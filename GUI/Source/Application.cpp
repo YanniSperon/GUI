@@ -14,6 +14,15 @@
 #include <glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#define DGPU
+
+#ifdef DGPU
+#include <Windows.h>
+extern "C" {
+	_declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
+}
+#endif
+
 static void GLAPIENTRY GLDebugMessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
 {
 	switch (severity)
@@ -31,7 +40,6 @@ static void GLAPIENTRY GLDebugMessageCallback(GLenum source, GLenum type, GLuint
 		Console::Info("GL NOTIFICATION:%s type = 0x%x, severity = 0x%x, message = %s\n", (type == GL_DEBUG_TYPE_ERROR ? " ** GL ERROR **" : ""), type, severity, message);
 		break;
 	}
-	assert(false);
 }
 
 static double mouseXPos = 0.0;
@@ -54,7 +62,7 @@ int main() {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 	//////////////////////////////////////////////////////////////////////////////////////////////
-	GLFWwindow* window = glfwCreateWindow(windowWidth, windowHeight, "OpenGL", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(windowWidth, windowHeight, "GUI", NULL, NULL);
 	Input* input = new Input();
 	input->SetShouldCaptureKeyboardInput(true);
 	input->SetShouldCaptureMouseInput(true);
@@ -172,7 +180,7 @@ int main() {
 
 
 	GUI::FontManager::GetInstance()->GetFont("C:\\Windows\\Fonts\\arial.ttf", 12);
-	GUI::FontManager::GetInstance()->GetFont("C:\\Windows\\Fonts\\arial.ttf", 48);
+	GUI::FontManager::GetInstance()->GetFont("C:\\Windows\\Fonts\\arial.ttf", 72);
 
 
 
@@ -236,7 +244,7 @@ int main() {
 	auto lastTime = std::chrono::high_resolution_clock::now();
 	auto currentTime = lastTime;
 
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);	
 
 	while (!glfwWindowShouldClose(window)) {
 		currentTime = std::chrono::high_resolution_clock::now();
@@ -269,9 +277,10 @@ int main() {
 
 
 		
-		//mainView->Draw(proj, shader);
+		mainView->Draw(proj, shader);
 
-		GUI::FontManager::GetInstance()->GetFont("C:\\Windows\\Fonts\\arial.ttf", 48)->Draw();
+		GUI::FontManager::GetInstance()->GetFont("C:\\Windows\\Fonts\\arial.ttf", 72)->Draw(proj);
+		//GUI::FontManager::GetInstance()->GetFont("C:\\Windows\\Fonts\\arial.ttf", 12)->Draw(proj);
 
 		glfwSwapBuffers(window);
 

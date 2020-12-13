@@ -3,6 +3,7 @@
 #include "FreetypeManager.h"
 
 #include <glew.h>
+#include <glm/gtc/matrix_transform.hpp>
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
@@ -11,7 +12,7 @@
 
 namespace GUI {
 	Font::Font(const std::string& path, int size)
-		: m_Path(path), m_CharacterTextureCoordinates(), m_Size(size), tempShader(new Shader("Resources/Shaders/Temp", SHADER_FRAGMENT_SHADER | SHADER_VERTEX_SHADER))
+		: m_Path(path), m_CharacterTextureCoordinates(), m_Size(size), tempShader(new Shader("Resources/Shaders/Text", SHADER_FRAGMENT_SHADER | SHADER_VERTEX_SHADER)), m_Scale(1.0f, 1.0f), m_Translation(0.0f, 0.0f)
 	{
         glGenTextures(1, &m_TextureAtlasID);
 
@@ -36,7 +37,7 @@ namespace GUI {
             int xOffset = 0;
             int yOffset = 0;
 
-            for (unsigned char c = 0; c < 128; c++)
+            for (unsigned char c = 0; c < 255; c++)
             {
                 if (FT_Load_Char(face, c, FT_LOAD_RENDER))
                 {
@@ -64,6 +65,9 @@ namespace GUI {
                 }
             }
             FT_Done_Face(face);
+
+            m_Translation = glm::vec2(960.0f, 540.0f);
+            m_Scale = glm::vec2(ATLAS_WIDTH, ATLAS_HEIGHT);
 		}
 
         GLfloat vertices[] = {
@@ -100,9 +104,11 @@ namespace GUI {
 
 	}
 
-    void Font::Draw()
+    void Font::Draw(const glm::mat4& projection)
     {
         tempShader->Bind();
+        tempShader->SetMat4("u_P", projection);
+        tempShader->SetMat4("u_M", glm::translate(glm::mat4(1.0f), glm::vec3(m_Translation, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(m_Scale, 1.0f)));
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, m_TextureAtlasID);
         glBindVertexArray(m_VAO);

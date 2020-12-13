@@ -31,10 +31,13 @@ namespace GUI {
 		GLuint m_VAO;
 		GLuint m_VBO;
 
+		glm::vec2 m_Scale;
+		glm::vec2 m_Translation;
+
 	public:
 		Font(const std::string& path, int size);
 		~Font();
 
-		void Draw();
+		void Draw(const glm::mat4& projection);
 	};
 }
