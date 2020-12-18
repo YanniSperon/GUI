@@ -956,6 +956,7 @@
       <Filter>Vendor\stb</Filter>
     </ClInclude>
     <ClInclude Include="Source\Graphics\GUI\FreetypeManager.h" />
+    <ClInclude Include="Source\Graphics\GUI\Text.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp" />
@@ -1015,5 +1016,6 @@
       <Filter>Vendor\stb</Filter>
     </ClCompile>
     <ClCompile Include="Source\Graphics\GUI\FreetypeManager.cpp" />
+    <ClCompile Include="Source\Graphics\GUI\Text.cpp" />
   </ItemGroup>
 </Project>

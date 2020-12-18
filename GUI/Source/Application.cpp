@@ -5,7 +5,7 @@
 #include "Shader.h"
 #include "View.h"
 #include "ImageView.h"
-#include "FontManager.h"
+#include "Text.h"
 
 #include <glew.h>
 #include <glfw3.h>
@@ -179,16 +179,25 @@ int main() {
 
 
 
-	GUI::FontManager::GetInstance()->GetFont("C:\\Windows\\Fonts\\arial.ttf", 12);
-	GUI::FontManager::GetInstance()->GetFont("C:\\Windows\\Fonts\\arial.ttf", 72);
+	//GUI::FontManager::GetInstance()->GetFont("C:\\Windows\\Fonts\\arial.ttf", 12);
+	//GUI::FontManager::GetInstance()->GetFont("C:\\Windows\\Fonts\\arial.ttf", 72);
+	Shader textShader("Resources/Shaders/TempText", SHADER_VERTEX_SHADER | SHADER_FRAGMENT_SHADER);
+	GUI::Text* text = new GUI::Text("C:\\Windows\\Fonts\\arial.ttf", 72, "Test", 0, 0);
 
+	GUI::View* tempView = new GUI::View(0.0f, 0.0f, (float)windowWidth, (float)windowHeight);
+	tempView->SetCornerRoundness(0.0f);
+	tempView->SetTintColor(glm::vec4(0.12157f, 0.65098f, 0.85882f, 1.0f));
+	tempView->SetXConstraint(0.0f, VIEW_CONSTRAINT_MEASUREMENT_TYPE_PIXELS, VIEW_CONSTRAINT_LOCATION_CENTER);
+	tempView->SetYConstraint(0.0f, VIEW_CONSTRAINT_MEASUREMENT_TYPE_PIXELS, VIEW_CONSTRAINT_LOCATION_CENTER);
+	tempView->SetWidthConstraint(20.0f, VIEW_CONSTRAINT_MEASUREMENT_TYPE_PIXELS);
+	tempView->SetHeightConstraint(20.0f, VIEW_CONSTRAINT_MEASUREMENT_TYPE_PIXELS);
+	tempView->Recalculate(0.0f, 0.0f, (float)windowWidth, (float)windowHeight);
 
 
 
 
 	Shader shader("Resources/Shaders/2D", SHADER_VERTEX_SHADER | SHADER_FRAGMENT_SHADER);
 	shader.Bind();
-
 
 	GUI::View* mainView = new GUI::View(0.0f, 0.0f, (float)windowWidth, (float)windowHeight);
 	mainView->SetCornerRoundness(0.0f);
@@ -276,11 +285,9 @@ int main() {
 		}
 
 
-		
-		mainView->Draw(proj, shader);
-
-		GUI::FontManager::GetInstance()->GetFont("C:\\Windows\\Fonts\\arial.ttf", 72)->Draw(proj);
-		//GUI::FontManager::GetInstance()->GetFont("C:\\Windows\\Fonts\\arial.ttf", 12)->Draw(proj);
+		tempView->Draw(proj, shader);
+		//mainView->Draw(proj, shader);
+		text->Draw(proj, textShader);
 
 		glfwSwapBuffers(window);
 

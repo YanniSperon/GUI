@@ -6,7 +6,7 @@ in vec2 s_TextureCoordinate;
 
 layout (binding = 0) uniform sampler2D u_Image;
 
-vec3 textColor = vec3(0.0, 0.0, 0.0);
+vec3 textColor = vec3(1.0, 1.0, 1.0);
 
 void main()
 {

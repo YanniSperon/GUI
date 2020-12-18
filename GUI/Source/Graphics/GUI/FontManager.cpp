@@ -21,7 +21,7 @@ namespace GUI {
 		}
 	}
 
-	Font* FontManager::GetFont(const std::string& path, int size)
+	Font* FontManager::GetFont(const std::string& path, unsigned int size)
 	{
 		std::string name = path + std::to_string(size);
 		if (m_Fonts.find(name) != m_Fonts.end()) {

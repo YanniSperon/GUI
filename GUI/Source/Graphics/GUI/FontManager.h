@@ -13,7 +13,7 @@ namespace GUI {
 		FontManager();
 		~FontManager();
 
-		Font* GetFont(const std::string& path, int size);
+		Font* GetFont(const std::string& path, unsigned int size);
 		std::unordered_map<std::string, Font*>& GetManagedFonts();
 
 		static void InitializeSingleton();
