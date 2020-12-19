@@ -11,22 +11,25 @@ namespace GUI {
 	private:
 		GLuint m_VAO;
 		GLuint m_VBO;
+		glm::vec2 m_TranslationOffset;
 
-		glm::vec2 m_Scale;
-		glm::vec2 m_Translation;
+		glm::vec2 m_Max;
+		glm::vec2 m_Min;
 
-		glm::vec2 m_Size;
-		
 		Font* m_Font;
 		std::string m_Text;
 
 		unsigned int m_NumberOfRows;
 		unsigned int m_MaxWidth;
+	protected:
+		glm::vec2 m_Scale;
+		glm::vec2 m_Translation;
 	public:
-		Text(const std::string& fontPath, unsigned int fontSize, const std::string& text, unsigned int numRows, unsigned int maxWidth);
+		Text(const std::string& fontPath, unsigned int fontSize, unsigned int numRows, unsigned int maxWidth, const char* fmt, ...);
 		~Text();
 
-		void SetText(const std::string& newText, unsigned int fontSize);
+		void SetText(const std::string& text, const std::string& fontPath = std::string("keepFont"), int fontSize = -1, int numRows = -1);
+		void SetText(const char* fmt, ...);
 		void SetNumberOfRows(unsigned int numRows);
 		void SetMaxWidth(unsigned int maxWidth);
 		void SetTranslation(const glm::vec2& translation);

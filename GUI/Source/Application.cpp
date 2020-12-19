@@ -37,7 +37,7 @@ static void GLAPIENTRY GLDebugMessageCallback(GLenum source, GLenum type, GLuint
 		Console::Warning("GL CALLBACK:%s type = 0x%x, severity = 0x%x, message = %s\n", (type == GL_DEBUG_TYPE_ERROR ? " ** GL ERROR **" : ""), type, severity, message);
 		break;
 	case GL_DEBUG_SEVERITY_NOTIFICATION:
-		Console::Info("GL NOTIFICATION:%s type = 0x%x, severity = 0x%x, message = %s\n", (type == GL_DEBUG_TYPE_ERROR ? " ** GL ERROR **" : ""), type, severity, message);
+		//Console::Info("GL NOTIFICATION:%s type = 0x%x, severity = 0x%x, message = %s\n", (type == GL_DEBUG_TYPE_ERROR ? " ** GL ERROR **" : ""), type, severity, message);
 		break;
 	}
 }
@@ -179,20 +179,10 @@ int main() {
 
 
 
-	//GUI::FontManager::GetInstance()->GetFont("C:\\Windows\\Fonts\\arial.ttf", 12);
-	//GUI::FontManager::GetInstance()->GetFont("C:\\Windows\\Fonts\\arial.ttf", 72);
 	Shader textShader("Resources/Shaders/TempText", SHADER_VERTEX_SHADER | SHADER_FRAGMENT_SHADER);
-	GUI::Text* text = new GUI::Text("C:\\Windows\\Fonts\\arial.ttf", 72, "Test", 0, 0);
+	GUI::Text* text = new GUI::Text("C:\\Windows\\Fonts\\times.ttf", 72, 0, 0, "FPS %.1f", 0.0f);
 
-	GUI::View* tempView = new GUI::View(0.0f, 0.0f, (float)windowWidth, (float)windowHeight);
-	tempView->SetCornerRoundness(0.0f);
-	tempView->SetTintColor(glm::vec4(0.12157f, 0.65098f, 0.85882f, 1.0f));
-	tempView->SetXConstraint(0.0f, VIEW_CONSTRAINT_MEASUREMENT_TYPE_PIXELS, VIEW_CONSTRAINT_LOCATION_CENTER);
-	tempView->SetYConstraint(0.0f, VIEW_CONSTRAINT_MEASUREMENT_TYPE_PIXELS, VIEW_CONSTRAINT_LOCATION_CENTER);
-	tempView->SetWidthConstraint(20.0f, VIEW_CONSTRAINT_MEASUREMENT_TYPE_PIXELS);
-	tempView->SetHeightConstraint(20.0f, VIEW_CONSTRAINT_MEASUREMENT_TYPE_PIXELS);
-	tempView->Recalculate(0.0f, 0.0f, (float)windowWidth, (float)windowHeight);
-
+	GUI::Text* textTemp = new GUI::Text("C:\\Windows\\Fonts\\times.ttf", 72, 0, 0, "SUPER SUPER SUPER SUPER SUPER SUPER SUPER SUPER LONG TEXT TEXT TEXT TIAWHDNIOWABNDOIAWNDOIWANODINWAIODNWAOIDNWIAODNAWIOKJLDNBAJKGFLQY*OWUIBDLNJ:WQXCB IJQLEY*@(*J¾¾", 0.0f);
 
 
 
@@ -270,7 +260,7 @@ int main() {
 			mainView->Recalculate(0, 0, windowWidth, windowHeight);
 			proj = glm::ortho(0.0f, (float)windowWidth, 0.0f, (float)windowHeight);;
 		}
-
+		text->SetText("FPS %.1f", 1.0 / deltaTime);
 		if (input->GetMouseButtonPressed(AD_MOUSE_BUTTON_1)) {
 			GUI::View* temp = mainView->HitTest(input->GetMousePositionX(), ((float)windowHeight) - input->GetMousePositionY());
 			if (temp) {
@@ -285,9 +275,9 @@ int main() {
 		}
 
 
-		tempView->Draw(proj, shader);
-		//mainView->Draw(proj, shader);
+		mainView->Draw(proj, shader);
 		text->Draw(proj, textShader);
+		textTemp->Draw(proj, textShader);
 
 		glfwSwapBuffers(window);
 

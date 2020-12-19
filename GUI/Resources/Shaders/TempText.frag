@@ -10,10 +10,5 @@ vec3 textColor = vec3(1.0, 1.0, 1.0);
 
 void main()
 {
-    float texSample = texture(u_Image, s_TextureCoordinate).r;
-    if (texSample > 0.5) {
-        o_Color = vec4(textColor, texSample);
-    } else {
-        o_Color = vec4(1.0, 0.0, 0.0, 0.5);
-    }
+    o_Color = vec4(textColor, texture(u_Image, s_TextureCoordinate).r);
 }
