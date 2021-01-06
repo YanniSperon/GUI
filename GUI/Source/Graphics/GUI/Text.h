@@ -9,6 +9,8 @@
 namespace GUI {
 	class Text {
 	private:
+		bool m_SupportsMarkup;
+
 		GLuint m_VAO;
 		GLuint m_VBO;
 		glm::vec2 m_TranslationOffset;

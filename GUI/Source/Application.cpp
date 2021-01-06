@@ -182,7 +182,7 @@ int main() {
 	Shader textShader("Resources/Shaders/TempText", SHADER_VERTEX_SHADER | SHADER_FRAGMENT_SHADER);
 	GUI::Text* text = new GUI::Text("C:\\Windows\\Fonts\\times.ttf", 72, 0, 0, "FPS %.1f", 0.0f);
 
-	GUI::Text* textTemp = new GUI::Text("C:\\Windows\\Fonts\\times.ttf", 72, 0, 0, "SUPER SUPER SUPER SUPER SUPER SUPER SUPER SUPER LONG TEXT TEXT TEXT TIAWHDNIOWABNDOIAWNDOIWANODINWAIODNWAOIDNWIAODNAWIOKJLDNBAJKGFLQY*OWUIBDLNJ:WQXCB IJQLEY*@(*J¾¾", 0.0f);
+	GUI::Text* textTemp = new GUI::Text("C:\\Windows\\Fonts\\times.ttf", 72, 0, 0, "VAVAVAVATo");
 
 
 
@@ -275,8 +275,9 @@ int main() {
 		}
 
 
-		mainView->Draw(proj, shader);
+		//mainView->Draw(proj, shader);
 		text->Draw(proj, textShader);
+		text->SetTranslation(glm::vec2(input->GetMousePositionX(), (float)windowHeight - input->GetMousePositionY()));
 		textTemp->Draw(proj, textShader);
 
 		glfwSwapBuffers(window);

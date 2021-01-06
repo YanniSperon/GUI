@@ -16,7 +16,7 @@
 
 namespace GUI {
 	Font::Font(const std::string& path, unsigned int size)
-		: m_Path(path), m_Characters(), m_Size(size)//, tempShader(new Shader("Resources/Shaders/Text", SHADER_FRAGMENT_SHADER | SHADER_VERTEX_SHADER))
+		: m_Path(path), m_Characters(), m_Size(size) //, tempShader(new Shader("Resources/Shaders/Text", SHADER_FRAGMENT_SHADER | SHADER_VERTEX_SHADER))
 	{
 		glGenTextures(1, &m_AtlasTextureID);
 
