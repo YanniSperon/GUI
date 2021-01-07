@@ -5,8 +5,9 @@
 static ShaderManager* s_ShaderManager;
 
 ShaderManager::ShaderManager()
+	: m_Shaders(), m_ShouldCleanup(false)
 {
-	m_Shaders = std::unordered_map<std::string, std::shared_ptr<Shader>>();
+
 }
 
 ShaderManager::~ShaderManager()

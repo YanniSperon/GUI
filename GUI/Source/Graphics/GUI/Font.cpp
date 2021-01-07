@@ -7,8 +7,6 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-// ADD SUPPORT FOR ADVANCE Y
-
 #define ATLAS_WIDTH 4096
 #define ATLAS_HEIGHT 4096
 #define INVERSE_ATLAS_WIDTH (1.0f / (float) ATLAS_WIDTH)
@@ -187,5 +185,15 @@ namespace GUI {
 	GLuint Font::GetAtlasTextureID()
 	{
 		return m_AtlasTextureID;
+	}
+
+	void Font::SetHasFakeUser(bool hasFakeUser)
+	{
+		m_HasFakeUser = hasFakeUser;
+	}
+
+	bool Font::GetHasFakeUser()
+	{
+		return m_HasFakeUser;
 	}
 }

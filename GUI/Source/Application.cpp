@@ -6,6 +6,7 @@
 #include "View.h"
 #include "ImageView.h"
 #include "Text.h"
+#include "MathExtensions.h"
 
 #include <glew.h>
 #include <glfw3.h>
@@ -180,9 +181,10 @@ int main() {
 
 
 	Shader textShader("Resources/Shaders/TempText", SHADER_VERTEX_SHADER | SHADER_FRAGMENT_SHADER);
-	GUI::Text* text = new GUI::Text("C:\\Windows\\Fonts\\times.ttf", 72, 0, 0, "FPS %.1f", 0.0f);
+	GUI::Text* text = new GUI::Text("C:\\Windows\\Fonts\\times.ttf", 72, false, 0, 500, TEXT_ALIGN_LOCATION_LEFT, "FPS %.1f", 0.0f);
 
-	GUI::Text* textTemp = new GUI::Text("C:\\Windows\\Fonts\\times.ttf", 72, 0, 0, "VAVAVAVATo");
+	GUI::Text* textTemp = new GUI::Text("C:\\Windows\\Fonts\\times.ttf", 72, false, 0, 500, TEXT_ALIGN_LOCATION_LEFT, "VAVAVAVAToauidbuAanudiSbwudF|gk");
+	textTemp->SetTranslation(glm::vec2(960.0f, 540.0f));
 
 
 
@@ -197,8 +199,16 @@ int main() {
 	mainView->Recalculate(0.0f, 0.0f, (float)windowWidth, (float)windowHeight);
 
 	GUI::View* subView = new GUI::View(mainView);
+	subView->SetTintColor(Math::Scale255To1(glm::vec4(222.0f, 170.0f, 29.0f, 255.0f)));
+	subView->SetWidthConstraint(500.0f, VIEW_CONSTRAINT_MEASUREMENT_TYPE_PIXELS);
+	subView->SetHeightConstraint(500.0f, VIEW_CONSTRAINT_MEASUREMENT_TYPE_PIXELS);
+	subView->SetXConstraint(0.0f, VIEW_CONSTRAINT_MEASUREMENT_TYPE_PIXELS, VIEW_CONSTRAINT_LOCATION_CENTER);
+	subView->SetYConstraint(0.0f, VIEW_CONSTRAINT_MEASUREMENT_TYPE_PIXELS, VIEW_CONSTRAINT_LOCATION_CENTER);
+	subView->Recalculate();
 
-	subView->SetTintColor(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
+	/*GUI::View* subView = new GUI::View(mainView);
+
+	subView->SetTintColor(glm::vec4(0.0f, 1.0f, 0.0f	, 1.0f));
 	subView->SetWidthConstraint(40.0f, VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT);
 	subView->SetHeightConstraint(40.0f, VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT);
 	subView->SetXConstraint(0.0f, VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT, VIEW_CONSTRAINT_LOCATION_LEFT);
@@ -235,7 +245,7 @@ int main() {
 	sssubView2->SetCornerRoundness(0.5f);
 	sssubView2->SetWidthConstraint(80.0f, VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT);
 	sssubView2->SetHeightConstraint(60.0f, VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT);
-	sssubView2->Recalculate();
+	sssubView2->Recalculate();*/
 
 	glm::mat4 proj = glm::ortho(0.0f, (float)windowWidth, 0.0f, (float)windowHeight);
 
@@ -275,7 +285,7 @@ int main() {
 		}
 
 
-		//mainView->Draw(proj, shader);
+		mainView->Draw(proj, shader);
 		text->Draw(proj, textShader);
 		text->SetTranslation(glm::vec2(input->GetMousePositionX(), (float)windowHeight - input->GetMousePositionY()));
 		textTemp->Draw(proj, textShader);

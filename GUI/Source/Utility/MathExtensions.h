@@ -3,10 +3,10 @@
 #include "Vendor/glm/glm.hpp"
 
 class Math {
-
+public:
 	template <class T>
 	static T Round(const T& input) {
-		return T + 0.5;
+		return input + 0.5;
 	}
 
 	template <class T>
@@ -59,5 +59,15 @@ class Math {
 	template<>
 	static glm::ivec4 Lerp(const double& time, const glm::ivec4& startValue, const glm::ivec4& endValue) {
 		return glm::ivec4(glm::round(glm::dvec4(startValue) * (1.0 - time) + glm::dvec4(endValue) * time));
+	}
+
+	template <class T>
+	static T Scale255To1(const T& input) {
+		return input * 0.00392156863f;
+	}
+
+	template <class T>
+	static bool AboutEquals(const T& left, const T& right, const T& tolerance) {
+		return glm::abs(left - right) > tolerance;
 	}
 };

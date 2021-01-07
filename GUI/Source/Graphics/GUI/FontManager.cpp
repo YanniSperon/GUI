@@ -8,34 +8,53 @@ namespace GUI {
 	static FontManager* s_FontManager;
 
 	FontManager::FontManager()
-		: m_Fonts()
+		: m_Fonts(), m_ShouldCleanup(false)
 	{
 
 	}
 
 	FontManager::~FontManager()
 	{
-		for (const auto& font : m_Fonts)
-		{
-			delete font.second;
-		}
+		m_Fonts.clear();
 	}
 
-	Font* FontManager::GetFont(const std::string& path, unsigned int size)
+	std::shared_ptr<Font> FontManager::GetFont(const std::string& path, unsigned int size)
 	{
 		std::string name = path + std::to_string(size);
 		if (m_Fonts.find(name) != m_Fonts.end()) {
 			return m_Fonts[name];
 		}
 		else {
-			m_Fonts[name] = new Font(path, size);
+			m_Fonts[name] = std::make_shared<Font>(path, size);
 			return m_Fonts[name];
 		}
 	}
 
-	std::unordered_map<std::string, Font*>& FontManager::GetManagedFonts()
+	std::unordered_map<std::string, std::shared_ptr<Font>>& FontManager::GetManagedFonts()
 	{
 		return m_Fonts;
+	}
+
+	void FontManager::Cleanup()
+	{
+		if (m_ShouldCleanup) {
+			Shader::Unbind();
+			auto it = m_Fonts.begin();
+			while (it != m_Fonts.end()) {
+				if (it->second.unique() && !it->second->GetHasFakeUser()) {
+					it = m_Fonts.erase(it);
+				}
+				else {
+					it++;
+				}
+			}
+			m_ShouldCleanup = false;
+		}
+	}
+
+	void FontManager::MarkForCleanup()
+	{
+		m_ShouldCleanup = true;
 	}
 
 	void FontManager::InitializeSingleton()

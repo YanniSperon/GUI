@@ -36,6 +36,7 @@ void Global::Update()
 {
 	TextureManager::GetInstance()->Cleanup();
 	ShaderManager::GetInstance()->Cleanup();
+	GUI::FontManager::GetInstance()->Cleanup();
 }
 
 void Global::Cleanup()

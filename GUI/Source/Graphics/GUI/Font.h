@@ -34,6 +34,8 @@ namespace GUI {
 		//
 		//Shader* tempShader;
 
+		bool m_HasFakeUser;
+
 	public:
 
 		Font(const std::string& path, unsigned int size);
@@ -46,5 +48,8 @@ namespace GUI {
 
 		std::map<char, Character>& GetCharacters();
 		GLuint GetAtlasTextureID();
+
+		void SetHasFakeUser(bool hasFakeUser);
+		bool GetHasFakeUser();
 	};
 }
