@@ -7,13 +7,16 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace GUI {
-    Text::Text(const std::string& fontPath, unsigned int fontSize, bool supportsMarkup, unsigned int numRows, unsigned int maxWidth, unsigned int alignment, const char* fmt, ...)
-        : m_Fonts(), m_NumberOfRows(numRows), m_MaxWidth(maxWidth), m_Scale(1.0f, 1.0f), m_Translation(0.0f, 0.0f), m_Min(FLT_MAX, FLT_MAX), m_Max(-FLT_MAX, -FLT_MAX), m_SupportsMarkup(supportsMarkup), m_TextAlignment(alignment), m_Color(1.0f, 1.0f, 1.0f, 1.0f)
+    Text::Text(const std::string& fontPath, unsigned int fontSize, bool supportsMarkup, unsigned int numRows, unsigned int maxWidth, Alignment alignment, const char* fmt, ...)
+        : m_Fonts(), m_NumberOfRows(numRows), m_MaxWidth(maxWidth), m_Scale(1.0f, 1.0f), m_Translation(0.0f, 0.0f), m_Min(FLT_MAX, FLT_MAX), m_Max(-FLT_MAX, -FLT_MAX), m_SupportsMarkup(supportsMarkup), m_Alignment(alignment), m_Color(1.0f, 1.0f, 1.0f, 1.0f)
     {
+        if (m_Alignment == Alignment::PREVIOUS || m_Alignment == Alignment::DEFAULT) {
+            m_Alignment = Alignment::LEFT;
+        }
         va_list args, argsCopy;
         va_start(args, fmt);
         va_copy(argsCopy, args);
-        size_t bufferSize = vsnprintf(nullptr, 0, fmt, argsCopy);
+        size_t bufferSize = vsnprintf(nullptr, 0, fmt, argsCopy) + 1;
         char* message = new char[bufferSize];
         vsnprintf(message, bufferSize, fmt, args);
         m_Text = std::string(message);
@@ -41,6 +44,9 @@ namespace GUI {
             float yOffset = 0.0f;
             for (int i = 0; i < stringLength; i++) {
                 char c = m_Text[i];
+                if (c == 'k') {
+                    Console::Info("K");
+                }
                 Character ch = characters[c];
 
                 memcpy(vertices + 24 * i, ch.vertices, 24 * sizeof(GLfloat));
@@ -108,8 +114,27 @@ namespace GUI {
         FontManager::GetInstance()->MarkForCleanup();
     }
 
-    void Text::SetText(const std::string& text, const std::string& fontPath, int fontSize, bool supportsMarkup, int numRows, int alignment)
+    void Text::SetText(const std::string& text, const std::string& fontPath, int fontSize, bool supportsMarkup, int numRows, Alignment alignment)
     {
+        switch (alignment)
+        {
+        case GUI::Text::Alignment::DEFAULT:
+            m_Alignment = Alignment::LEFT;
+            break;
+        case GUI::Text::Alignment::PREVIOUS:
+            break;
+        case GUI::Text::Alignment::LEFT:
+            m_Alignment = Alignment::LEFT;
+            break;
+        case GUI::Text::Alignment::CENTER:
+            m_Alignment = Alignment::CENTER;
+            break;
+        case GUI::Text::Alignment::RIGHT:
+            m_Alignment = Alignment::RIGHT;
+            break;
+        default:
+            break;
+        }
         m_SupportsMarkup = supportsMarkup;
         if (supportsMarkup) {
             Console::Warning("Text does not currently support markup!");
@@ -130,9 +155,6 @@ namespace GUI {
             }
             if (numRows > 0) {
                 m_NumberOfRows = numRows;
-            }
-            if (alignment > 0) {
-                m_TextAlignment = alignment;
             }
             m_Fonts[0] = FontManager::GetInstance()->GetFont(tempFontPath, tempFontSize);
             FontManager::GetInstance()->MarkForCleanup();
@@ -173,7 +195,7 @@ namespace GUI {
                     characterBearingX = 0;
                 }
 
-                
+
                 float shiftX = kerningXPx + characterBearingX + xOffset;
                 for (int j = 0; j < 24; j += 4) {
                     vertices[j + 24 * i] += shiftX;
@@ -216,7 +238,7 @@ namespace GUI {
             va_list args, argsCopy;
             va_start(args, fmt);
             va_copy(argsCopy, args);
-            size_t bufferSize = vsnprintf(nullptr, 0, fmt, argsCopy);
+            size_t bufferSize = vsnprintf(nullptr, 0, fmt, argsCopy) + 1;
             char* message = new char[bufferSize];
             vsnprintf(message, bufferSize, fmt, args);
             m_Text = std::string(message);

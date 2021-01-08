@@ -957,6 +957,7 @@
     </ClInclude>
     <ClInclude Include="Source\Graphics\GUI\FreetypeManager.h" />
     <ClInclude Include="Source\Graphics\GUI\Text.h" />
+    <ClInclude Include="Source\Graphics\GUI\TextView.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp" />
@@ -1017,5 +1018,6 @@
     </ClCompile>
     <ClCompile Include="Source\Graphics\GUI\FreetypeManager.cpp" />
     <ClCompile Include="Source\Graphics\GUI\Text.cpp" />
+    <ClCompile Include="Source\Graphics\GUI\TextView.cpp" />
   </ItemGroup>
 </Project>

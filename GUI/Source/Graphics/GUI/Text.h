@@ -8,12 +8,16 @@
 #include <glm.hpp>
 #include <string>
 
-#define TEXT_ALIGN_LOCATION_LEFT 1
-#define TEXT_ALIGN_LOCATION_CENTER 2
-#define TEXT_ALIGN_LOCATION_RIGHT 4
-
 namespace GUI {
 	class Text {
+	public:
+		enum class Alignment {
+			DEFAULT = 1,
+			PREVIOUS = 2,
+			LEFT = 4,
+			CENTER = 8,
+			RIGHT = 16
+		};
 	private:
 		bool m_SupportsMarkup;
 
@@ -29,17 +33,17 @@ namespace GUI {
 
 		unsigned int m_NumberOfRows;
 		unsigned int m_MaxWidth;
-		unsigned int m_TextAlignment;
+		Alignment m_Alignment;
 
 		glm::vec4 m_Color;
 	protected:
 		glm::vec2 m_Scale;
 		glm::vec2 m_Translation;
 	public:
-		Text(const std::string& fontPath, unsigned int fontSize, bool supportsMarkup, unsigned int numRows, unsigned int maxWidth, unsigned int alignment, const char* fmt, ...);
+		Text(const std::string& fontPath, unsigned int fontSize, bool supportsMarkup, unsigned int numRows, unsigned int maxWidth, Alignment alignment, const char* fmt, ...);
 		~Text();
 
-		void SetText(const std::string& text, const std::string& fontPath = std::string("keepFont"), int fontSize = -1, bool supportsMarkup = false, int numRows = -1, int alignment = -1);
+		void SetText(const std::string& text, const std::string& fontPath = std::string("keepFont"), int fontSize = -1, bool supportsMarkup = false, int numRows = -1, Alignment alignment = Alignment::PREVIOUS);
 		void SetText(const char* fmt, ...);
 		void SetNumberOfRows(unsigned int numRows);
 		void SetMaxWidth(unsigned int maxWidth);

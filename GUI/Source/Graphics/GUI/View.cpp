@@ -7,7 +7,7 @@
 
 namespace GUI {
 	View::View(float x, float y, float width, float height)
-		: m_WidthConstraint(50.0f), m_WidthConstraintMeasurementType(VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT), m_HeightConstraint(50.0f), m_HeightConstraintMeasurementType(VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT), m_XConstraintOffset(0.0f), m_XConstraintLocation(VIEW_CONSTRAINT_LOCATION_CENTER), m_XConstraintOffsetMeasurementType(VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT), m_YConstraintOffset(0.0f), m_YConstraintLocation(VIEW_CONSTRAINT_LOCATION_CENTER), m_YConstraintOffsetMeasurementType(VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT), m_VAO(0), m_VBO(0), m_Scale(1.0f), m_Translation(0.0f), m_MinimumWidth(1.0f), m_MinimumHeight(1.0f), m_Opacity(1.0f), m_Children(), m_Parent(nullptr), m_CornerRoundness(0.0625f), m_TintColor(1.0f, 1.0f, 1.0f, 1.0f), m_MinimumBounds(x, y), m_MaximumBounds(x + width, y + height), m_AspectRatio(1.0f), m_ShouldClipToBounds(false), m_SizeMode(VIEW_SIZE_MODE_FILL), m_BorderWeight(0.0f), m_BorderColor(0.0f, 0.0f, 0.0f, 1.0f)
+		: m_WidthConstraint(50.0f), m_WidthConstraintMeasurementType(ConstraintMeasurementType::PERCENT), m_HeightConstraint(50.0f), m_HeightConstraintMeasurementType(ConstraintMeasurementType::PERCENT), m_XConstraintOffset(0.0f), m_XConstraintLocation(XConstraintLocation::CENTER), m_XConstraintOffsetMeasurementType(ConstraintMeasurementType::PERCENT), m_YConstraintOffset(0.0f), m_YConstraintLocation(YConstraintLocation::CENTER), m_YConstraintOffsetMeasurementType(ConstraintMeasurementType::PERCENT), m_VAO(0), m_VBO(0), m_Scale(1.0f), m_Translation(0.0f), m_MinimumWidth(1.0f), m_MinimumHeight(1.0f), m_Opacity(1.0f), m_Children(), m_Parent(nullptr), m_CornerRoundness(0.0625f), m_TintColor(1.0f, 1.0f, 1.0f, 1.0f), m_MinimumBounds(x, y), m_MaximumBounds(x + width, y + height), m_AspectRatio(1.0f), m_ShouldClipToBounds(false), m_SizeMode(SizeMode::FILL), m_BorderWeight(0.0f), m_BorderColor(0.0f, 0.0f, 0.0f, 1.0f)
 	{
 		GLfloat vertices[] = {
 			-0.5f, -0.5f, // Bottom Left
@@ -41,7 +41,7 @@ namespace GUI {
 	}
 
 	View::View(View* parent)
-		: m_WidthConstraint(50.0f), m_WidthConstraintMeasurementType(VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT),  m_HeightConstraint(50.0f), m_HeightConstraintMeasurementType(VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT), m_XConstraintOffset(0.0f), m_XConstraintLocation(VIEW_CONSTRAINT_LOCATION_CENTER), m_XConstraintOffsetMeasurementType(VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT), m_YConstraintOffset(0.0f), m_YConstraintLocation(VIEW_CONSTRAINT_LOCATION_CENTER), m_YConstraintOffsetMeasurementType(VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT), m_VAO(0), m_VBO(0), m_Scale(1.0f), m_Translation(0.0f), m_MinimumWidth(1.0f), m_MinimumHeight(1.0f), m_Opacity(1.0f), m_Children(), m_Parent(parent), m_CornerRoundness(0.0625f), m_TintColor(1.0f, 1.0f, 1.0f, 1.0f), m_MinimumBounds(parent->m_MinimumBounds), m_MaximumBounds(parent->m_MaximumBounds), m_SizeMode(VIEW_SIZE_MODE_FILL), m_AspectRatio(1.0f), m_ShouldClipToBounds(false), m_BorderWeight(0.0f), m_BorderColor(0.0f, 0.0f, 0.0f, 1.0f)
+		: m_WidthConstraint(50.0f), m_WidthConstraintMeasurementType(ConstraintMeasurementType::PERCENT),  m_HeightConstraint(50.0f), m_HeightConstraintMeasurementType(ConstraintMeasurementType::PERCENT), m_XConstraintOffset(0.0f), m_XConstraintLocation(XConstraintLocation::CENTER), m_XConstraintOffsetMeasurementType(ConstraintMeasurementType::PERCENT), m_YConstraintOffset(0.0f), m_YConstraintLocation(YConstraintLocation::CENTER), m_YConstraintOffsetMeasurementType(ConstraintMeasurementType::PERCENT), m_VAO(0), m_VBO(0), m_Scale(1.0f), m_Translation(0.0f), m_MinimumWidth(1.0f), m_MinimumHeight(1.0f), m_Opacity(1.0f), m_Children(), m_Parent(parent), m_CornerRoundness(0.0625f), m_TintColor(1.0f, 1.0f, 1.0f, 1.0f), m_MinimumBounds(parent->m_MinimumBounds), m_MaximumBounds(parent->m_MaximumBounds), m_SizeMode(SizeMode::FILL), m_AspectRatio(1.0f), m_ShouldClipToBounds(false), m_BorderWeight(0.0f), m_BorderColor(0.0f, 0.0f, 0.0f, 1.0f)
 	{
 		m_Parent->AddChild(this);
 		GLfloat vertices[] = {
@@ -94,10 +94,10 @@ namespace GUI {
 		int finalWidthPixels = 1;
 		switch (m_WidthConstraintMeasurementType)
 		{
-		case VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT:
+		case ConstraintMeasurementType::PERCENT:
 			finalWidthPixels = glm::round((parentXMax - parentXMin) * (m_WidthConstraint / 100.0f));
 			break;
-		case VIEW_CONSTRAINT_MEASUREMENT_TYPE_PIXELS:
+		case ConstraintMeasurementType::PIXELS:
 			finalWidthPixels = glm::round(m_WidthConstraint);
 			break;
 		default:
@@ -113,10 +113,10 @@ namespace GUI {
 		int finalHeightPixels = 1;
 		switch (m_HeightConstraintMeasurementType)
 		{
-		case VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT:
+		case ConstraintMeasurementType::PERCENT:
 			finalHeightPixels = glm::round((parentYMax - parentYMin) * (m_HeightConstraint / 100.0f));
 			break;
-		case VIEW_CONSTRAINT_MEASUREMENT_TYPE_PIXELS:
+		case ConstraintMeasurementType::PIXELS:
 			finalHeightPixels = glm::round(m_HeightConstraint);
 			break;
 		default:
@@ -132,10 +132,10 @@ namespace GUI {
 		int xPixelOffset = 0;
 		switch (m_XConstraintOffsetMeasurementType)
 		{
-		case VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT:
+		case ConstraintMeasurementType::PERCENT:
 			xPixelOffset = glm::round((parentXMax - parentXMin) * (m_XConstraintOffset / 100.0f));
 			break;
-		case VIEW_CONSTRAINT_MEASUREMENT_TYPE_PIXELS:
+		case ConstraintMeasurementType::PIXELS:
 			xPixelOffset = glm::round(m_XConstraintOffset);
 			break;
 		default:
@@ -144,13 +144,13 @@ namespace GUI {
 		int xPixelDefaultSpot = 0;
 		switch (m_XConstraintLocation)
 		{
-		case VIEW_CONSTRAINT_LOCATION_LEFT:
+		case XConstraintLocation::LEFT:
 			xPixelDefaultSpot = glm::round(parentXMin + (finalWidthPixels / 2.0f));
 			break;
-		case VIEW_CONSTRAINT_LOCATION_CENTER:
+		case XConstraintLocation::CENTER:
 			xPixelDefaultSpot = glm::round(parentXMin + ((parentXMax - parentXMin) / 2.0f));
 			break;
-		case VIEW_CONSTRAINT_LOCATION_RIGHT:
+		case XConstraintLocation::RIGHT:
 			xPixelDefaultSpot = glm::round(parentXMax - (finalWidthPixels / 2.0f));
 			break;
 		default:
@@ -164,10 +164,10 @@ namespace GUI {
 		int yPixelOffset = 0;
 		switch (m_XConstraintOffsetMeasurementType)
 		{
-		case VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT:
+		case ConstraintMeasurementType::PERCENT:
 			yPixelOffset = glm::round((parentYMax - parentYMin) * (m_YConstraintOffset / 100.0f));
 			break;
-		case VIEW_CONSTRAINT_MEASUREMENT_TYPE_PIXELS:
+		case ConstraintMeasurementType::PIXELS:
 			yPixelOffset = glm::round(m_YConstraintOffset);
 			break;
 		default:
@@ -176,13 +176,13 @@ namespace GUI {
 		int yPixelDefaultSpot = 0;
 		switch (m_YConstraintLocation)
 		{
-		case VIEW_CONSTRAINT_LOCATION_TOP:
+		case YConstraintLocation::TOP:
 			yPixelDefaultSpot = glm::round(parentYMax - (finalHeightPixels / 2.0f));
 			break;
-		case VIEW_CONSTRAINT_LOCATION_CENTER:
+		case YConstraintLocation::CENTER:
 			yPixelDefaultSpot = glm::round(parentYMin + ((parentYMax - parentYMin) / 2.0f));
 			break;
-		case VIEW_CONSTRAINT_LOCATION_BOTTOM:
+		case YConstraintLocation::BOTTOM:
 			yPixelDefaultSpot = glm::round(parentYMin + (finalHeightPixels / 2.0f));
 			break;
 		default:
@@ -214,10 +214,10 @@ namespace GUI {
 		int finalWidthPixels = 1 ;
 		switch (m_WidthConstraintMeasurementType)
 		{
-		case VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT:
+		case ConstraintMeasurementType::PERCENT:
 			finalWidthPixels = glm::round((parentXMax - parentXMin) * (m_WidthConstraint / 100.0f));
 			break;
-		case VIEW_CONSTRAINT_MEASUREMENT_TYPE_PIXELS:
+		case ConstraintMeasurementType::PIXELS:
 			finalWidthPixels = glm::round(m_WidthConstraint);
 			break;
 		default:
@@ -230,10 +230,10 @@ namespace GUI {
 		int finalHeightPixels = 1;
 		switch (m_HeightConstraintMeasurementType)
 		{
-		case VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT:
+		case ConstraintMeasurementType::PERCENT:
 			finalHeightPixels = glm::round((parentYMax - parentYMin) * (m_HeightConstraint / 100.0f));
 			break;
-		case VIEW_CONSTRAINT_MEASUREMENT_TYPE_PIXELS:
+		case ConstraintMeasurementType::PIXELS:
 			finalHeightPixels = glm::round(m_HeightConstraint);
 			break;
 		default:
@@ -247,7 +247,7 @@ namespace GUI {
 
 		switch (m_SizeMode)
 		{
-		case VIEW_SIZE_MODE_ASPECT_FILL:
+		case SizeMode::ASPECT_FILL:
 			if (finalHeightPixels >= finalWidthPixels) {
 				finalWidthPixels = glm::round(m_AspectRatio * ((float)finalHeightPixels));
 			}
@@ -255,7 +255,7 @@ namespace GUI {
 				finalHeightPixels = glm::round((1.0f / m_AspectRatio) * ((float)finalWidthPixels));
 			}
 			break;
-		case VIEW_SIZE_MODE_ASPECT_FIT:
+		case SizeMode::ASPECT_FIT:
 			if (finalWidthPixels >= finalHeightPixels) {
 				finalWidthPixels = glm::round(m_AspectRatio * ((float)finalHeightPixels));
 			}
@@ -263,7 +263,7 @@ namespace GUI {
 				finalHeightPixels = glm::round((1.0f / m_AspectRatio) * ((float)finalWidthPixels));
 			}
 			break;
-		case VIEW_SIZE_MODE_FILL:
+		case SizeMode::FILL:
 			// Leave as is
 			break;
 		default:
@@ -276,10 +276,10 @@ namespace GUI {
 		int xPixelOffset = 0;
 		switch (m_XConstraintOffsetMeasurementType)
 		{
-		case VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT:
+		case ConstraintMeasurementType::PERCENT:
 			xPixelOffset = glm::round((parentXMax - parentXMin) * (m_XConstraintOffset / 100.0f));
 			break;
-		case VIEW_CONSTRAINT_MEASUREMENT_TYPE_PIXELS:
+		case ConstraintMeasurementType::PIXELS:
 			xPixelOffset = glm::round(m_XConstraintOffset);
 			break;
 		default:
@@ -288,13 +288,13 @@ namespace GUI {
 		int xPixelDefaultSpot = 0;
 		switch (m_XConstraintLocation)
 		{
-		case VIEW_CONSTRAINT_LOCATION_LEFT:
+		case XConstraintLocation::LEFT:
 			xPixelDefaultSpot = glm::round(parentXMin + (finalWidthPixels / 2.0f));
 			break;
-		case VIEW_CONSTRAINT_LOCATION_CENTER:
+		case XConstraintLocation::CENTER:
 			xPixelDefaultSpot = glm::round(parentXMin + ((parentXMax - parentXMin)/2.0f));
 			break;
-		case VIEW_CONSTRAINT_LOCATION_RIGHT:
+		case XConstraintLocation::RIGHT:
 			xPixelDefaultSpot = glm::round(parentXMax - (finalWidthPixels / 2.0f));
 			break;
 		default:
@@ -308,10 +308,10 @@ namespace GUI {
 		int yPixelOffset = 0;
 		switch (m_XConstraintOffsetMeasurementType)
 		{
-		case VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT:
+		case ConstraintMeasurementType::PERCENT:
 			yPixelOffset = glm::round((parentYMax - parentYMin) * (m_YConstraintOffset / 100.0f));
 			break;
-		case VIEW_CONSTRAINT_MEASUREMENT_TYPE_PIXELS:
+		case ConstraintMeasurementType::PIXELS:
 			yPixelOffset = glm::round(m_YConstraintOffset);
 			break;
 		default:
@@ -320,13 +320,13 @@ namespace GUI {
 		int yPixelDefaultSpot = 0;
 		switch (m_YConstraintLocation)
 		{
-		case VIEW_CONSTRAINT_LOCATION_TOP:
+		case YConstraintLocation::TOP:
 			yPixelDefaultSpot = glm::round(parentYMax - (finalHeightPixels / 2.0f));
 			break;
-		case VIEW_CONSTRAINT_LOCATION_CENTER:
+		case YConstraintLocation::CENTER:
 			yPixelDefaultSpot = glm::round(parentYMin + ((parentYMax - parentYMin) / 2.0f));
 			break;
-		case VIEW_CONSTRAINT_LOCATION_BOTTOM:
+		case YConstraintLocation::BOTTOM:
 			yPixelDefaultSpot = glm::round(parentYMin + (finalHeightPixels / 2.0f));
 			break;
 		default:
@@ -346,33 +346,33 @@ namespace GUI {
 		}
 	}
 
-	void View::SetWidthConstraint(float width, int type)
+	void View::SetWidthConstraint(float width, ConstraintMeasurementType type)
 	{
 		m_WidthConstraint = width;
 		m_WidthConstraintMeasurementType = type;
 	}
 
-	void View::SetHeightConstraint(float height, int type)
+	void View::SetHeightConstraint(float height, ConstraintMeasurementType type)
 	{
 		m_HeightConstraint = height;
 		m_HeightConstraintMeasurementType = type;
 	}
 
-	void View::SetXConstraint(float offset, int offsetType, int location)
+	void View::SetXConstraint(float offset, ConstraintMeasurementType measurementType, XConstraintLocation location)
 	{
 		m_XConstraintOffset = offset;
-		m_XConstraintOffsetMeasurementType = offsetType;
+		m_XConstraintOffsetMeasurementType = measurementType;
 		m_XConstraintLocation = location;
 	}
 
-	void View::SetYConstraint(float offset, int offsetType, int location)
+	void View::SetYConstraint(float offset, ConstraintMeasurementType measurementType, YConstraintLocation location)
 	{
 		m_YConstraintOffset = offset;
-		m_YConstraintOffsetMeasurementType = offsetType;
+		m_YConstraintOffsetMeasurementType = measurementType;
 		m_YConstraintLocation = location;
 	}
 
-	void View::SetSizeMode(int sizeMode, float aspectRatio)
+	void View::SetSizeMode(SizeMode sizeMode, float aspectRatio)
 	{
 		m_SizeMode = sizeMode;
 		m_AspectRatio = aspectRatio;

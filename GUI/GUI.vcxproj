@@ -101,6 +101,7 @@
     <ClInclude Include="Source\Graphics\GUI\FreetypeManager.h" />
     <ClInclude Include="Source\Graphics\GUI\ImageView.h" />
     <ClInclude Include="Source\Graphics\GUI\Text.h" />
+    <ClInclude Include="Source\Graphics\GUI\TextView.h" />
     <ClInclude Include="Source\Graphics\GUI\View.h" />
     <ClInclude Include="Source\Graphics\Shader\Shader.h" />
     <ClInclude Include="Source\Graphics\Shader\ShaderManager.h" />
@@ -409,6 +410,7 @@
     <ClCompile Include="Source\Graphics\GUI\FreetypeManager.cpp" />
     <ClCompile Include="Source\Graphics\GUI\ImageView.cpp" />
     <ClCompile Include="Source\Graphics\GUI\Text.cpp" />
+    <ClCompile Include="Source\Graphics\GUI\TextView.cpp" />
     <ClCompile Include="Source\Graphics\GUI\View.cpp" />
     <ClCompile Include="Source\Graphics\Shader\Shader.cpp" />
     <ClCompile Include="Source\Graphics\Shader\ShaderManager.cpp" />

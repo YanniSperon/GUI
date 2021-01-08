@@ -181,9 +181,10 @@ int main() {
 
 
 	Shader textShader("Resources/Shaders/TempText", SHADER_VERTEX_SHADER | SHADER_FRAGMENT_SHADER);
-	GUI::Text* text = new GUI::Text("C:\\Windows\\Fonts\\times.ttf", 72, false, 0, 500, TEXT_ALIGN_LOCATION_LEFT, "FPS %.1f", 0.0f);
+	GUI::Text* text = new GUI::Text("C:\\Windows\\Fonts\\times.ttf", 72, false, 0, 500, GUI::Text::Alignment::LEFT, "FPS %.1f", 0.0f);
 
-	GUI::Text* textTemp = new GUI::Text("C:\\Windows\\Fonts\\times.ttf", 72, false, 0, 500, TEXT_ALIGN_LOCATION_LEFT, "VAVAVAVAToauidbuAanudiSbwudF|gk");
+	GUI::Text* textTemp = new GUI::Text("C:\\Windows\\Fonts\\times.ttf", 72, false, 0, 500, GUI::Text::Alignment::LEFT, "Loula");
+	textTemp->SetColor(Math::Scale255To1(glm::vec4(255.0f, 0.0f, 255.0f, 255.0f)));
 	textTemp->SetTranslation(glm::vec2(960.0f, 540.0f));
 
 
@@ -193,22 +194,26 @@ int main() {
 
 	GUI::View* mainView = new GUI::View(0.0f, 0.0f, (float)windowWidth, (float)windowHeight);
 	mainView->SetCornerRoundness(0.0f);
-	mainView->SetTintColor(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
-	mainView->SetWidthConstraint(100.0f, VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT);
-	mainView->SetHeightConstraint(100.0f, VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT);
+	mainView->SetTintColor(Math::Scale255To1(glm::vec4(75.0f, 75.0f, 75.0f, 255.0f)));
+	mainView->SetWidthConstraint(100.0f, GUI::View::ConstraintMeasurementType::PERCENT);
+	mainView->SetHeightConstraint(100.0f, GUI::View::ConstraintMeasurementType::PERCENT);
 	mainView->Recalculate(0.0f, 0.0f, (float)windowWidth, (float)windowHeight);
 
-	GUI::View* subView = new GUI::View(mainView);
+	GUI::ImageView* subView = new GUI::ImageView(mainView);
+	subView->SetSizeMode(GUI::View::SizeMode::ASPECT_FIT, 9.0f/16.0f);
+	subView->SetTexture("Resources/Textures/sexything.png");
+	subView->SetBorderWeight(10.0f);
+	subView->SetBorderColor(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
 	subView->SetTintColor(Math::Scale255To1(glm::vec4(222.0f, 170.0f, 29.0f, 255.0f)));
-	subView->SetWidthConstraint(500.0f, VIEW_CONSTRAINT_MEASUREMENT_TYPE_PIXELS);
-	subView->SetHeightConstraint(500.0f, VIEW_CONSTRAINT_MEASUREMENT_TYPE_PIXELS);
-	subView->SetXConstraint(0.0f, VIEW_CONSTRAINT_MEASUREMENT_TYPE_PIXELS, VIEW_CONSTRAINT_LOCATION_CENTER);
-	subView->SetYConstraint(0.0f, VIEW_CONSTRAINT_MEASUREMENT_TYPE_PIXELS, VIEW_CONSTRAINT_LOCATION_CENTER);
+	subView->SetWidthConstraint(500.0f, GUI::View::ConstraintMeasurementType::PIXELS);
+	subView->SetHeightConstraint(500.0f, GUI::View::ConstraintMeasurementType::PIXELS);
+	subView->SetXConstraint(0.0f, GUI::View::ConstraintMeasurementType::PIXELS, GUI::View::XConstraintLocation::CENTER);
+	subView->SetYConstraint(0.0f, GUI::View::ConstraintMeasurementType::PIXELS, GUI::View::YConstraintLocation::CENTER);
 	subView->Recalculate();
 
 	/*GUI::View* subView = new GUI::View(mainView);
 
-	subView->SetTintColor(glm::vec4(0.0f, 1.0f, 0.0f	, 1.0f));
+	subView->SetTintColor(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
 	subView->SetWidthConstraint(40.0f, VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT);
 	subView->SetHeightConstraint(40.0f, VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT);
 	subView->SetXConstraint(0.0f, VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT, VIEW_CONSTRAINT_LOCATION_LEFT);

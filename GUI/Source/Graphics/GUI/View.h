@@ -6,7 +6,7 @@
 #include <glew.h>
 #include <vector>
 
-#define VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT 1
+/*#define VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT 1
 #define VIEW_CONSTRAINT_MEASUREMENT_TYPE_PIXELS 2
 
 #define VIEW_CONSTRAINT_LOCATION_LEFT 1
@@ -17,24 +17,44 @@
 
 #define VIEW_SIZE_MODE_FILL 1
 #define VIEW_SIZE_MODE_ASPECT_FIT 2
-#define VIEW_SIZE_MODE_ASPECT_FILL 4
+#define VIEW_SIZE_MODE_ASPECT_FILL 4*/
 
 namespace GUI {
 	class View {
+	public:
+		enum class SizeMode {
+			FILL = 1,
+			ASPECT_FIT = 2,
+			ASPECT_FILL = 4
+		};
+		enum class ConstraintMeasurementType {
+			PERCENT = 1,
+			PIXELS = 2
+		};
+		enum class YConstraintLocation {
+			TOP = 1,
+			CENTER = 2,
+			BOTTOM = 4
+		};
+		enum class XConstraintLocation {
+			LEFT = 1,
+			CENTER = 2,
+			RIGHT = 4
+		};
 	private:
 		float m_WidthConstraint;
-		int m_WidthConstraintMeasurementType;
+		ConstraintMeasurementType m_WidthConstraintMeasurementType;
 		
 		float m_HeightConstraint;
-		int m_HeightConstraintMeasurementType;
+		ConstraintMeasurementType m_HeightConstraintMeasurementType;
 
 		float m_XConstraintOffset;
-		int m_XConstraintLocation;
-		int m_XConstraintOffsetMeasurementType;
+		XConstraintLocation m_XConstraintLocation;
+		ConstraintMeasurementType m_XConstraintOffsetMeasurementType;
 
 		float m_YConstraintOffset;
-		int m_YConstraintLocation;
-		int m_YConstraintOffsetMeasurementType;
+		YConstraintLocation m_YConstraintLocation;
+		ConstraintMeasurementType m_YConstraintOffsetMeasurementType;
 
 		GLuint m_VAO;
 		GLuint m_VBO;
@@ -59,18 +79,18 @@ namespace GUI {
 		float m_AspectRatio;
 
 		bool m_ShouldClipToBounds;
-		int m_SizeMode;
+		SizeMode m_SizeMode;
 
 	public:
 		View(float x, float y, float width, float height);
 		View(View* parent);
 		virtual ~View();
 
-		void SetWidthConstraint(float width, int type);
-		void SetHeightConstraint(float height, int type);
-		void SetXConstraint(float offset, int offsetType, int location);
-		void SetYConstraint(float offset, int offsetType, int location);
-		void SetSizeMode(int sizeMode, float aspectRatio);
+		void SetWidthConstraint(float width, ConstraintMeasurementType type);
+		void SetHeightConstraint(float height, ConstraintMeasurementType type);
+		void SetXConstraint(float offset, ConstraintMeasurementType measurementType, XConstraintLocation location);
+		void SetYConstraint(float offset, ConstraintMeasurementType measurementType, YConstraintLocation location);
+		void SetSizeMode(SizeMode sizeMode, float aspectRatio);
 
 		View* HitTest(double x, double y);
 
