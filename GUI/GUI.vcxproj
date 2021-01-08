@@ -96,6 +96,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Source\Global.h" />
+    <ClInclude Include="Source\Graphics\GUI\ButtonView.h" />
     <ClInclude Include="Source\Graphics\GUI\Font.h" />
     <ClInclude Include="Source\Graphics\GUI\FontManager.h" />
     <ClInclude Include="Source\Graphics\GUI\FreetypeManager.h" />
@@ -405,6 +406,7 @@
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Global.cpp" />
+    <ClCompile Include="Source\Graphics\GUI\ButtonView.cpp" />
     <ClCompile Include="Source\Graphics\GUI\Font.cpp" />
     <ClCompile Include="Source\Graphics\GUI\FontManager.cpp" />
     <ClCompile Include="Source\Graphics\GUI\FreetypeManager.cpp" />

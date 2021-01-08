@@ -10,7 +10,7 @@ namespace GUI {
 
 	ImageView::~ImageView()
 	{
-
+		delete m_Texture;
 	}
 
 	void ImageView::SetTexture(const std::string& name)

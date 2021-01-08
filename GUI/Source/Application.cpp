@@ -7,6 +7,7 @@
 #include "ImageView.h"
 #include "Text.h"
 #include "MathExtensions.h"
+#include "ButtonView.h"
 
 #include <glew.h>
 #include <glfw3.h>
@@ -183,7 +184,7 @@ int main() {
 	Shader textShader("Resources/Shaders/TempText", SHADER_VERTEX_SHADER | SHADER_FRAGMENT_SHADER);
 	GUI::Text* text = new GUI::Text("C:\\Windows\\Fonts\\times.ttf", 72, false, 0, 500, GUI::Text::Alignment::LEFT, "FPS %.1f", 0.0f);
 
-	GUI::Text* textTemp = new GUI::Text("C:\\Windows\\Fonts\\times.ttf", 72, false, 0, 500, GUI::Text::Alignment::LEFT, "Loula");
+	GUI::Text* textTemp = new GUI::Text("C:\\Windows\\Fonts\\times.ttf", 72, false, 0, 500, GUI::Text::Alignment::LEFT, "VAVAVAVAavavawndianuiodnwuia|qk");
 	textTemp->SetColor(Math::Scale255To1(glm::vec4(255.0f, 0.0f, 255.0f, 255.0f)));
 	textTemp->SetTranslation(glm::vec2(960.0f, 540.0f));
 
@@ -200,7 +201,6 @@ int main() {
 	mainView->Recalculate(0.0f, 0.0f, (float)windowWidth, (float)windowHeight);
 
 	GUI::ImageView* subView = new GUI::ImageView(mainView);
-	subView->SetSizeMode(GUI::View::SizeMode::ASPECT_FIT, 9.0f/16.0f);
 	subView->SetTexture("Resources/Textures/sexything.png");
 	subView->SetBorderWeight(10.0f);
 	subView->SetBorderColor(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
@@ -210,6 +210,24 @@ int main() {
 	subView->SetXConstraint(0.0f, GUI::View::ConstraintMeasurementType::PIXELS, GUI::View::XConstraintLocation::CENTER);
 	subView->SetYConstraint(0.0f, GUI::View::ConstraintMeasurementType::PIXELS, GUI::View::YConstraintLocation::CENTER);
 	subView->Recalculate();
+
+	GUI::ButtonView* subView2 = new GUI::ButtonView(subView);
+	subView2->SetBorderWeight(10.0f);
+	subView2->SetBorderColor(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+	subView2->SetTintColor(Math::Scale255To1(glm::vec4(222.0f, 170.0f, 29.0f, 255.0f)));
+	subView2->SetWidthConstraint(50.0f, GUI::View::ConstraintMeasurementType::PERCENT);
+	subView2->SetHeightConstraint(50.0f, GUI::View::ConstraintMeasurementType::PERCENT);
+	subView2->SetXConstraint(0.0f, GUI::View::ConstraintMeasurementType::PERCENT, GUI::View::XConstraintLocation::CENTER);
+	subView2->SetYConstraint(0.0f, GUI::View::ConstraintMeasurementType::PERCENT, GUI::View::YConstraintLocation::CENTER);
+	subView2->SetCallbackFunction([&subView2, &subView]() {
+		subView2->SetTintColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+		subView->SetTintColor(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+	});
+	//int ammo = 10;
+	//subView2->SetCallbackFunction([&ammo]() {
+	//	ammo--;
+	//});
+	subView2->Recalculate();
 
 	/*GUI::View* subView = new GUI::View(mainView);
 

@@ -92,7 +92,7 @@ namespace GUI {
 		void SetYConstraint(float offset, ConstraintMeasurementType measurementType, YConstraintLocation location);
 		void SetSizeMode(SizeMode sizeMode, float aspectRatio);
 
-		View* HitTest(double x, double y);
+		virtual View* HitTest(double x, double y);
 
 
 
