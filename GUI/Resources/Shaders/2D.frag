@@ -36,7 +36,7 @@ void main()
     vec4 finalColor = (aOpacity * (((1 - u_HasImageBackground) * u_TintColor) + (u_HasImageBackground * texture(u_Image, s_TextureCoordinate) * u_TintColor))) + ((1.0 - aOpacity) * bOpacity * u_BorderColor);
 
     o_Color = (u_ShouldClipToBounds * vec4(finalColor.xyz, finalColor.w * u_Opacity * bOpacity * smoothstep(0.0, 1.0, 1.0 - roundRect(gl_FragCoord.xy - u_ParentTranslation, u_ParentScale * 0.5, min(u_ParentScale.x, u_ParentScale.y) * u_ParentCornerRoundness)))) + ((1 - u_ShouldClipToBounds) * vec4(finalColor.xyz, finalColor.w * u_Opacity * bOpacity));
-
+    
 
 
     // EXPANDED VIEW

@@ -15,7 +15,7 @@ public:
 	TextureManager();
 	~TextureManager();
 
-	std::shared_ptr<Texture> GetTexture(const std::string& name);
+	std::shared_ptr<Texture> GetTexture(const std::string& name, Texture::Type type);
 
 	std::unordered_map<std::string, std::shared_ptr<Texture>>& GetManagedTextures();
 

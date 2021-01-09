@@ -5,19 +5,7 @@
 #include <glm.hpp>
 #include <glew.h>
 #include <vector>
-
-/*#define VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT 1
-#define VIEW_CONSTRAINT_MEASUREMENT_TYPE_PIXELS 2
-
-#define VIEW_CONSTRAINT_LOCATION_LEFT 1
-#define VIEW_CONSTRAINT_LOCATION_TOP 1
-#define VIEW_CONSTRAINT_LOCATION_CENTER 2
-#define VIEW_CONSTRAINT_LOCATION_RIGHT 4
-#define VIEW_CONSTRAINT_LOCATION_BOTTOM 4
-
-#define VIEW_SIZE_MODE_FILL 1
-#define VIEW_SIZE_MODE_ASPECT_FIT 2
-#define VIEW_SIZE_MODE_ASPECT_FILL 4*/
+#include <memory>
 
 namespace GUI {
 	class View {
@@ -62,6 +50,8 @@ namespace GUI {
 		View* m_Parent;
 		std::vector<View*> m_Children;
 
+		std::shared_ptr<Shader> m_Shader;
+
 		glm::vec4 m_TintColor;
 		float m_Opacity;
 		float m_CornerRoundness;
@@ -80,6 +70,8 @@ namespace GUI {
 
 		bool m_ShouldClipToBounds;
 		SizeMode m_SizeMode;
+
+		virtual void SetBounds(const glm::vec2& min, const glm::vec2& max);
 
 	public:
 		View(float x, float y, float width, float height);
@@ -103,8 +95,8 @@ namespace GUI {
 		void Recalculate(float x, float y, float width, float height);
 		void Recalculate();
 
-		virtual void Bind(const glm::mat4& projection, Shader& shader);
-		virtual void Draw(const glm::mat4& projection, Shader& shader);
+		virtual void Bind(const glm::mat4& projection);
+		virtual void Draw(const glm::mat4& projection);
 
 		void AddChild(View* view);
 		void SetParent(View* parent);

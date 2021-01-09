@@ -1,13 +1,14 @@
 #include "View.h"
 #include "Console.h"
 #include "Texture.h"
+#include "ShaderManager.h"
 
 #include <glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace GUI {
 	View::View(float x, float y, float width, float height)
-		: m_WidthConstraint(50.0f), m_WidthConstraintMeasurementType(ConstraintMeasurementType::PERCENT), m_HeightConstraint(50.0f), m_HeightConstraintMeasurementType(ConstraintMeasurementType::PERCENT), m_XConstraintOffset(0.0f), m_XConstraintLocation(XConstraintLocation::CENTER), m_XConstraintOffsetMeasurementType(ConstraintMeasurementType::PERCENT), m_YConstraintOffset(0.0f), m_YConstraintLocation(YConstraintLocation::CENTER), m_YConstraintOffsetMeasurementType(ConstraintMeasurementType::PERCENT), m_VAO(0), m_VBO(0), m_Scale(1.0f), m_Translation(0.0f), m_MinimumWidth(1.0f), m_MinimumHeight(1.0f), m_Opacity(1.0f), m_Children(), m_Parent(nullptr), m_CornerRoundness(0.0625f), m_TintColor(1.0f, 1.0f, 1.0f, 1.0f), m_MinimumBounds(x, y), m_MaximumBounds(x + width, y + height), m_AspectRatio(1.0f), m_ShouldClipToBounds(false), m_SizeMode(SizeMode::FILL), m_BorderWeight(0.0f), m_BorderColor(0.0f, 0.0f, 0.0f, 1.0f)
+		: m_WidthConstraint(50.0f), m_WidthConstraintMeasurementType(ConstraintMeasurementType::PERCENT), m_HeightConstraint(50.0f), m_HeightConstraintMeasurementType(ConstraintMeasurementType::PERCENT), m_XConstraintOffset(0.0f), m_XConstraintLocation(XConstraintLocation::CENTER), m_XConstraintOffsetMeasurementType(ConstraintMeasurementType::PERCENT), m_YConstraintOffset(0.0f), m_YConstraintLocation(YConstraintLocation::CENTER), m_YConstraintOffsetMeasurementType(ConstraintMeasurementType::PERCENT), m_VAO(0), m_VBO(0), m_Scale(1.0f), m_Translation(0.0f), m_MinimumWidth(1.0f), m_MinimumHeight(1.0f), m_Opacity(1.0f), m_Children(), m_Parent(nullptr), m_CornerRoundness(0.0625f), m_TintColor(1.0f, 1.0f, 1.0f, 1.0f), m_MinimumBounds(x, y), m_MaximumBounds(x + width, y + height), m_AspectRatio(1.0f), m_ShouldClipToBounds(false), m_SizeMode(SizeMode::FILL), m_BorderWeight(0.0f), m_BorderColor(0.0f, 0.0f, 0.0f, 1.0f), m_Shader(ShaderManager::GetInstance()->GetShader("Resources/Shaders/2D", SHADER_VERTEX_SHADER | SHADER_FRAGMENT_SHADER))
 	{
 		GLfloat vertices[] = {
 			-0.5f, -0.5f, // Bottom Left
@@ -41,7 +42,7 @@ namespace GUI {
 	}
 
 	View::View(View* parent)
-		: m_WidthConstraint(50.0f), m_WidthConstraintMeasurementType(ConstraintMeasurementType::PERCENT),  m_HeightConstraint(50.0f), m_HeightConstraintMeasurementType(ConstraintMeasurementType::PERCENT), m_XConstraintOffset(0.0f), m_XConstraintLocation(XConstraintLocation::CENTER), m_XConstraintOffsetMeasurementType(ConstraintMeasurementType::PERCENT), m_YConstraintOffset(0.0f), m_YConstraintLocation(YConstraintLocation::CENTER), m_YConstraintOffsetMeasurementType(ConstraintMeasurementType::PERCENT), m_VAO(0), m_VBO(0), m_Scale(1.0f), m_Translation(0.0f), m_MinimumWidth(1.0f), m_MinimumHeight(1.0f), m_Opacity(1.0f), m_Children(), m_Parent(parent), m_CornerRoundness(0.0625f), m_TintColor(1.0f, 1.0f, 1.0f, 1.0f), m_MinimumBounds(parent->m_MinimumBounds), m_MaximumBounds(parent->m_MaximumBounds), m_SizeMode(SizeMode::FILL), m_AspectRatio(1.0f), m_ShouldClipToBounds(false), m_BorderWeight(0.0f), m_BorderColor(0.0f, 0.0f, 0.0f, 1.0f)
+		: m_WidthConstraint(50.0f), m_WidthConstraintMeasurementType(ConstraintMeasurementType::PERCENT),  m_HeightConstraint(50.0f), m_HeightConstraintMeasurementType(ConstraintMeasurementType::PERCENT), m_XConstraintOffset(0.0f), m_XConstraintLocation(XConstraintLocation::CENTER), m_XConstraintOffsetMeasurementType(ConstraintMeasurementType::PERCENT), m_YConstraintOffset(0.0f), m_YConstraintLocation(YConstraintLocation::CENTER), m_YConstraintOffsetMeasurementType(ConstraintMeasurementType::PERCENT), m_VAO(0), m_VBO(0), m_Scale(1.0f), m_Translation(0.0f), m_MinimumWidth(1.0f), m_MinimumHeight(1.0f), m_Opacity(1.0f), m_Children(), m_Parent(parent), m_CornerRoundness(0.0625f), m_TintColor(1.0f, 1.0f, 1.0f, 1.0f), m_MinimumBounds(parent->m_MinimumBounds), m_MaximumBounds(parent->m_MaximumBounds), m_SizeMode(SizeMode::FILL), m_AspectRatio(1.0f), m_ShouldClipToBounds(false), m_BorderWeight(0.0f), m_BorderColor(0.0f, 0.0f, 0.0f, 1.0f), m_Shader(ShaderManager::GetInstance()->GetShader("Resources/Shaders/2D", SHADER_VERTEX_SHADER | SHADER_FRAGMENT_SHADER))
 	{
 		m_Parent->AddChild(this);
 		GLfloat vertices[] = {
@@ -194,8 +195,7 @@ namespace GUI {
 
 		m_Translation = glm::vec2(finalXTranslation, finalYTranslation);
 		m_Scale = glm::vec2(finalWidthPixels, finalHeightPixels);
-		m_MinimumBounds = glm::vec2(m_Translation - (m_Scale/2.0f));
-		m_MaximumBounds = glm::vec2(m_Translation + (m_Scale / 2.0f));
+		SetBounds(glm::vec2(m_Translation - (m_Scale / 2.0f)), glm::vec2(m_Translation + (m_Scale / 2.0f)));
 
 		for (int i = 0; i < m_Children.size(); i++) {
 			m_Children[i]->Recalculate();
@@ -249,18 +249,18 @@ namespace GUI {
 		{
 		case SizeMode::ASPECT_FILL:
 			if (finalHeightPixels >= finalWidthPixels) {
-				finalWidthPixels = glm::round(m_AspectRatio * ((float)finalHeightPixels));
+				finalWidthPixels = glm::round((1.0f / m_AspectRatio) * ((float)finalHeightPixels));
 			}
 			else if (finalHeightPixels < finalWidthPixels) {
-				finalHeightPixels = glm::round((1.0f / m_AspectRatio) * ((float)finalWidthPixels));
+				finalHeightPixels = glm::round(m_AspectRatio * ((float)finalWidthPixels));
 			}
 			break;
 		case SizeMode::ASPECT_FIT:
 			if (finalWidthPixels >= finalHeightPixels) {
-				finalWidthPixels = glm::round(m_AspectRatio * ((float)finalHeightPixels));
+				finalWidthPixels = glm::round((1.0f / m_AspectRatio) * ((float)finalHeightPixels));
 			}
 			else if (finalWidthPixels < finalHeightPixels) {
-				finalHeightPixels = glm::round((1.0f / m_AspectRatio) * ((float)finalWidthPixels));
+				finalHeightPixels = glm::round(m_AspectRatio * ((float)finalWidthPixels));
 			}
 			break;
 		case SizeMode::FILL:
@@ -334,16 +334,19 @@ namespace GUI {
 		}
 		int finalYTranslation = yPixelDefaultSpot + yPixelOffset;
 
-
-
 		m_Translation = glm::vec2(finalXTranslation, finalYTranslation);
 		m_Scale = glm::vec2(finalWidthPixels, finalHeightPixels);
-		m_MinimumBounds = glm::vec2(m_Translation - (m_Scale / 2.0f));
-		m_MaximumBounds = glm::vec2(m_Translation + (m_Scale / 2.0f));
+		SetBounds(glm::vec2(m_Translation - (m_Scale / 2.0f)), glm::vec2(m_Translation + (m_Scale / 2.0f)));
 
 		for (int i = 0; i < m_Children.size(); i++) {
 			m_Children[i]->Recalculate();
 		}
+	}
+
+	void View::SetBounds(const glm::vec2& min, const glm::vec2& max)
+	{
+		m_MinimumBounds = min;
+		m_MaximumBounds = max;
 	}
 
 	void View::SetWidthConstraint(float width, ConstraintMeasurementType type)
@@ -411,36 +414,36 @@ namespace GUI {
 		return glm::scale(glm::mat4(1.0f), glm::vec3(m_Scale, 1.0f));
 	}
 
-	void View::Bind(const glm::mat4& projection, Shader& shader)
+	void View::Bind(const glm::mat4& projection)
 	{
-		shader.Bind();
-		shader.SetMat4("u_P", projection);
-		shader.SetMat4("u_M", GetTransformationMatrix());
-		shader.SetVec4("u_TintColor", m_TintColor);
-		shader.SetFloat("u_Opacity", m_Opacity);
-		shader.SetFloat("u_CornerRoundness", m_CornerRoundness);
-		shader.SetInt("u_ShouldClipToBounds", m_Parent && m_ShouldClipToBounds);
+		m_Shader->Bind();
+		m_Shader->SetMat4("u_P", projection);
+		m_Shader->SetMat4("u_M", GetTransformationMatrix());
+		m_Shader->SetVec4("u_TintColor", m_TintColor);
+		m_Shader->SetFloat("u_Opacity", m_Opacity);
+		m_Shader->SetFloat("u_CornerRoundness", m_CornerRoundness);
+		m_Shader->SetInt("u_ShouldClipToBounds", m_Parent && m_ShouldClipToBounds);
 		if (m_Parent) {
-			shader.SetFloat("u_ParentCornerRoundness", m_Parent->m_CornerRoundness);
-			shader.SetVec2("u_ParentScale", m_Parent->m_Scale);
-			shader.SetVec2("u_ParentTranslation", m_Parent->m_Translation);
+			m_Shader->SetFloat("u_ParentCornerRoundness", m_Parent->m_CornerRoundness);
+			m_Shader->SetVec2("u_ParentScale", m_Parent->m_Scale);
+			m_Shader->SetVec2("u_ParentTranslation", m_Parent->m_Translation);
 		}
-		shader.SetInt("u_HasImageBackground", 0);
-		shader.SetFloat("u_BorderWeight", m_BorderWeight);
-		shader.SetVec4("u_BorderColor", m_BorderColor);
+		m_Shader->SetInt("u_HasImageBackground", 0);
+		m_Shader->SetFloat("u_BorderWeight", m_BorderWeight);
+		m_Shader->SetVec4("u_BorderColor", m_BorderColor);
 		Texture::Unbind(0);
 	}
 
-	void View::Draw(const glm::mat4& projection, Shader& shader)
+	void View::Draw(const glm::mat4& projection)
 	{
-		Bind(projection, shader);
+		Bind(projection);
 
 		glBindVertexArray(m_VAO);
 		glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 
 		for (int i = 0; i < m_Children.size(); i++) {
-			m_Children[i]->Draw(projection, shader);
+			m_Children[i]->Draw(projection);
 		}
 	}
 

@@ -24,6 +24,9 @@ namespace GUI {
 		std::map<char, Character> m_Characters;
 
 		GLuint m_AtlasTextureID;
+
+		unsigned int m_AtlasHeight;
+		unsigned int m_AtlasWidth;
 		
 		std::string m_Path;
 

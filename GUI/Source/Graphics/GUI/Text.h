@@ -36,10 +36,19 @@ namespace GUI {
 		Alignment m_Alignment;
 
 		glm::vec4 m_Color;
+
+		std::shared_ptr<Shader> m_Shader;
+
+		std::string m_FontPath;
+
+		int m_FontSize;
+
+		void Recalculate();
 	protected:
 		glm::vec2 m_Scale;
 		glm::vec2 m_Translation;
 	public:
+		Text();
 		Text(const std::string& fontPath, unsigned int fontSize, bool supportsMarkup, unsigned int numRows, unsigned int maxWidth, Alignment alignment, const char* fmt, ...);
 		~Text();
 
@@ -58,6 +67,6 @@ namespace GUI {
 		const glm::vec2& GetScale();
 		const glm::vec4& GetColor();
 
-		void Draw(const glm::mat4& projection, Shader& shader);
+		void Draw(const glm::mat4& projection);
 	};
 }

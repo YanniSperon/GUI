@@ -8,6 +8,7 @@
 #include "Text.h"
 #include "MathExtensions.h"
 #include "ButtonView.h"
+#include "ShaderManager.h"
 
 #include <glew.h>
 #include <glfw3.h>
@@ -63,6 +64,7 @@ int main() {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+	glfwWindowHint(GLFW_SAMPLES, 16);
 	//////////////////////////////////////////////////////////////////////////////////////////////
 	GLFWwindow* window = glfwCreateWindow(windowWidth, windowHeight, "GUI", NULL, NULL);
 	Input* input = new Input();
@@ -75,7 +77,13 @@ int main() {
 	GLenum err = glewInit();
 	Console::Assert(err == GLEW_OK, "Failed GLEW Initialization - %s", reinterpret_cast<char const*>(glewGetErrorString(err)));
 	//////////////////////////////////////////////////////////////////////////////////////////////
+	if (GLEW_ARB_texture_filter_anisotropic)
+	{
+
+	}
 	glEnable(GL_DEBUG_OUTPUT);
+	glEnable(GL_MULTISAMPLE);
+
 	//glEnable(GL_DEPTH_TEST);
 	//glDepthFunc(GL_LEQUAL);
 	//glEnable(GL_CULL_FACE);
@@ -181,17 +189,8 @@ int main() {
 
 
 
-	Shader textShader("Resources/Shaders/TempText", SHADER_VERTEX_SHADER | SHADER_FRAGMENT_SHADER);
-	GUI::Text* text = new GUI::Text("C:\\Windows\\Fonts\\times.ttf", 72, false, 0, 500, GUI::Text::Alignment::LEFT, "FPS %.1f", 0.0f);
-
-	GUI::Text* textTemp = new GUI::Text("C:\\Windows\\Fonts\\times.ttf", 72, false, 0, 500, GUI::Text::Alignment::LEFT, "VAVAVAVAavavawndianuiodnwuia|qk");
-	textTemp->SetColor(Math::Scale255To1(glm::vec4(255.0f, 0.0f, 255.0f, 255.0f)));
-	textTemp->SetTranslation(glm::vec2(960.0f, 540.0f));
-
-
-
-	Shader shader("Resources/Shaders/2D", SHADER_VERTEX_SHADER | SHADER_FRAGMENT_SHADER);
-	shader.Bind();
+	GUI::Text* text = new GUI::Text();
+	text->SetScale(glm::vec2(5.0f, 5.0f));
 
 	GUI::View* mainView = new GUI::View(0.0f, 0.0f, (float)windowWidth, (float)windowHeight);
 	mainView->SetCornerRoundness(0.0f);
@@ -200,34 +199,29 @@ int main() {
 	mainView->SetHeightConstraint(100.0f, GUI::View::ConstraintMeasurementType::PERCENT);
 	mainView->Recalculate(0.0f, 0.0f, (float)windowWidth, (float)windowHeight);
 
-	GUI::ImageView* subView = new GUI::ImageView(mainView);
-	subView->SetTexture("Resources/Textures/sexything.png");
-	subView->SetBorderWeight(10.0f);
-	subView->SetBorderColor(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
-	subView->SetTintColor(Math::Scale255To1(glm::vec4(222.0f, 170.0f, 29.0f, 255.0f)));
-	subView->SetWidthConstraint(500.0f, GUI::View::ConstraintMeasurementType::PIXELS);
-	subView->SetHeightConstraint(500.0f, GUI::View::ConstraintMeasurementType::PIXELS);
-	subView->SetXConstraint(0.0f, GUI::View::ConstraintMeasurementType::PIXELS, GUI::View::XConstraintLocation::CENTER);
-	subView->SetYConstraint(0.0f, GUI::View::ConstraintMeasurementType::PIXELS, GUI::View::YConstraintLocation::CENTER);
-	subView->Recalculate();
-
-	GUI::ButtonView* subView2 = new GUI::ButtonView(subView);
-	subView2->SetBorderWeight(10.0f);
-	subView2->SetBorderColor(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
-	subView2->SetTintColor(Math::Scale255To1(glm::vec4(222.0f, 170.0f, 29.0f, 255.0f)));
-	subView2->SetWidthConstraint(50.0f, GUI::View::ConstraintMeasurementType::PERCENT);
-	subView2->SetHeightConstraint(50.0f, GUI::View::ConstraintMeasurementType::PERCENT);
+	GUI::ImageView* subView2 = new GUI::ImageView(mainView);
+	subView2->SetTexture("Resources/Textures/testimage1.png");
+	//subView2->SetSizeMode(GUI::View::SizeMode::ASPECT_FIT, 1.33f);
+	//subView2->SetWidthConstraint(50.0f, GUI::View::ConstraintMeasurementType::PERCENT);
+	subView2->SetWidthConstraint(1000.0f, GUI::View::ConstraintMeasurementType::PIXELS);
+	//subView2->SetHeightConstraint(50.0f, GUI::View::ConstraintMeasurementType::PERCENT);
+	subView2->SetHeightConstraint(1000.0f, GUI::View::ConstraintMeasurementType::PIXELS); 
 	subView2->SetXConstraint(0.0f, GUI::View::ConstraintMeasurementType::PERCENT, GUI::View::XConstraintLocation::CENTER);
 	subView2->SetYConstraint(0.0f, GUI::View::ConstraintMeasurementType::PERCENT, GUI::View::YConstraintLocation::CENTER);
-	subView2->SetCallbackFunction([&subView2, &subView]() {
-		subView2->SetTintColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-		subView->SetTintColor(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
-	});
-	//int ammo = 10;
-	//subView2->SetCallbackFunction([&ammo]() {
-	//	ammo--;
-	//});
 	subView2->Recalculate();
+
+	GUI::ButtonView* subView3 = new GUI::ButtonView(subView2);
+	subView3->SetBorderWeight(0.0f);
+	subView3->SetBorderColor(glm::vec4(0.0f, 0.0f, 0.0f, 0.0f));
+	subView3->SetTintColor(glm::vec4(0.0f, 0.0f, 0.0f, 0.0f));
+	subView3->SetWidthConstraint(100.0f, GUI::View::ConstraintMeasurementType::PERCENT);
+	subView3->SetHeightConstraint(100.0f, GUI::View::ConstraintMeasurementType::PERCENT);
+	subView3->SetXConstraint(0.0f, GUI::View::ConstraintMeasurementType::PERCENT, GUI::View::XConstraintLocation::CENTER);
+	subView3->SetYConstraint(0.0f, GUI::View::ConstraintMeasurementType::PERCENT, GUI::View::YConstraintLocation::CENTER);
+	subView3->SetCallbackFunction([]() {
+		Console::Info("BUTTON PRESSED!");
+	});
+	subView3->Recalculate();
 
 	/*GUI::View* subView = new GUI::View(mainView);
 
@@ -293,7 +287,6 @@ int main() {
 			mainView->Recalculate(0, 0, windowWidth, windowHeight);
 			proj = glm::ortho(0.0f, (float)windowWidth, 0.0f, (float)windowHeight);;
 		}
-		text->SetText("FPS %.1f", 1.0 / deltaTime);
 		if (input->GetMouseButtonPressed(AD_MOUSE_BUTTON_1)) {
 			GUI::View* temp = mainView->HitTest(input->GetMousePositionX(), ((float)windowHeight) - input->GetMousePositionY());
 			if (temp) {
@@ -302,16 +295,16 @@ int main() {
 			else {
 				Console::Info("    Hit Test - NO RESULT");
 			}
+			text->SetText(std::string("Test"), "C:/Windows/Fonts/times.ttf", 12, false, -1, GUI::Text::Alignment::CENTER);
+			text->SetColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+			text->SetTranslation(glm::vec2(100.0f, 100.0f));
 		}
 		if (input->GetMouseButtonHeld(AD_MOUSE_BUTTON_2)) {
 			Console::Info("Mouse Position: (%.2f, %.2f)", input->GetMousePositionX(), input->GetMousePositionY());
 		}
 
-
-		mainView->Draw(proj, shader);
-		text->Draw(proj, textShader);
-		text->SetTranslation(glm::vec2(input->GetMousePositionX(), (float)windowHeight - input->GetMousePositionY()));
-		textTemp->Draw(proj, textShader);
+		mainView->Draw(proj);
+		text->Draw(proj);
 
 		glfwSwapBuffers(window);
 

@@ -7,24 +7,25 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-#define ATLAS_WIDTH 4096
-#define ATLAS_HEIGHT 4096
-#define INVERSE_ATLAS_WIDTH (1.0f / (float) ATLAS_WIDTH)
-#define INVERSE_ATLAS_HEIGHT (1.0f / (float) ATLAS_HEIGHT)
+#define PIXEL_GAP 5
 
 namespace GUI {
 	Font::Font(const std::string& path, unsigned int size)
-		: m_Path(path), m_Characters(), m_Size(size) //, tempShader(new Shader("Resources/Shaders/Text", SHADER_FRAGMENT_SHADER | SHADER_VERTEX_SHADER))
+		: m_Path(path), m_Characters(), m_Size(size), m_HasFakeUser(false), m_AtlasHeight(size * 20), m_AtlasWidth(size * 20) //, tempShader(new Shader("Resources/Shaders/Text", SHADER_FRAGMENT_SHADER | SHADER_VERTEX_SHADER))
 	{
 		glGenTextures(1, &m_AtlasTextureID);
 
 		glBindTexture(GL_TEXTURE_2D, m_AtlasTextureID);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, ATLAS_WIDTH, ATLAS_HEIGHT, 0, GL_RED, GL_UNSIGNED_BYTE, nullptr);
+
+		float inverseAtlasWidth = (1.0f / (float)m_AtlasWidth);
+		float inverseAtlasHeight = (1.0f / (float)m_AtlasHeight);
+
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, m_AtlasWidth, m_AtlasHeight, 0, GL_RED, GL_UNSIGNED_BYTE, nullptr);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 		FT_Face face;
 		if (FT_New_Face(FreetypeManager::GetInstance()->GetLibrary(), path.c_str(), 0, &face))
@@ -42,6 +43,7 @@ namespace GUI {
 			for (unsigned char c = 0; c < 255; c++)
 			{
 				if (FT_Load_Char(face, c, FT_LOAD_RENDER))
+				//if (FT_Load_Char(face, c, FT_LOAD_NO_HINTING | FT_LOAD_MONOCHROME)) This produces a monochrome image, need to somehow convert monochrome to GL_RED or something
 				{
 					Console::Error("Failed to load Glyph");
 					continue;
@@ -66,8 +68,8 @@ namespace GUI {
 				float floatHalfWidth = floatWidth * 0.5f;
 				float floatHalfHeight = floatHeight * 0.5f;
 
-				glm::vec2 bottomLeftTexCoord = glm::vec2(floatXOffset * INVERSE_ATLAS_WIDTH, (floatYOffset + floatHeight) * INVERSE_ATLAS_HEIGHT);
-				glm::vec2 topRightTexCoord = glm::vec2((floatXOffset + floatWidth) * INVERSE_ATLAS_WIDTH, floatYOffset * INVERSE_ATLAS_HEIGHT);
+				glm::vec2 bottomLeftTexCoord = glm::vec2(floatXOffset * inverseAtlasWidth, (floatYOffset + floatHeight) * inverseAtlasHeight);
+				glm::vec2 topRightTexCoord = glm::vec2((floatXOffset + floatWidth) * inverseAtlasWidth, floatYOffset * inverseAtlasHeight);
 
 				m_Characters[c] = {
 					bottomLeftTexCoord,
@@ -109,11 +111,11 @@ namespace GUI {
 
 				glTexSubImage2D(GL_TEXTURE_2D, 0, xOffset, yOffset, width, height, GL_RED, GL_UNSIGNED_BYTE, face->glyph->bitmap.buffer);
 
-				xOffset += width + 4;
-				if (xOffset + size >= ATLAS_WIDTH) {
+				xOffset += width + PIXEL_GAP;
+				if (xOffset + size >= m_AtlasWidth) {
 					xOffset = 0;
-					yOffset += size + 4;
-					if (yOffset >= ATLAS_HEIGHT) {
+					yOffset += size + PIXEL_GAP;
+					if (yOffset >= m_AtlasHeight) {
 						break;
 					}
 				}

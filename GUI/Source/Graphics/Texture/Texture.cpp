@@ -4,16 +4,16 @@
 
 #include "stb_image.h"
 
-Texture::Texture(const std::string& name)
+Texture::Texture(const std::string& name, Type type)
 	: m_ID(0), m_FakeUser(false), m_Path(name)
 {
-	LoadTexture(name);
+	LoadTexture(name, type);
 }
 
-Texture::Texture(const glm::vec4& color)
+Texture::Texture(const glm::vec4& color, Type type)
 	: m_ID(0), m_FakeUser(false), m_Path("COLOR")
 {
-	LoadColor(color);
+	LoadColor(color, type);
 }
 
 Texture::~Texture()
@@ -22,7 +22,7 @@ Texture::~Texture()
 	Console::Warning("Deleted texture");
 }
 
-void Texture::LoadTexture(const std::string& name)
+void Texture::LoadTexture(const std::string& name, Type type)
 {
 	glGenTextures(1, &m_ID);
 	stbi_set_flip_vertically_on_load(1);
@@ -30,26 +30,46 @@ void Texture::LoadTexture(const std::string& name)
 	int width, height, nrChannels;
 	unsigned char* data = stbi_load(name.c_str(), &width, &height, &nrChannels, 0);
 
+
 	if (data)
 	{
 		GLenum format = GL_RED;
-		if (nrChannels == 1) {
+		switch (nrChannels)
+		{
+		case 1:
 			format = GL_RED;
-		}
-		else if (nrChannels == 3) {
+			break;
+		case 3:
 			format = GL_RGB;
-		}
-		else if (nrChannels == 4) {
+			break;
+		case 4:
 			format = GL_RGBA;
+			break;
+		default:
+			break;
 		}
+
 		glBindTexture(GL_TEXTURE_2D, m_ID);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+		switch (type)
+		{
+		case Texture::Type::TWOD:
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			break;
+		case Texture::Type::THREED:
+			glGenerateMipmap(GL_TEXTURE_2D);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			break;
+		default:
+			break;
+		}
+
 
 		stbi_image_free(data);
 	}
@@ -60,7 +80,7 @@ void Texture::LoadTexture(const std::string& name)
 	}
 }
 
-void Texture::LoadColor(const glm::vec4& color)
+void Texture::LoadColor(const glm::vec4& color, Type type)
 {
 	GLubyte colorImageData[] = {
 		(GLubyte)color.x * 255,

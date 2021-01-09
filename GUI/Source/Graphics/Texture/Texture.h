@@ -13,12 +13,16 @@ private:
 	std::string m_Path;
 
 public:
-	Texture(const std::string& name);
-	Texture(const glm::vec4& color);
+	enum class Type {
+		TWOD = 0,
+		THREED = 1,
+	};
+	Texture(const std::string& name, Type type);
+	Texture(const glm::vec4& color, Type type);
 	~Texture();
 
-	void LoadTexture(const std::string& name);
-	void LoadColor(const glm::vec4& color);
+	void LoadTexture(const std::string& name, Type type);
+	void LoadColor(const glm::vec4& color, Type type);
 
 	void Bind(int slot);
 

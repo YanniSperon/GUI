@@ -1,5 +1,6 @@
 #include "ImageView.h"
 #include "Console.h"
+#include "TextureManager.h"
 
 namespace GUI {
 	ImageView::ImageView(View* parent)
@@ -10,21 +11,21 @@ namespace GUI {
 
 	ImageView::~ImageView()
 	{
-		delete m_Texture;
+		TextureManager::GetInstance()->MarkForCleanup();
 	}
 
 	void ImageView::SetTexture(const std::string& name)
 	{
 		if (m_Texture) {
-			delete m_Texture;
+			TextureManager::GetInstance()->MarkForCleanup();
 		}
-		m_Texture = new Texture(name);
+		m_Texture = TextureManager::GetInstance()->GetTexture(name, Texture::Type::TWOD);
 	}
 
-	void ImageView::Bind(const glm::mat4& projection, Shader& shader)
+	void ImageView::Bind(const glm::mat4& projection)
 	{
-		View::Bind(projection, shader);
-		shader.SetInt("u_HasImageBackground", 1);
+		View::Bind(projection);
+		m_Shader->SetInt("u_HasImageBackground", 1);
 		if (m_Texture) {
 			m_Texture->Bind(0);
 		}

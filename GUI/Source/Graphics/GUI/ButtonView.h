@@ -3,11 +3,6 @@
 
 #include <functional>
 
-//#define BIND_CALLBACK(x) std::bind(&x, this, std::placeholders::_1)
-//int test() {
-//	std::bind(&test, this);
-//}
-
 namespace GUI {
 	class ButtonView: public View {
 	private:

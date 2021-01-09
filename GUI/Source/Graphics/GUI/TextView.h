@@ -1,19 +1,23 @@
-/*#pragma once
+#pragma once
 #include "View.h"
 #include "Text.h"
 
 #include <memory>
-
+#include <string>
+/*
 namespace GUI {
-	class TextView : public View {
+	class TextView : public View, public Text {
 	private:
-		std::unique_ptr<Text> m_Text;
+		//friend class Text;
+		//Text m_Text;
 	public:
 		TextView(View* parent);
 		virtual ~TextView() override;
 
-		void SetText();
+		Text& GetText();
 
-		virtual void Bind(const glm::mat4& projection, Shader& shader) override;
+		virtual void Draw(const glm::mat4& projection, Shader& shader) override;
+	protected:
+		virtual void SetBounds(const glm::vec2& min, const glm::vec2& max) override;
 	};
 }*/

@@ -14,13 +14,13 @@ TextureManager::~TextureManager()
 	m_Textures.clear();
 }
 
-std::shared_ptr<Texture> TextureManager::GetTexture(const std::string& name)
+std::shared_ptr<Texture> TextureManager::GetTexture(const std::string& name, Texture::Type type)
 {
 	if (m_Textures.find(name) != m_Textures.end()) {
 		return m_Textures[name];
 	}
 	else {
-		m_Textures[name] = std::make_shared<Texture>(name);
+		m_Textures[name] = std::make_shared<Texture>(name, type);
 		return m_Textures[name];
 	}
 }
