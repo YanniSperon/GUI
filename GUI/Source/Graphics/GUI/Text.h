@@ -41,6 +41,8 @@ namespace GUI {
 
 		std::string m_FontPath;
 
+		bool m_UsePtSize;
+
 		int m_FontSize;
 
 		void Recalculate();
@@ -49,10 +51,10 @@ namespace GUI {
 		glm::vec2 m_Translation;
 	public:
 		Text();
-		Text(const std::string& fontPath, unsigned int fontSize, bool supportsMarkup, unsigned int numRows, unsigned int maxWidth, Alignment alignment, const char* fmt, ...);
+		Text(const std::string& fontPath, unsigned int fontSize, bool usePtSize, bool supportsMarkup, unsigned int numRows, unsigned int maxWidth, Alignment alignment, const char* fmt, ...);
 		~Text();
 
-		void SetText(const std::string& text, const std::string& fontPath = std::string("keepFont"), int fontSize = -1, bool supportsMarkup = false, int numRows = -1, Alignment alignment = Alignment::PREVIOUS);
+		void SetTextAttributes(const std::string& text, const std::string& fontPath = std::string("keepFont"), int fontSize = -1, int usePtSize = -1, int supportsMarkup = -1, int numRows = -1, Alignment alignment = Alignment::PREVIOUS);
 		void SetText(const char* fmt, ...);
 		void SetNumberOfRows(unsigned int numRows);
 		void SetMaxWidth(unsigned int maxWidth);

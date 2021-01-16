@@ -8,6 +8,7 @@
 #include "Text.h"
 #include "MathExtensions.h"
 #include "ButtonView.h"
+#include "TextView.h"
 #include "ShaderManager.h"
 
 #include <glew.h>
@@ -186,11 +187,9 @@ int main() {
 
 
 
+	GUI::Text* temptex = new GUI::Text("C:/Windows/Fonts/Arial.ttf", 24, true, false, 0, 0, GUI::Text::Alignment::DEFAULT, "Test\ntesting");
+	temptex->SetTranslation(glm::vec2(100.0f, 100.0f));
 
-
-
-	GUI::Text* text = new GUI::Text();
-	text->SetScale(glm::vec2(5.0f, 5.0f));
 
 	GUI::View* mainView = new GUI::View(0.0f, 0.0f, (float)windowWidth, (float)windowHeight);
 	mainView->SetCornerRoundness(0.0f);
@@ -199,29 +198,41 @@ int main() {
 	mainView->SetHeightConstraint(100.0f, GUI::View::ConstraintMeasurementType::PERCENT);
 	mainView->Recalculate(0.0f, 0.0f, (float)windowWidth, (float)windowHeight);
 
-	GUI::ImageView* subView2 = new GUI::ImageView(mainView);
-	subView2->SetTexture("Resources/Textures/testimage1.png");
-	//subView2->SetSizeMode(GUI::View::SizeMode::ASPECT_FIT, 1.33f);
-	//subView2->SetWidthConstraint(50.0f, GUI::View::ConstraintMeasurementType::PERCENT);
-	subView2->SetWidthConstraint(1000.0f, GUI::View::ConstraintMeasurementType::PIXELS);
-	//subView2->SetHeightConstraint(50.0f, GUI::View::ConstraintMeasurementType::PERCENT);
-	subView2->SetHeightConstraint(1000.0f, GUI::View::ConstraintMeasurementType::PIXELS); 
+	GUI::View* subView2 = new GUI::View(mainView);
+	subView2->SetTintColor(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+	subView2->SetCornerRoundness(0.5f);
+	subView2->SetBorderWeight(5.0f);
+	subView2->SetWidthConstraint(50.0f, GUI::View::ConstraintMeasurementType::PERCENT);
+	subView2->SetHeightConstraint(50.0f, GUI::View::ConstraintMeasurementType::PERCENT);
 	subView2->SetXConstraint(0.0f, GUI::View::ConstraintMeasurementType::PERCENT, GUI::View::XConstraintLocation::CENTER);
 	subView2->SetYConstraint(0.0f, GUI::View::ConstraintMeasurementType::PERCENT, GUI::View::YConstraintLocation::CENTER);
 	subView2->Recalculate();
 
-	GUI::ButtonView* subView3 = new GUI::ButtonView(subView2);
-	subView3->SetBorderWeight(0.0f);
-	subView3->SetBorderColor(glm::vec4(0.0f, 0.0f, 0.0f, 0.0f));
-	subView3->SetTintColor(glm::vec4(0.0f, 0.0f, 0.0f, 0.0f));
+	GUI::TextView* subView3 = new GUI::TextView(subView2);
+	subView3->GetText().SetTextAttributes("Testing123", "C:/Windows/Fonts/Arial.ttf", 24, true);
+	subView3->SetCornerRoundness(0.0f);
+	subView3->SetTintColor(Math::Scale255To1(glm::vec4(75.0f, 75.0f, 75.0f, 50.0f)));
 	subView3->SetWidthConstraint(100.0f, GUI::View::ConstraintMeasurementType::PERCENT);
 	subView3->SetHeightConstraint(100.0f, GUI::View::ConstraintMeasurementType::PERCENT);
 	subView3->SetXConstraint(0.0f, GUI::View::ConstraintMeasurementType::PERCENT, GUI::View::XConstraintLocation::CENTER);
 	subView3->SetYConstraint(0.0f, GUI::View::ConstraintMeasurementType::PERCENT, GUI::View::YConstraintLocation::CENTER);
-	subView3->SetCallbackFunction([]() {
-		Console::Info("BUTTON PRESSED!");
-	});
 	subView3->Recalculate();
+
+
+	//GUI::ButtonView* subView3 = new GUI::ButtonView(subView2);
+	//subView3->SetBorderWeight(0.0f);
+	//subView3->SetBorderColor(glm::vec4(0.0f, 0.0f, 0.0f, 0.0f));
+	//subView3->SetTintColor(glm::vec4(0.0f, 0.0f, 0.0f, 0.0f));
+	//subView3->SetWidthConstraint(100.0f, GUI::View::ConstraintMeasurementType::PERCENT);
+	//subView3->SetHeightConstraint(100.0f, GUI::View::ConstraintMeasurementType::PERCENT);
+	//subView3->SetXConstraint(0.0f, GUI::View::ConstraintMeasurementType::PERCENT, GUI::View::XConstraintLocation::CENTER);
+	//subView3->SetYConstraint(0.0f, GUI::View::ConstraintMeasurementType::PERCENT, GUI::View::YConstraintLocation::CENTER);
+	//subView3->SetCallbackFunction([]() {
+	//	Console::Info("BUTTON PRESSED!");
+	//});
+	//subView3->Recalculate();
+
+
 
 	/*GUI::View* subView = new GUI::View(mainView);
 
@@ -295,16 +306,13 @@ int main() {
 			else {
 				Console::Info("    Hit Test - NO RESULT");
 			}
-			text->SetText(std::string("Test"), "C:/Windows/Fonts/times.ttf", 12, false, -1, GUI::Text::Alignment::CENTER);
-			text->SetColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-			text->SetTranslation(glm::vec2(100.0f, 100.0f));
 		}
 		if (input->GetMouseButtonHeld(AD_MOUSE_BUTTON_2)) {
 			Console::Info("Mouse Position: (%.2f, %.2f)", input->GetMousePositionX(), input->GetMousePositionY());
 		}
 
 		mainView->Draw(proj);
-		text->Draw(proj);
+		temptex->Draw(proj);
 
 		glfwSwapBuffers(window);
 

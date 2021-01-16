@@ -10,9 +10,12 @@
 #define PIXEL_GAP 5
 
 namespace GUI {
-	Font::Font(const std::string& path, unsigned int size)
-		: m_Path(path), m_Characters(), m_Size(size), m_HasFakeUser(false), m_AtlasHeight(size * 20), m_AtlasWidth(size * 20) //, tempShader(new Shader("Resources/Shaders/Text", SHADER_FRAGMENT_SHADER | SHADER_VERTEX_SHADER))
+	Font::Font(const std::string& path, unsigned int size, bool usePtSize)
+		: m_Path(path), m_Characters(), m_Size(usePtSize ? glm::round((float)size * 1.3333333): size), m_HasFakeUser(false), m_PtSize(usePtSize ? size : glm::round((float)size * 1.3333333)) //, tempShader(new Shader("Resources/Shaders/Text", SHADER_FRAGMENT_SHADER | SHADER_VERTEX_SHADER))
 	{
+		m_AtlasHeight = (m_Size * 20 + PIXEL_GAP * 20);
+		m_AtlasWidth = (m_Size * 20 + PIXEL_GAP * 20);
+
 		glGenTextures(1, &m_AtlasTextureID);
 
 		glBindTexture(GL_TEXTURE_2D, m_AtlasTextureID);
@@ -112,9 +115,9 @@ namespace GUI {
 				glTexSubImage2D(GL_TEXTURE_2D, 0, xOffset, yOffset, width, height, GL_RED, GL_UNSIGNED_BYTE, face->glyph->bitmap.buffer);
 
 				xOffset += width + PIXEL_GAP;
-				if (xOffset + size >= m_AtlasWidth) {
+				if (xOffset + m_Size >= m_AtlasWidth) {
 					xOffset = 0;
-					yOffset += size + PIXEL_GAP;
+					yOffset += m_Size + PIXEL_GAP;
 					if (yOffset >= m_AtlasHeight) {
 						break;
 					}

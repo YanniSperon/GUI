@@ -93,7 +93,7 @@ namespace GUI {
 		glm::mat4 GetScaleMatrix();
 
 		void Recalculate(float x, float y, float width, float height);
-		void Recalculate();
+		virtual void Recalculate();
 
 		virtual void Bind(const glm::mat4& projection);
 		virtual void Draw(const glm::mat4& projection);

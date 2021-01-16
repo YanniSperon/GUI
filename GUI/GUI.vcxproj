@@ -100,6 +100,7 @@
     <ClInclude Include="Source\Graphics\GUI\Font.h" />
     <ClInclude Include="Source\Graphics\GUI\FontManager.h" />
     <ClInclude Include="Source\Graphics\GUI\FreetypeManager.h" />
+    <ClInclude Include="Source\Graphics\GUI\Gesture.h" />
     <ClInclude Include="Source\Graphics\GUI\ImageView.h" />
     <ClInclude Include="Source\Graphics\GUI\Text.h" />
     <ClInclude Include="Source\Graphics\GUI\TextView.h" />
@@ -108,10 +109,14 @@
     <ClInclude Include="Source\Graphics\Shader\ShaderManager.h" />
     <ClInclude Include="Source\Graphics\Texture\Texture.h" />
     <ClInclude Include="Source\Graphics\Texture\TextureManager.h" />
+    <ClInclude Include="Source\Utility\AutomaticTimer.h" />
     <ClInclude Include="Source\Utility\Console.h" />
+    <ClInclude Include="Source\Utility\Converter.h" />
     <ClInclude Include="Source\Utility\Input.h" />
+    <ClInclude Include="Source\Utility\ManualTimer.h" />
     <ClInclude Include="Source\Utility\MathExtensions.h" />
     <ClInclude Include="Source\Utility\Random.h" />
+    <ClInclude Include="Source\Utility\Timer.h" />
     <ClInclude Include="Source\Vendor\glm\common.hpp" />
     <ClInclude Include="Source\Vendor\glm\detail\_features.hpp" />
     <ClInclude Include="Source\Vendor\glm\detail\_fixes.hpp" />
@@ -418,9 +423,13 @@
     <ClCompile Include="Source\Graphics\Shader\ShaderManager.cpp" />
     <ClCompile Include="Source\Graphics\Texture\Texture.cpp" />
     <ClCompile Include="Source\Graphics\Texture\TextureManager.cpp" />
+    <ClCompile Include="Source\Utility\AutomaticTimer.cpp" />
     <ClCompile Include="Source\Utility\Console.cpp" />
+    <ClCompile Include="Source\Utility\Converter.cpp" />
     <ClCompile Include="Source\Utility\Input.cpp" />
+    <ClCompile Include="Source\Utility\ManualTimer.cpp" />
     <ClCompile Include="Source\Utility\Random.cpp" />
+    <ClCompile Include="Source\Utility\Timer.cpp" />
     <ClCompile Include="Source\Vendor\glm\detail\glm.cpp" />
     <ClCompile Include="Source\Vendor\imgui\Edited\ImGuiOpenGLRenderer.cpp" />
     <ClCompile Include="Source\Vendor\imgui\imgui.cpp" />

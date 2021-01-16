@@ -31,6 +31,7 @@ namespace GUI {
 		std::string m_Path;
 
 		unsigned int m_Size;
+		unsigned int m_PtSize;
 
 		//GLuint m_VAO;
 		//GLuint m_VBO;
@@ -41,7 +42,7 @@ namespace GUI {
 
 	public:
 
-		Font(const std::string& path, unsigned int size);
+		Font(const std::string& path, unsigned int size, bool usePtSize);
 		~Font();
 
 		void Draw(const glm::mat4& projection);

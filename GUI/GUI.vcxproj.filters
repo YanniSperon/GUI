@@ -959,6 +959,11 @@
     <ClInclude Include="Source\Graphics\GUI\Text.h" />
     <ClInclude Include="Source\Graphics\GUI\TextView.h" />
     <ClInclude Include="Source\Graphics\GUI\ButtonView.h" />
+    <ClInclude Include="Source\Graphics\GUI\Gesture.h" />
+    <ClInclude Include="Source\Utility\Timer.h" />
+    <ClInclude Include="Source\Utility\ManualTimer.h" />
+    <ClInclude Include="Source\Utility\AutomaticTimer.h" />
+    <ClInclude Include="Source\Utility\Converter.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp" />
@@ -1021,5 +1026,9 @@
     <ClCompile Include="Source\Graphics\GUI\Text.cpp" />
     <ClCompile Include="Source\Graphics\GUI\TextView.cpp" />
     <ClCompile Include="Source\Graphics\GUI\ButtonView.cpp" />
+    <ClCompile Include="Source\Utility\Timer.cpp" />
+    <ClCompile Include="Source\Utility\ManualTimer.cpp" />
+    <ClCompile Include="Source\Utility\AutomaticTimer.cpp" />
+    <ClCompile Include="Source\Utility\Converter.cpp" />
   </ItemGroup>
 </Project>

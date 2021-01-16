@@ -5,7 +5,6 @@
 
 namespace GUI {
 	class ButtonView: public View {
-	private:
 	protected:
 		std::function<void()> m_CallbackFunction;
 	public:

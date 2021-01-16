@@ -1,6 +1,5 @@
 #include "TextView.h"
 
-/*
 namespace GUI {
 	TextView::TextView(View* parent)
 		: View(parent), m_Text()
@@ -18,15 +17,16 @@ namespace GUI {
 		return m_Text;
 	}
 
-	void TextView::Draw(const glm::mat4& projection, Shader& shader)
+	void TextView::Recalculate()
 	{
-		View::Draw(projection, shader);
+		View::Recalculate();
+		m_Text.SetTranslation(glm::vec2(m_MaximumBounds - m_MinimumBounds));
+		m_Text.SetMaxWidth(m_MaximumBounds.x - m_MinimumBounds.x);
+	}
+
+	void TextView::Draw(const glm::mat4& projection)
+	{
+		View::Draw(projection);
 		m_Text.Draw(projection);
 	}
-
-	void TextView::SetBounds(const glm::vec2& min, const glm::vec2& max)
-	{
-
-	}
 }
-*/

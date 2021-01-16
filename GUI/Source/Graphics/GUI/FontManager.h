@@ -16,7 +16,7 @@ namespace GUI {
 		FontManager();
 		~FontManager();
 
-		std::shared_ptr<Font> GetFont(const std::string& path, unsigned int size);
+		std::shared_ptr<Font> GetFont(const std::string& path, unsigned int size, bool usePtSize);
 		std::unordered_map<std::string, std::shared_ptr<Font>>& GetManagedFonts();
 
 		void Cleanup();
