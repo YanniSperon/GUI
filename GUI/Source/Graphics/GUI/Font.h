@@ -8,14 +8,26 @@
 #include <map>
 
 namespace GUI {
-
 	struct Character {
-		glm::vec2 bottomLeftTexCoord; // Texture coordinates of the bottom left of the rect
-		glm::vec2 topRightTexCoord;   // Texture coordinates of the top right of the rect
-		glm::ivec2 size;              // Size of glyph
-		glm::ivec2 bearing;           // Offset from baseline to left/top of glyph
-		glm::ivec2 advance;           // Offset to advance to next glyph
-		GLfloat vertices[24];         // Vertex data including the size and the vertex coordinates
+		struct Vertex {
+			glm::vec2 position;
+			glm::vec2 textureCoordinate;
+			glm::vec4 color;
+		};
+		struct Face {
+			Vertex bottomLeft;
+			Vertex topLeft;
+			Vertex topRight;
+			Vertex bottomLeftDuplicate;
+			Vertex topRightDuplicate;
+			Vertex bottomRight;
+		};
+		glm::vec2 bottomLeftTexCoord;                // Texture coordinates of the bottom left of the rect
+		glm::vec2 topRightTexCoord;                  // Texture coordinates of the top right of the rect
+		glm::ivec2 size;                             // Size of glyph
+		glm::ivec2 bearing;                          // Offset from baseline to left/top of glyph
+		glm::ivec2 advance;                          // Offset to advance to next glyph
+		Face face;                                   // Vertex data including the size and the vertex coordinates
 		std::map<char, glm::ivec2> kerning;          // Specific offsets for following characters
 	};
 

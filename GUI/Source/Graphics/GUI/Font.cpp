@@ -11,10 +11,10 @@
 
 namespace GUI {
 	Font::Font(const std::string& path, unsigned int size, bool usePtSize)
-		: m_Path(path), m_Characters(), m_Size(usePtSize ? glm::round((float)size * 1.3333333): size), m_HasFakeUser(false), m_PtSize(usePtSize ? size : glm::round((float)size * 1.3333333)) //, tempShader(new Shader("Resources/Shaders/Text", SHADER_FRAGMENT_SHADER | SHADER_VERTEX_SHADER))
+		: m_Path(path), m_Characters(), m_Size(usePtSize ? glm::round(static_cast<float>(size) * 1.3333333f): size), m_HasFakeUser(false), m_PtSize(usePtSize ? size : glm::round((float)size * 1.3333333)) //, tempShader(new Shader("Resources/Shaders/Text", SHADER_FRAGMENT_SHADER | SHADER_VERTEX_SHADER))
 	{
-		m_AtlasHeight = (m_Size * 20 + PIXEL_GAP * 20);
-		m_AtlasWidth = (m_Size * 20 + PIXEL_GAP * 20);
+		m_AtlasHeight = ((m_Size + PIXEL_GAP) * 20);
+		m_AtlasWidth = ((m_Size + PIXEL_GAP) * 20);
 
 		glGenTextures(1, &m_AtlasTextureID);
 
@@ -81,19 +81,37 @@ namespace GUI {
 					bearing,
 					advance,
 					{
-						0.0f, bearingFloat.y - charSizeFloat.y,             // Bottom Left
-						bottomLeftTexCoord.x , bottomLeftTexCoord.y,        // 
-						0.0f, bearingFloat.y,								// Top Left
-						bottomLeftTexCoord.x, topRightTexCoord.y,			// 
-						charSizeFloat.x, bearingFloat.y,					// Top Right
-						topRightTexCoord.x, topRightTexCoord.y,				// 
-
-						0.0f, bearingFloat.y - charSizeFloat.y,             // Bottom Left
-						bottomLeftTexCoord.x, bottomLeftTexCoord.y,			// 
-						charSizeFloat.x, bearingFloat.y,					// Top Right
-						topRightTexCoord.x, topRightTexCoord.y,				// 
-						charSizeFloat.x, bearingFloat.y - charSizeFloat.y,  // Bottom Right
-						topRightTexCoord.x, bottomLeftTexCoord.y			// 
+						{
+							{ 0.0f, bearingFloat.y - charSizeFloat.y },             // Bottom Left
+							{ bottomLeftTexCoord.x , bottomLeftTexCoord.y },        //   texture
+							{ 1.0f, 1.0f, 1.0f, 1.0f }                              //   color
+						},
+						{
+							{ 0.0f, bearingFloat.y },								// Top Left
+							{ bottomLeftTexCoord.x, topRightTexCoord.y },			//   texture
+							{ 1.0f, 1.0f, 1.0f, 1.0f }                              //   color
+						},
+						{
+							{ charSizeFloat.x, bearingFloat.y },					// Top Right
+							{ topRightTexCoord.x, topRightTexCoord.y },				//   texture
+							{ 1.0f, 1.0f, 1.0f, 1.0f }                              //   color
+						},
+						
+						{
+							{ 0.0f, bearingFloat.y - charSizeFloat.y },             // Bottom Left
+							{ bottomLeftTexCoord.x, bottomLeftTexCoord.y },			//   texture
+							{ 1.0f, 1.0f, 1.0f, 1.0f }                              //   color
+						},
+						{
+							{ charSizeFloat.x, bearingFloat.y },					// Top Right
+							{ topRightTexCoord.x, topRightTexCoord.y },				//   texture
+							{ 1.0f, 1.0f, 1.0f, 1.0f }                              //   color
+						},
+						{
+							{ charSizeFloat.x, bearingFloat.y - charSizeFloat.y },  // Bottom Right
+							{ topRightTexCoord.x, bottomLeftTexCoord.y },			//   texture
+							{ 1.0f, 1.0f, 1.0f, 1.0f }                              //   color
+						},
 					},
 					{}
 				};

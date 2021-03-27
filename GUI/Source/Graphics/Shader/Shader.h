@@ -49,7 +49,7 @@ public:
 	bool GetHasFakeUser();
 	int GetShaderType();
 
-	std::string GetPath();
+	const std::string& GetPath();
 
 	static void Unbind();
 };

@@ -189,7 +189,7 @@ int Shader::GetShaderType()
 	return m_ShaderType;
 }
 
-std::string Shader::GetPath()
+const std::string& Shader::GetPath()
 {
 	return m_Path;
 }

@@ -3,6 +3,7 @@
 #include "Font.h"
 
 #include <vector>
+#include <unordered_map>
 #include <memory>
 #include <glew.h>
 #include <glm.hpp>
@@ -19,7 +20,7 @@ namespace GUI {
 			RIGHT = 16
 		};
 	private:
-		bool m_SupportsMarkup;
+		bool m_SupportsMarkdown;
 
 		GLuint m_VAO;
 		GLuint m_VBO;
@@ -28,7 +29,7 @@ namespace GUI {
 		glm::vec2 m_Max;
 		glm::vec2 m_Min;
 
-		std::vector<std::shared_ptr<Font>> m_Fonts;
+		std::unordered_map<unsigned int, std::shared_ptr<Font>> m_Fonts;
 		std::string m_Text;
 
 		unsigned int m_NumberOfRows;
@@ -45,17 +46,23 @@ namespace GUI {
 
 		int m_FontSize;
 
+		bool m_ShouldRecalculate;
+
+		void PrepareMarkdownText(Character::Face* vertices);
 		void Recalculate();
 	protected:
 		glm::vec2 m_Scale;
 		glm::vec2 m_Translation;
 	public:
 		Text();
-		Text(const std::string& fontPath, unsigned int fontSize, bool usePtSize, bool supportsMarkup, unsigned int numRows, unsigned int maxWidth, Alignment alignment, const char* fmt, ...);
 		~Text();
 
-		void SetTextAttributes(const std::string& text, const std::string& fontPath = std::string("keepFont"), int fontSize = -1, int usePtSize = -1, int supportsMarkup = -1, int numRows = -1, Alignment alignment = Alignment::PREVIOUS);
 		void SetText(const char* fmt, ...);
+		void SetFont(const std::string& path);
+		void SetFontSize(unsigned int size);
+		void SetUsePtSize(bool usePtSize);
+		void SetSupportsMarkdown(bool supportsMarkdown);
+		void SetAlignment(Alignment alignment);
 		void SetNumberOfRows(unsigned int numRows);
 		void SetMaxWidth(unsigned int maxWidth);
 		void SetTranslation(const glm::vec2& translation);
@@ -63,6 +70,11 @@ namespace GUI {
 		void SetColor(const glm::vec4& color);
 
 		const std::string& GetText();
+		const std::string& GetFontPath();
+		unsigned int GetFontSize();
+		bool GetUsePtSize();
+		bool GetSupportsMarkdown();
+		Alignment GetAlignment();
 		unsigned int GetNumberOfRows();
 		unsigned int GetMaxWidth();
 		const glm::vec2& GetTranslation();

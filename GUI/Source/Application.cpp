@@ -186,9 +186,19 @@ int main() {
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 
-
-	GUI::Text* temptex = new GUI::Text("C:/Windows/Fonts/Arial.ttf", 24, true, false, 0, 0, GUI::Text::Alignment::DEFAULT, "Test\ntesting");
+	
+	//Text(const std::string & fontPath, unsigned int fontSize, bool usePtSize, bool supportsMarkdown, unsigned int numRows, unsigned int maxWidth, Alignment alignment, const char* fmt, ...);
+	GUI::Text* temptex = new GUI::Text();
+	temptex->SetFont("C:/Windows/Fonts/Arial");
+	temptex->SetFontSize(24);
+	temptex->SetUsePtSize(true);
+	temptex->SetSupportsMarkdown(false);
+	temptex->SetNumberOfRows(0);
+	temptex->SetMaxWidth(0);
+	temptex->SetAlignment(GUI::Text::Alignment::DEFAULT);
+	temptex->SetText("Test\ntesting");
 	temptex->SetTranslation(glm::vec2(100.0f, 100.0f));
+
 
 
 	GUI::View* mainView = new GUI::View(0.0f, 0.0f, (float)windowWidth, (float)windowHeight);
@@ -209,71 +219,20 @@ int main() {
 	subView2->Recalculate();
 
 	GUI::TextView* subView3 = new GUI::TextView(subView2);
-	subView3->GetText().SetTextAttributes("Testing123", "C:/Windows/Fonts/Arial.ttf", 24, true);
+	subView3->GetText().SetFont("C:/Windows/Fonts/Arial");
+	subView3->GetText().SetFontSize(24);
+	subView3->GetText().SetSupportsMarkdown(true);
+	subView3->GetText().SetUsePtSize(true);
+	subView3->GetText().SetText("Test\ntesting");
 	subView3->SetCornerRoundness(0.0f);
 	subView3->SetTintColor(Math::Scale255To1(glm::vec4(75.0f, 75.0f, 75.0f, 50.0f)));
 	subView3->SetWidthConstraint(100.0f, GUI::View::ConstraintMeasurementType::PERCENT);
 	subView3->SetHeightConstraint(100.0f, GUI::View::ConstraintMeasurementType::PERCENT);
-	subView3->SetXConstraint(0.0f, GUI::View::ConstraintMeasurementType::PERCENT, GUI::View::XConstraintLocation::CENTER);
+	subView3->SetXConstraint(0.0f, GUI::View::ConstraintMeasurementType::PERCENT, GUI::View::XConstraintLocation::LEFT);
 	subView3->SetYConstraint(0.0f, GUI::View::ConstraintMeasurementType::PERCENT, GUI::View::YConstraintLocation::CENTER);
 	subView3->Recalculate();
 
 
-	//GUI::ButtonView* subView3 = new GUI::ButtonView(subView2);
-	//subView3->SetBorderWeight(0.0f);
-	//subView3->SetBorderColor(glm::vec4(0.0f, 0.0f, 0.0f, 0.0f));
-	//subView3->SetTintColor(glm::vec4(0.0f, 0.0f, 0.0f, 0.0f));
-	//subView3->SetWidthConstraint(100.0f, GUI::View::ConstraintMeasurementType::PERCENT);
-	//subView3->SetHeightConstraint(100.0f, GUI::View::ConstraintMeasurementType::PERCENT);
-	//subView3->SetXConstraint(0.0f, GUI::View::ConstraintMeasurementType::PERCENT, GUI::View::XConstraintLocation::CENTER);
-	//subView3->SetYConstraint(0.0f, GUI::View::ConstraintMeasurementType::PERCENT, GUI::View::YConstraintLocation::CENTER);
-	//subView3->SetCallbackFunction([]() {
-	//	Console::Info("BUTTON PRESSED!");
-	//});
-	//subView3->Recalculate();
-
-
-
-	/*GUI::View* subView = new GUI::View(mainView);
-
-	subView->SetTintColor(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
-	subView->SetWidthConstraint(40.0f, VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT);
-	subView->SetHeightConstraint(40.0f, VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT);
-	subView->SetXConstraint(0.0f, VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT, VIEW_CONSTRAINT_LOCATION_LEFT);
-	subView->Recalculate();
-
-	GUI::View* ssubView = new GUI::View(subView);
-	ssubView->SetShouldClipToBounds(true);
-	ssubView->SetSizeMode(VIEW_SIZE_MODE_ASPECT_FIT, 1.5f);
-	ssubView->SetTintColor(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
-	ssubView->SetWidthConstraint(80.0f, VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT);
-	ssubView->SetHeightConstraint(60.0f, VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT);
-	ssubView->Recalculate();
-
-	GUI::View* subView2 = new GUI::View(mainView);
-
-	subView2->SetTintColor(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
-	subView2->SetWidthConstraint(40.0f, VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT);
-	subView2->SetHeightConstraint(40.0f, VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT);
-	subView2->SetXConstraint(0.0f, VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT, VIEW_CONSTRAINT_LOCATION_RIGHT);
-	subView2->Recalculate();
-
-	GUI::View* ssubView2 = new GUI::View(subView2);
-	ssubView2->SetShouldClipToBounds(true);
-	ssubView2->SetSizeMode(VIEW_SIZE_MODE_ASPECT_FIT, 1.5f);
-	ssubView2->SetTintColor(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
-	ssubView2->SetWidthConstraint(80.0f, VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT);
-	ssubView2->SetHeightConstraint(60.0f, VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT);
-	ssubView2->Recalculate();
-
-	GUI::ImageView* sssubView2 = new GUI::ImageView(ssubView2);
-	sssubView2->SetTexture("Resources/Textures/Basic.png");
-	sssubView2->SetShouldClipToBounds(true);
-	sssubView2->SetSizeMode(VIEW_SIZE_MODE_ASPECT_FIT, 1.5f);
-	sssubView2->SetCornerRoundness(0.5f);
-	sssubView2->SetWidthConstraint(80.0f, VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT);
-	sssubView2->SetHeightConstraint(60.0f, VIEW_CONSTRAINT_MEASUREMENT_TYPE_PERCENT);
-	sssubView2->Recalculate();*/
 
 	glm::mat4 proj = glm::ortho(0.0f, (float)windowWidth, 0.0f, (float)windowHeight);
 
@@ -296,7 +255,7 @@ int main() {
 
 		if (shouldRecalculate) {
 			mainView->Recalculate(0, 0, windowWidth, windowHeight);
-			proj = glm::ortho(0.0f, (float)windowWidth, 0.0f, (float)windowHeight);;
+			proj = glm::ortho(0.0f, (float)windowWidth, 0.0f, (float)windowHeight);
 		}
 		if (input->GetMouseButtonPressed(AD_MOUSE_BUTTON_1)) {
 			GUI::View* temp = mainView->HitTest(input->GetMousePositionX(), ((float)windowHeight) - input->GetMousePositionY());
