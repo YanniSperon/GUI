@@ -35,7 +35,75 @@ namespace GUI {
 		FontManager::GetInstance()->MarkForCleanup();
 	}
 
-	void PrepareText(const std::string& text, Font* font, float scale, Character::Face* vertices, unsigned int maxWidth, glm::vec2& offset, glm::vec2& min, glm::vec2& max, glm::vec4& color)
+	std::string AlignText(const std::string& text, Font* font, unsigned int maxWidth, unsigned int maxLines, glm::vec2& min, glm::vec2& max) {
+		//glm::vec2 tempOffset = glm::vec2(0.0f, 0.0f);
+		//
+		//std::map<char, Character>& characters = font->GetCharacters();
+		//
+		//int kerningXPx = 0;
+		//int kerningX = 0;
+		//int characterBearingX = 0;
+		//float tempXOffset = 0.0f;
+		//float shiftX = 0.0f;
+		//glm::vec2 currMin = glm::vec2(0.0f, 0.0f);
+		//glm::vec2 currMax = glm::vec2(0.0f, 0.0f);
+		//
+		//unsigned int fontSize = font->GetSize();
+		//
+		//int linesCount = 0;
+		//int charsOnLineCount = 0;
+		//
+		//for (int i = 0; i < text.size(); i++) {
+		//	char c = text[i];
+		//	if (c == '\n') {
+		//		tempOffset.x = 0.0f;
+		//		tempOffset.y += fontSize;
+		//		linesCount++;
+		//		continue;
+		//	}
+		//
+		//	Character& ch = characters[c];
+		//
+		//	kerningX = 0;
+		//
+		//	if (i != 0) {
+		//		Character& previousChar = characters[text[i - 1]];
+		//		if (previousChar.kerning.find(c) != previousChar.kerning.end()) {
+		//			kerningX = previousChar.kerning[c].x;
+		//		}
+		//	}
+		//
+		//	kerningXPx = (kerningX >> 6);
+		//
+		//	characterBearingX = ch.bearing.x;
+		//
+		//	tempXOffset = kerningXPx + (ch.advance.x >> 6);
+		//	if (tempOffset.x + tempXOffset > maxWidth) {
+		//		tempOffset.x = 0.0f;
+		//		tempOffset.y += fontSize;
+		//		kerningXPx = 0;
+		//		characterBearingX = 0;
+		//		linesCount++;
+		//	}
+		//
+		//	shiftX = kerningXPx + characterBearingX + tempOffset.x;
+		//
+		//	currMin.x = ch.face.bottomLeft.position.x + shiftX;
+		//	currMin.x = ch.face.bottomLeft.position.y - tempOffset.y;
+		//	min.x = glm::min(currMin.x, min.x);
+		//	min.y = glm::min(currMin.y, min.y);
+		//	currMax.x = (ch.face.topRight.position.x + shiftX);
+		//	currMax.y = ch.face.topRight.position.y - tempOffset.y;
+		//	max.x = glm::max(currMax.x, max.x);
+		//	max.y = glm::max(currMax.y, max.y);
+		//
+		//	tempOffset.x += tempXOffset;
+		//	charsOnLineCount++;
+		//}
+		return text;
+	}
+
+	void PrepareText(const std::string& text, Font* font, Character::Face* vertices, unsigned int maxWidth, glm::vec2& offset, glm::vec2& min, glm::vec2& max, glm::vec4& color)
 	{
 		std::map<char, Character>& characters = font->GetCharacters();
 		
@@ -47,16 +115,12 @@ namespace GUI {
 		glm::vec2 currMin;
 		glm::vec2 currMax;
 
-		Console::Info("Loading");
-
-		//unsigned int fontSize = glm::round(font->GetSize() * scale);
 		unsigned int fontSize = font->GetSize();
 
 		for (int i = 0; i < text.size(); i++) {
 			char c = text[i];
 			if (c == '\n') {
 				offset.x = 0.0f;
-				//offset.y += glm::round(fontSize * scale);
 				offset.y += fontSize;
 				continue;
 			}
@@ -73,14 +137,8 @@ namespace GUI {
 					kerningX = previousChar.kerning[c].x;
 				}
 			}
-		
+			
 			kerningXPx = (kerningX >> 6);
-
-			//TODO
-			Console::Info("    Size: %u", font->GetSize());
-			Console::Info("        Char: %c", c);
-			Console::Info("            %i", ch.advance.x);
-			Console::Info("            %i", (ch.advance.x >> 6));
 
 			characterBearingX = ch.bearing.x;
 		
@@ -146,7 +204,6 @@ namespace GUI {
 			max.y = glm::max(currMax.y, max.y);
 			offset.x += tempXOffset;
 		}
-		Console::Info("Finished");
 	}
 
 #define WEIGHT_BOLD 1
@@ -177,7 +234,8 @@ namespace GUI {
 		
 		glm::vec2 cursor = glm::vec2(0.0f, 0.0f);
 
-		PrepareText(m_Text, m_Fonts[SIZE_2_00X | WEIGHT_BOLD | WEIGHT_ITALIC].get(), 1.0f, vertices, m_MaxWidth, cursor, m_Min, m_Max, m_Color);
+		//PrepareText(m_Text, m_Fonts[SIZE_2_00X | WEIGHT_BOLD | WEIGHT_ITALIC].get(), 1.0f, vertices, m_MaxWidth, cursor, m_Min, m_Max, m_Color);
+		PrepareText(m_Text, m_Fonts[SIZE_2_00X].get(), vertices, m_MaxWidth, cursor, m_Min, m_Max, m_Color);
 		//for (unsigned int i = 0; i < text.size(); ++i) {
 		//
 		//}
@@ -192,53 +250,6 @@ namespace GUI {
 			unsigned int stringLength = m_Text.length();
 
 			GUI::Character::Face* characterFaces = new GUI::Character::Face[stringLength];
-			//characterFaces[1].bottomLeft.color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
-			//characterFaces[1].topLeft.color = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
-			//characterFaces[1].topRight.color = glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);
-			//characterFaces[1].topRightDuplicate.color = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
-			//characterFaces[1].bottomLeftDuplicate.color = glm::vec4(1.0f, 0.0f, 1.0f, 1.0f);
-			//characterFaces[1].bottomRight.color = glm::vec4(0.0f, 1.0f, 1.0f, 1.0f);
-			//
-			//characterFaces[1].bottomLeft.position = glm::vec2(1.0f, 1.0f);
-			//characterFaces[1].topLeft.position = glm::vec2(2.0f, 2.0f);
-			//characterFaces[1].topRight.position = glm::vec2(3.0f, 3.0f);
-			//characterFaces[1].topRightDuplicate.position = glm::vec2(4.0f, 4.0f);
-			//characterFaces[1].bottomLeftDuplicate.position = glm::vec2(5.0f, 5.0f);
-			//characterFaces[1].bottomRight.position = glm::vec2(6.0f, 6.0f);
-			//
-			//characterFaces[1].bottomLeft.textureCoordinate = glm::vec2(0.0f, 0.0f);
-			//characterFaces[1].topLeft.textureCoordinate = glm::vec2(0.0f, 1.0f);
-			//characterFaces[1].topRight.textureCoordinate = glm::vec2(1.0f, 1.0f);
-			//characterFaces[1].topRightDuplicate.textureCoordinate = glm::vec2(1.0f, 1.0f);
-			//characterFaces[1].bottomLeftDuplicate.textureCoordinate = glm::vec2(0.0f, 0.0f);
-			//characterFaces[1].bottomRight.textureCoordinate = glm::vec2(1.0f, 0.0f);
-			//
-			//GUI::Character::Face tempFace;
-			//
-			//memcpy(&tempFace, &characterFaces[1], sizeof(GUI::Character::Face));
-			//
-			//{
-			//	Console::Info("(%.3f, %.3f, %.3f, %.3f)", tempFace.bottomLeft.color.r, tempFace.bottomLeft.color.g, tempFace.bottomLeft.color.b, tempFace.bottomLeft.color.a);
-			//	Console::Info("(%.3f, %.3f, %.3f, %.3f)", tempFace.topLeft.color.r, tempFace.topLeft.color.g, tempFace.topLeft.color.b, tempFace.topLeft.color.a);
-			//	Console::Info("(%.3f, %.3f, %.3f, %.3f)", tempFace.topRight.color.r, tempFace.topRight.color.g, tempFace.topRight.color.b, tempFace.topRight.color.a);
-			//	Console::Info("(%.3f, %.3f, %.3f, %.3f)", tempFace.topRightDuplicate.color.r, tempFace.topRightDuplicate.color.g, tempFace.topRightDuplicate.color.b, tempFace.topRightDuplicate.color.a);
-			//	Console::Info("(%.3f, %.3f, %.3f, %.3f)", tempFace.bottomLeftDuplicate.color.r, tempFace.bottomLeftDuplicate.color.g, tempFace.bottomLeftDuplicate.color.b, tempFace.bottomLeftDuplicate.color.a);
-			//	Console::Info("(%.3f, %.3f, %.3f, %.3f)", tempFace.bottomRight.color.r, tempFace.bottomRight.color.g, tempFace.bottomRight.color.b, tempFace.bottomRight.color.a);
-			//
-			//	Console::Info("(%.3f, %.3f)", tempFace.bottomLeft.position.x, tempFace.bottomLeft.position.y);
-			//	Console::Info("(%.3f, %.3f)", tempFace.topLeft.position.x, tempFace.topLeft.position.y);
-			//	Console::Info("(%.3f, %.3f)", tempFace.topRight.position.x, tempFace.topRight.position.y);
-			//	Console::Info("(%.3f, %.3f)", tempFace.topRightDuplicate.position.x, tempFace.topRightDuplicate.position.y);
-			//	Console::Info("(%.3f, %.3f)", tempFace.bottomLeftDuplicate.position.x, tempFace.bottomLeftDuplicate.position.y);
-			//	Console::Info("(%.3f, %.3f)", tempFace.bottomRight.position.x, tempFace.bottomRight.position.y);
-			//
-			//	Console::Info("(%.3f, %.3f)", tempFace.bottomLeft.textureCoordinate.x, tempFace.bottomLeft.textureCoordinate.y);
-			//	Console::Info("(%.3f, %.3f)", tempFace.topLeft.textureCoordinate.x, tempFace.topLeft.textureCoordinate.y);
-			//	Console::Info("(%.3f, %.3f)", tempFace.topRight.textureCoordinate.x, tempFace.topRight.textureCoordinate.y);
-			//	Console::Info("(%.3f, %.3f)", tempFace.topRightDuplicate.textureCoordinate.x, tempFace.topRightDuplicate.textureCoordinate.y);
-			//	Console::Info("(%.3f, %.3f)", tempFace.bottomLeftDuplicate.textureCoordinate.x, tempFace.bottomLeftDuplicate.textureCoordinate.y);
-			//	Console::Info("(%.3f, %.3f)", tempFace.bottomRight.textureCoordinate.x, tempFace.bottomRight.textureCoordinate.y);
-			//}
 
 			if (m_Alignment != Text::Alignment::LEFT) {
 				Console::Warning("Text does not currently support non-left alignments!");
@@ -303,14 +314,11 @@ namespace GUI {
 
 				std::string defaultFontPath = m_FontPath + ".ttf";
 
-				unsigned int fontSize_2_00X = glm::round(m_FontSize * 2.0f);
-				//m_Fonts[SIZE_1_00X] = FontManager::GetInstance()->GetFont(defaultFontPath, m_FontSize, m_UsePtSize);
 				m_Fonts[SIZE_1_00X] = FontManager::GetInstance()->GetFont(defaultFontPath, m_FontSize, m_UsePtSize);
 
 				FontManager::GetInstance()->MarkForCleanup();
 
-				//PrepareText(m_Text, m_Fonts[SIZE_1_00X].get(), 1.0f, characterFaces, m_MaxWidth, glm::vec2(0.0f, 0.0f), m_Min, m_Max, m_Color);
-				PrepareText(m_Text, m_Fonts[SIZE_1_00X].get(), 1.0f, characterFaces, m_MaxWidth, glm::vec2(0.0f, 0.0f), m_Min, m_Max, m_Color);
+				PrepareText(m_Text, m_Fonts[SIZE_1_00X].get(), characterFaces, m_MaxWidth, glm::vec2(0.0f, 0.0f), m_Min, m_Max, m_Color);
 			}
 			//m_TranslationOffset = glm::round(m_Max - ((glm::abs(m_Min) + glm::abs(m_Max)) * 0.5f));
 			m_TranslationOffset = glm::vec2(0.0f, glm::round(m_Max.y - ((glm::abs(m_Min.y) + glm::abs(m_Max.y)) * 0.5f)));
@@ -500,7 +508,7 @@ namespace GUI {
 			glActiveTexture(GL_TEXTURE0);
 			GLuint textureID = 0;
 			if (m_Fonts.size() > 0) {
-				textureID = m_Fonts[SIZE_2_00X | WEIGHT_BOLD | WEIGHT_ITALIC]->GetAtlasTextureID();
+				textureID = m_Fonts[SIZE_2_00X]->GetAtlasTextureID();
 			}
 			glBindTexture(GL_TEXTURE_2D, textureID);
 			glBindVertexArray(m_VAO);

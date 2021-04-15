@@ -73,7 +73,7 @@ namespace GUI {
 
 				glm::vec2 bottomLeftTexCoord = glm::vec2(floatXOffset * inverseAtlasWidth, (floatYOffset + floatHeight) * inverseAtlasHeight);
 				glm::vec2 topRightTexCoord = glm::vec2((floatXOffset + floatWidth) * inverseAtlasWidth, floatYOffset * inverseAtlasHeight);
-
+				
 				m_Characters[c] = {
 					bottomLeftTexCoord,
 					topRightTexCoord,
