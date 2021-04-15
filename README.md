@@ -1,0 +1,21 @@
+# GUI
+C++ GUI Library implemented with OpenGL and FreeType 2.
+- [X] Node based layer system (layers are referred to as views)
+  - [X] Modifiable constraints
+  - [X] Passing events through views
+- [X] Empty View
+- [X] Button View
+- [X] Image View
+- [ ] Text View
+  - [X] Text Rendering
+  - [X] Font Atlas
+  - [ ] Text Alignment
+- [ ] Support For Custom Gestures (i.e. click and drag)
+  - [X] Single Click
+  - [ ] Double Click
+  - [ ] Click and Drag (Swipe)
+- [ ] Support For Multiple Rendering APIs
+  - [X] OpenGL
+  - [ ] Vulkan (Will eventually replace OpenGL)
+  - [ ] DirectX
+  - [ ] Metal
