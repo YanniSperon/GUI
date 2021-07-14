@@ -49,13 +49,28 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Global.h" />
+    <ClInclude Include="Source\Graphics\GUI\ButtonView.h">
+      <Filter>Graphics\GUI</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Graphics\GUI\Font.h">
       <Filter>Graphics\GUI</Filter>
     </ClInclude>
     <ClInclude Include="Source\Graphics\GUI\FontManager.h">
       <Filter>Graphics\GUI</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Graphics\GUI\FreetypeManager.h">
+      <Filter>Graphics\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\GUI\Gesture.h">
+      <Filter>Graphics\GUI</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Graphics\GUI\ImageView.h">
+      <Filter>Graphics\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\GUI\Text.h">
+      <Filter>Graphics\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\GUI\TextView.h">
       <Filter>Graphics\GUI</Filter>
     </ClInclude>
     <ClInclude Include="Source\Graphics\GUI\View.h">
@@ -73,16 +88,28 @@
     <ClInclude Include="Source\Graphics\Texture\TextureManager.h">
       <Filter>Graphics\Texture</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Utility\AutomaticTimer.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Utility\Console.h">
       <Filter>Utility</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Utility\Converter.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Utility\Input.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\ManualTimer.h">
       <Filter>Utility</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utility\MathExtensions.h">
       <Filter>Utility</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utility\Random.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\Timer.h">
       <Filter>Utility</Filter>
     </ClInclude>
     <ClInclude Include="Source\Vendor\glm\common.hpp">
@@ -955,26 +982,29 @@
     <ClInclude Include="Source\Vendor\stb\stb_image.h">
       <Filter>Vendor\stb</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\GUI\FreetypeManager.h" />
-    <ClInclude Include="Source\Graphics\GUI\Text.h" />
-    <ClInclude Include="Source\Graphics\GUI\TextView.h" />
-    <ClInclude Include="Source\Graphics\GUI\ButtonView.h" />
-    <ClInclude Include="Source\Graphics\GUI\Gesture.h" />
-    <ClInclude Include="Source\Utility\Timer.h" />
-    <ClInclude Include="Source\Utility\ManualTimer.h" />
-    <ClInclude Include="Source\Utility\AutomaticTimer.h" />
-    <ClInclude Include="Source\Utility\Converter.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Global.cpp" />
+    <ClCompile Include="Source\Graphics\GUI\ButtonView.cpp">
+      <Filter>Graphics\GUI</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Graphics\GUI\Font.cpp">
       <Filter>Graphics\GUI</Filter>
     </ClCompile>
     <ClCompile Include="Source\Graphics\GUI\FontManager.cpp">
       <Filter>Graphics\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Graphics\GUI\FreetypeManager.cpp">
+      <Filter>Graphics\GUI</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Graphics\GUI\ImageView.cpp">
+      <Filter>Graphics\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GUI\Text.cpp">
+      <Filter>Graphics\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GUI\TextView.cpp">
       <Filter>Graphics\GUI</Filter>
     </ClCompile>
     <ClCompile Include="Source\Graphics\GUI\View.cpp">
@@ -992,13 +1022,25 @@
     <ClCompile Include="Source\Graphics\Texture\TextureManager.cpp">
       <Filter>Graphics\Texture</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Utility\AutomaticTimer.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Utility\Console.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utility\Converter.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
     <ClCompile Include="Source\Utility\Input.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Utility\ManualTimer.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Utility\Random.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utility\Timer.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
     <ClCompile Include="Source\Vendor\glm\detail\glm.cpp">
@@ -1022,13 +1064,5 @@
     <ClCompile Include="Source\Vendor\stb\stb_image.cpp">
       <Filter>Vendor\stb</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\GUI\FreetypeManager.cpp" />
-    <ClCompile Include="Source\Graphics\GUI\Text.cpp" />
-    <ClCompile Include="Source\Graphics\GUI\TextView.cpp" />
-    <ClCompile Include="Source\Graphics\GUI\ButtonView.cpp" />
-    <ClCompile Include="Source\Utility\Timer.cpp" />
-    <ClCompile Include="Source\Utility\ManualTimer.cpp" />
-    <ClCompile Include="Source\Utility\AutomaticTimer.cpp" />
-    <ClCompile Include="Source\Utility\Converter.cpp" />
   </ItemGroup>
 </Project>
