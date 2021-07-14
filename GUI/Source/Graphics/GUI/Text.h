@@ -48,6 +48,8 @@ namespace GUI {
 
 		bool m_ShouldRecalculate;
 
+		float m_LineSpacing;
+
 		void PrepareMarkdownText(Character::Face* vertices);
 		void Recalculate();
 	protected:
@@ -58,6 +60,7 @@ namespace GUI {
 		~Text();
 
 		void SetText(const char* fmt, ...);
+		void SetText(const std::string& text);
 		void SetFont(const std::string& path);
 		void SetFontSize(unsigned int size);
 		void SetUsePtSize(bool usePtSize);
@@ -68,6 +71,7 @@ namespace GUI {
 		void SetTranslation(const glm::vec2& translation);
 		void SetScale(const glm::vec2& scale);
 		void SetColor(const glm::vec4& color);
+		void SetLineSpacing(float lineSpacing);
 
 		const std::string& GetText();
 		const std::string& GetFontPath();
@@ -80,6 +84,7 @@ namespace GUI {
 		const glm::vec2& GetTranslation();
 		const glm::vec2& GetScale();
 		const glm::vec4& GetColor();
+		float GetLineSpacing();
 
 		void Draw(const glm::mat4& projection);
 	};

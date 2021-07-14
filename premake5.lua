@@ -28,7 +28,6 @@ project "GUI"
 	{
 		"Dependencies/GLEW",
 		"Dependencies/GLFW",
-		"Dependencies/ASSIMP/include",
 		"Dependencies/FREETYPE/include",
 		"%{prj.name}/Source",
 		"%{prj.name}/Source/**"
@@ -38,7 +37,6 @@ project "GUI"
 	{
 		"Dependencies/GLEW",
 		"Dependencies/GLFW",
-		"Dependencies/ASSIMP/lib",
 		"Dependencies/FREETYPE/lib"
 	}
 	
@@ -46,9 +44,6 @@ project "GUI"
 		"glew32s.lib",
 		"glfw3.lib",
 		"opengl32.lib",
-		"zlibstaticd.lib",
-		"IrrXMLd.lib",
-		"assimpd.lib",
 		"freetype.lib"
 	}
 	

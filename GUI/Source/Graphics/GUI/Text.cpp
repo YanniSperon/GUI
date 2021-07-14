@@ -9,7 +9,7 @@
 
 namespace GUI {
 	Text::Text()
-		: m_Fonts(), m_NumberOfRows(0), m_MaxWidth(INT_MAX), m_Scale(1.0f, 1.0f), m_Translation(0.0f, 0.0f), m_Min(FLT_MAX, FLT_MAX), m_Max(-FLT_MAX, -FLT_MAX), m_SupportsMarkdown(false), m_Alignment(Alignment::LEFT), m_Color(1.0f, 1.0f, 1.0f, 1.0f), m_TranslationOffset(0.0f, 0.0f), m_Shader(ShaderManager::GetInstance()->GetShader("Resources/Shaders/Text", SHADER_VERTEX_SHADER | SHADER_FRAGMENT_SHADER)), m_FontPath(""), m_FontSize(12), m_UsePtSize(true), m_ShouldRecalculate(false)
+		: m_Fonts(), m_NumberOfRows(0), m_MaxWidth(INT_MAX), m_Scale(1.0f, 1.0f), m_Translation(0.0f, 0.0f), m_Min(FLT_MAX, FLT_MAX), m_Max(-FLT_MAX, -FLT_MAX), m_SupportsMarkdown(false), m_Alignment(Alignment::LEFT), m_Color(1.0f, 1.0f, 1.0f, 1.0f), m_TranslationOffset(0.0f, 0.0f), m_Shader(ShaderManager::GetInstance()->GetShader("Resources/Shaders/Text", SHADER_VERTEX_SHADER | SHADER_FRAGMENT_SHADER)), m_FontPath(""), m_FontSize(12), m_UsePtSize(true), m_ShouldRecalculate(false), m_LineSpacing(1.0f)
 	{
 		glGenVertexArrays(1, &m_VAO);
 		glBindVertexArray(m_VAO);
@@ -103,7 +103,7 @@ namespace GUI {
 		return text;
 	}
 
-	void PrepareText(const std::string& text, Font* font, Character::Face* vertices, unsigned int maxWidth, glm::vec2& offset, glm::vec2& min, glm::vec2& max, glm::vec4& color)
+	void PrepareText(const std::string& text, float lineSpacing, Font* font, Character::Face* vertices, unsigned int maxWidth, glm::vec2& offset, glm::vec2& min, glm::vec2& max, glm::vec4& color)
 	{
 		std::map<char, Character>& characters = font->GetCharacters();
 		
@@ -117,7 +117,7 @@ namespace GUI {
 
 		unsigned int fontSize = font->GetSize();
 
-		for (int i = 0; i < text.size(); i++) {
+		for (std::size_t i = 0; i < text.size(); ++i) {
 			char c = text[i];
 			if (c == '\n') {
 				offset.x = 0.0f;
@@ -145,7 +145,7 @@ namespace GUI {
 			tempXOffset = kerningXPx + (ch.advance.x >> 6);
 			if (offset.x + tempXOffset > maxWidth) {
 				offset.x = 0.0f;
-				offset.y += fontSize;
+				offset.y += fontSize * lineSpacing;
 				kerningXPx = 0;
 				characterBearingX = 0;
 			}
@@ -228,6 +228,60 @@ namespace GUI {
 		}
 	};
 
+	std::vector<std::pair<std::string, float>> AlignText(const std::string& text, Font* font, unsigned int maxWidth, Text::Alignment alignment)
+	{
+		// string and where the start position should be
+		std::vector<std::pair<std::string, float>> lines;
+
+		std::map<char, Character>& characters = font->GetCharacters();
+
+		int kerningXPx = 0;
+		int kerningX = 0;
+		float tempXOffset = 0.0f;
+		glm::vec2 currMin;
+		glm::vec2 currMax;
+		float offset = 0.0f;
+
+		unsigned int fontSize = font->GetSize();
+
+		std::string currentLine = "";
+
+		// check if 
+
+		for (std::size_t i = 0; i < text.size(); ++i) {
+			char c = text[i];
+
+			// check if newline
+			if (c == '\n') {
+				offset = 0.0f;
+				continue;
+			}
+
+			Character& ch = characters[c];
+
+			// calculate kerning
+			kerningX = 0;
+			if (currentLine.size() != 0) {
+				Character& previousChar = characters[text[i - 1]];
+				if (previousChar.kerning.find(c) != previousChar.kerning.end()) {
+					kerningX = previousChar.kerning[c].x;
+				}
+			}
+
+			// kerning + advance
+			tempXOffset = (kerningX >> 6) + (ch.advance.x >> 6);
+			
+			// check if offset + kerning + advance goes out of bounds
+			if (offset + tempXOffset > maxWidth) {
+				offset = 0.0f;
+			}
+			else {
+				offset += tempXOffset;
+			}
+		}
+		return lines;
+	}
+
 	void Text::PrepareMarkdownText(Character::Face* vertices)
 	{
 		std::vector<MarkdownData> formatting = std::vector<MarkdownData>();
@@ -235,7 +289,7 @@ namespace GUI {
 		glm::vec2 cursor = glm::vec2(0.0f, 0.0f);
 
 		//PrepareText(m_Text, m_Fonts[SIZE_2_00X | WEIGHT_BOLD | WEIGHT_ITALIC].get(), 1.0f, vertices, m_MaxWidth, cursor, m_Min, m_Max, m_Color);
-		PrepareText(m_Text, m_Fonts[SIZE_2_00X].get(), vertices, m_MaxWidth, cursor, m_Min, m_Max, m_Color);
+		PrepareText(m_Text, m_LineSpacing, m_Fonts[SIZE_2_00X].get(), vertices, m_MaxWidth, cursor, m_Min, m_Max, m_Color);
 		//for (unsigned int i = 0; i < text.size(); ++i) {
 		//
 		//}
@@ -318,7 +372,7 @@ namespace GUI {
 
 				FontManager::GetInstance()->MarkForCleanup();
 
-				PrepareText(m_Text, m_Fonts[SIZE_1_00X].get(), characterFaces, m_MaxWidth, glm::vec2(0.0f, 0.0f), m_Min, m_Max, m_Color);
+				PrepareText(m_Text, m_LineSpacing, m_Fonts[SIZE_1_00X].get(), characterFaces, m_MaxWidth, glm::vec2(0.0f, 0.0f), m_Min, m_Max, m_Color);
 			}
 			//m_TranslationOffset = glm::round(m_Max - ((glm::abs(m_Min) + glm::abs(m_Max)) * 0.5f));
 			m_TranslationOffset = glm::vec2(0.0f, glm::round(m_Max.y - ((glm::abs(m_Min.y) + glm::abs(m_Max.y)) * 0.5f)));
@@ -349,13 +403,38 @@ namespace GUI {
 		va_list args, argsCopy;
 		va_start(args, fmt);
 		va_copy(argsCopy, args);
-		size_t bufferSize = vsnprintf(nullptr, 0, fmt, argsCopy) + 1;
+		int bufferSize = vsnprintf(nullptr, 0, fmt, argsCopy) + 1;
 		char* message = new char[bufferSize];
 		vsnprintf(message, bufferSize, fmt, args);
 		m_Text = std::string(message);
 		va_end(args);
 		va_end(argsCopy);
 		delete[] message;
+
+		std::string replacementSpaces = "   ";
+
+		for (std::size_t i = 0; i < m_Text.size(); ++i) {
+			if (m_Text[i] == '\t') {
+				m_Text[i] = ' ';
+				m_Text.insert(i, replacementSpaces);
+			}
+		}
+
+		m_ShouldRecalculate = true;
+	}
+
+	void Text::SetText(const std::string& text)
+	{
+		m_Text = text;
+
+		std::string replacementSpaces = "   ";
+
+		for (std::size_t i = 0; i < m_Text.size(); ++i) {
+			if (m_Text[i] == '\t') {
+				m_Text[i] = ' ';
+				m_Text.insert(i, replacementSpaces);
+			}
+		}
 
 		m_ShouldRecalculate = true;
 	}
@@ -386,7 +465,7 @@ namespace GUI {
 
 	void Text::SetAlignment(Alignment alignment)
 	{
-		Alignment tempAlignment;
+		Alignment tempAlignment = GUI::Text::Alignment::LEFT;
 		switch (alignment)
 		{
 		case GUI::Text::Alignment::DEFAULT:
@@ -438,6 +517,11 @@ namespace GUI {
 	{
 		m_ShouldRecalculate = (m_Color != color) || m_ShouldRecalculate;
 		m_Color = color;
+	}
+
+	void Text::SetLineSpacing(float lineSpacing)
+	{
+		m_LineSpacing = lineSpacing;
 	}
 
 	const std::string& Text::GetText()
@@ -495,6 +579,11 @@ namespace GUI {
 		return m_Color;
 	}
 
+	float Text::GetLineSpacing()
+	{
+		return m_LineSpacing;
+	}
+
 	void Text::Draw(const glm::mat4& projection)
 	{
 		if (m_ShouldRecalculate) {
@@ -514,6 +603,7 @@ namespace GUI {
 			glBindVertexArray(m_VAO);
 			glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
 			glDrawArrays(GL_TRIANGLES, 0, 6 * m_Text.length());
+			//glDrawArrays(GL_TRIANGLE_STRIPS, 0, 4 * m_Text.length());
 		}
 		else {
 			m_Shader->Bind();

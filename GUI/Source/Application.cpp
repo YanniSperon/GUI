@@ -187,7 +187,6 @@ int main() {
 
 
 	
-	//Text(const std::string & fontPath, unsigned int fontSize, bool usePtSize, bool supportsMarkdown, unsigned int numRows, unsigned int maxWidth, Alignment alignment, const char* fmt, ...);
 	GUI::Text* temptex = new GUI::Text();
 	temptex->SetFont("C:/Windows/Fonts/Arial");
 	temptex->SetFontSize(24);
@@ -218,19 +217,19 @@ int main() {
 	subView2->SetYConstraint(0.0f, GUI::View::ConstraintMeasurementType::PERCENT, GUI::View::YConstraintLocation::CENTER);
 	subView2->Recalculate();
 
-	GUI::TextView* subView3 = new GUI::TextView(subView2);
-	subView3->GetText().SetFont("C:/Windows/Fonts/Arial");
-	subView3->GetText().SetFontSize(24);
-	subView3->GetText().SetSupportsMarkdown(true);
-	subView3->GetText().SetUsePtSize(true);
-	subView3->GetText().SetText("Test\ntesting");
-	subView3->SetCornerRoundness(0.0f);
-	subView3->SetTintColor(Math::Scale255To1(glm::vec4(75.0f, 75.0f, 75.0f, 50.0f)));
-	subView3->SetWidthConstraint(100.0f, GUI::View::ConstraintMeasurementType::PERCENT);
-	subView3->SetHeightConstraint(100.0f, GUI::View::ConstraintMeasurementType::PERCENT);
-	subView3->SetXConstraint(0.0f, GUI::View::ConstraintMeasurementType::PERCENT, GUI::View::XConstraintLocation::LEFT);
-	subView3->SetYConstraint(0.0f, GUI::View::ConstraintMeasurementType::PERCENT, GUI::View::YConstraintLocation::CENTER);
-	subView3->Recalculate();
+	//GUI::TextView* subView3 = new GUI::TextView(subView2);
+	//subView3->GetText().SetFont("C:/Windows/Fonts/Arial");
+	//subView3->GetText().SetFontSize(24);
+	//subView3->GetText().SetSupportsMarkdown(true);
+	//subView3->GetText().SetUsePtSize(true);
+	//subView3->GetText().SetText("Test\ntesting");
+	//subView3->SetCornerRoundness(0.0f);
+	//subView3->SetTintColor(Math::Scale255To1(glm::vec4(75.0f, 75.0f, 75.0f, 50.0f)));
+	//subView3->SetWidthConstraint(100.0f, GUI::View::ConstraintMeasurementType::PERCENT);
+	//subView3->SetHeightConstraint(100.0f, GUI::View::ConstraintMeasurementType::PERCENT);
+	//subView3->SetXConstraint(0.0f, GUI::View::ConstraintMeasurementType::PERCENT, GUI::View::XConstraintLocation::LEFT);
+	//subView3->SetYConstraint(0.0f, GUI::View::ConstraintMeasurementType::PERCENT, GUI::View::YConstraintLocation::CENTER);
+	//subView3->Recalculate();
 
 
 
