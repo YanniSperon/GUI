@@ -18,14 +18,11 @@
 #include <glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#define DGPU
-
-#ifdef DGPU
-#include <Windows.h>
-extern "C" {
-	_declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
+extern "C"
+{
+	__declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
+	__declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
 }
-#endif
 
 static void GLAPIENTRY GLDebugMessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
 {
