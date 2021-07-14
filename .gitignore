@@ -29,7 +29,7 @@ x86/
 bld/
 [Oo]bj/
 [Ll]og/
-[Bb]in/
+#[Bb]in/
 [Bb]in-Intermediates/
 
 # Visual Studio 2015/2017 cache/options directory
@@ -95,6 +95,8 @@ StyleCopReport.xml
 *.svclog
 *.scc
 **/*.tlog
+**/*.exp
+Bin/Debug-windows-x86_64/GUI/GUI.lib
 
 # Chutzpah Test files
 _Chutzpah*
