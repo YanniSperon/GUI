@@ -11,6 +11,10 @@
 #include <Windows.h>
 #endif
 
+#ifdef AD_DEBUG
+#include <cassert>
+#endif
+
 static std::mutex printMutex;
 
 void Console::Success(const char* fmt, ...)
@@ -176,6 +180,7 @@ void Console::Assert(bool value, const char* fmt, ...)
 		va_start(args, fmt);
 		FatalError(fmt, args);
 		va_end(args);
+		assert(false);
 	}
 #endif
 }

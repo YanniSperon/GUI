@@ -46,8 +46,8 @@ static void GLAPIENTRY GLDebugMessageCallback(GLenum source, GLenum type, GLuint
 static double mouseXPos = 0.0;
 static double mouseYPos = 0.0;
 
-static int windowWidth = 1920;
-static int windowHeight = 1080;
+static int windowWidth = 1280;
+static int windowHeight = 720;
 
 static bool didMove = false;
 
@@ -56,7 +56,6 @@ static bool shouldRecalculate = false;
 int main() {
 
 	Global::Initialize();
-
 	Console::Assert(glfwInit(), "Failed GLFW Initialization!");
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
@@ -187,12 +186,12 @@ int main() {
 	GUI::Text* temptex = new GUI::Text();
 	temptex->SetFont("C:/Windows/Fonts/Arial");
 	temptex->SetFontSize(24);
-	temptex->SetUsePtSize(true);
+	temptex->SetWrap(GUI::Text::Wrap::WORD);
+	temptex->SetAlignment(GUI::Text::Alignment::LEFT);
+	temptex->SetDPI(96);
 	temptex->SetSupportsMarkdown(false);
-	temptex->SetNumberOfRows(0);
-	temptex->SetMaxWidth(0);
-	temptex->SetAlignment(GUI::Text::Alignment::DEFAULT);
-	temptex->SetText("Test\ntesting");
+	temptex->SetMaxNumberOfRows(0);
+	temptex->SetText("Tes wwt\ntesting\nwwwwww wwwww");
 	temptex->SetTranslation(glm::vec2(100.0f, 100.0f));
 
 
@@ -264,6 +263,18 @@ int main() {
 		}
 		if (input->GetMouseButtonHeld(AD_MOUSE_BUTTON_2)) {
 			Console::Info("Mouse Position: (%.2f, %.2f)", input->GetMousePositionX(), input->GetMousePositionY());
+		}
+		if (input->GetKeyboardKeyPressed(AD_KEY_U)) {
+			temptex->SetAlignment(GUI::Text::Alignment::LEFT);
+		}
+		if (input->GetKeyboardKeyPressed(AD_KEY_I)) {
+			temptex->SetAlignment(GUI::Text::Alignment::CENTER);
+		}
+		if (input->GetKeyboardKeyPressed(AD_KEY_O)) {
+			temptex->SetAlignment(GUI::Text::Alignment::RIGHT);
+		}
+		if (input->GetKeyboardKeyPressed(AD_KEY_P)) {
+			temptex->SetAlignment(GUI::Text::Alignment::JUSTIFY);
 		}
 
 		mainView->Draw(proj);

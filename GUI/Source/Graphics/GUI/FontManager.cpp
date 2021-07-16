@@ -18,14 +18,14 @@ namespace GUI {
 		m_Fonts.clear();
 	}
 
-	std::shared_ptr<Font> FontManager::GetFont(const std::string& path, unsigned int size, bool usePtSize)
+	std::shared_ptr<Font> FontManager::GetFont(const std::string& path, unsigned int size, unsigned int dpi)
 	{
-		std::string name = path + std::to_string(size) + std::to_string(usePtSize);
+		std::string name = path + std::to_string(size) + std::to_string(dpi);
 		if (m_Fonts.find(name) != m_Fonts.end()) {
 			return m_Fonts[name];
 		}
 		else {
-			m_Fonts[name] = std::make_shared<Font>(path, size, usePtSize);
+			m_Fonts[name] = std::make_shared<Font>(path, size, dpi);
 			return m_Fonts[name];
 		}
 	}

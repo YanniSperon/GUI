@@ -8,16 +8,18 @@
 #include FT_FREETYPE_H
 
 #define PIXEL_GAP 5
+#define INVERSE_BASE_DPI 0.01388888888f
 
 namespace GUI {
-	Font::Font(const std::string& path, unsigned int size, bool usePtSize)
-		: m_Path(path), m_Characters(), m_Size(usePtSize ? glm::round(static_cast<float>(size) * 1.3333333f): size), m_HasFakeUser(false), m_PtSize(usePtSize ? size : glm::round((float)size * 1.3333333)) //, tempShader(new Shader("Resources/Shaders/Text", SHADER_FRAGMENT_SHADER | SHADER_VERTEX_SHADER))
+	Font::Font(const std::string& path, unsigned int size, unsigned int dpi)
+		: m_Path(path), m_Characters(), m_Size(glm::round(static_cast<float>(size) * static_cast<float>(dpi) * INVERSE_BASE_DPI)), m_HasFakeUser(false), m_RawSize(size), m_DPI(dpi)
 	{
 		m_AtlasHeight = ((m_Size + PIXEL_GAP) * 20);
 		m_AtlasWidth = ((m_Size + PIXEL_GAP) * 20);
-
+		
 		glGenTextures(1, &m_AtlasTextureID);
 
+		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, m_AtlasTextureID);
 
 		float inverseAtlasWidth = (1.0f / (float)m_AtlasWidth);
@@ -175,7 +177,9 @@ namespace GUI {
 
 	Font::~Font()
 	{
-
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, 0);
+		glDeleteTextures(1, &m_AtlasTextureID);
 	}
 
 	void Font::Draw(const glm::mat4& projection)
@@ -200,7 +204,7 @@ namespace GUI {
 		return m_Size;
 	}
 
-	std::map<char, Character>& Font::GetCharacters()
+	std::map<char, Font::Character>& Font::GetCharacters()
 	{
 		return m_Characters;
 	}
