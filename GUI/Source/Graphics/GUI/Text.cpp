@@ -9,7 +9,7 @@
 
 namespace GUI {
 	Text::Text()
-		: m_Fonts(), m_MaxNumberOfRows(0), m_MaxWidth(INT_MAX), m_Scale(1.0f, 1.0f), m_Translation(0.0f, 0.0f), m_Min(FLT_MAX, FLT_MAX), m_Max(-FLT_MAX, -FLT_MAX), m_SupportsMarkdown(false), m_Alignment(Alignment::LEFT), m_Color(1.0f, 1.0f, 1.0f, 1.0f), m_TranslationOffset(0.0f, 0.0f), m_Shader(ShaderManager::GetInstance()->GetShader("Resources/Shaders/Text", SHADER_VERTEX_SHADER | SHADER_FRAGMENT_SHADER)), m_FontPath(""), m_FontSize(12), m_ShouldRecalculate(false), m_LineSpacing(1.0f), m_Wrap(Text::Wrap::WORD), m_DPI(96)
+		: m_Fonts(), m_MaxNumberOfRows(0), m_MaxWidth(INT_MAX), m_Scale(1.0f, 1.0f), m_Translation(0.0f, 0.0f), m_Min(FLT_MAX, FLT_MAX), m_Max(-FLT_MAX, -FLT_MAX), m_SupportsMarkdown(false), m_HorizontalAlignment(HorizontalAlignment::LEFT), m_VerticalAlignment(VerticalAlignment::TOP), m_Color(1.0f, 1.0f, 1.0f, 1.0f), m_TranslationOffset(0.0f, 0.0f), m_Shader(ShaderManager::GetInstance()->GetShader("Resources/Shaders/Text", SHADER_VERTEX_SHADER | SHADER_FRAGMENT_SHADER)), m_FontPath(""), m_FontSize(12), m_ShouldRecalculate(false), m_LineSpacing(1.0f), m_Wrap(Text::Wrap::WORD), m_DPI(96)
 	{
 		glGenVertexArrays(1, &m_VAO);
 		glBindVertexArray(m_VAO);
@@ -40,7 +40,6 @@ namespace GUI {
 		std::map<char, Font::Character>& characters = font->GetCharacters();
 		
 		bool lastCharacterWasNewline = false;
-		bool lockedUntilNewline = false;
 		int kerningXPx;
 		int kerningX;
 		int characterBearingX;
@@ -56,7 +55,6 @@ namespace GUI {
 		std::size_t rowStartIndex = 0;
 		std::size_t lastSpaceIndex = 0;
 		std::size_t rowSize = 0;
-		int numSpaces = 0;
 		
 		unsigned int fontSize = font->GetSize();
 		
@@ -65,10 +63,6 @@ namespace GUI {
 
 			if (result.rows.size() >= maxNumberOfRows) {
 				break;
-			}
-
-			if (lockedUntilNewline && c != '\n') {
-				continue;
 			}
 
 			rowSize++;
@@ -96,7 +90,6 @@ namespace GUI {
 				lastSpaceIndex = i;
 				rowStartIndex = i + 1ull;
 				currentRow = Text::AlignedText::Row();
-				lockedUntilNewline = false;
 				baseline = 0.0f;
 				rowSize = 0;
 				continue;
@@ -128,15 +121,13 @@ namespace GUI {
 
 			if ((currentRow.max - currentRow.min) > maxWidth) {
 				// reset the cursor
-				if (wrap == Text::Wrap::NONE) {
-					lockedUntilNewline = true;
-				}
 				baseline = 0.0f;
 				if (lastSpaceIndex < rowStartIndex || wrap == Text::Wrap::LETTER) {
 					currentRow.text = text.substr(rowStartIndex, i - rowStartIndex + 1ull);
 				}
 				else {
 					currentRow.text = text.substr(rowStartIndex, rowSize - 1ull - (i - lastSpaceIndex));
+					currentRow.numSpaces--;
 					currentRow.max = maxAtLastSpace;
 					i = lastSpaceIndex;
 				}
@@ -164,10 +155,13 @@ namespace GUI {
 			result.min = glm::min(result.rows[i].min, result.min);
 			result.max = glm::max(result.rows[i].max, result.max);
 		}
+		//if (maxWidth != INT_MAX) {
+		//	result.max = INT_MAX;
+		//}
 		return result;
 	}
 
-	void Text::PrepareText(AlignedText alignedText, Font* font, Font::Character::Face* vertices, Text::Alignment alignment, float lineSpacing, glm::vec2& offset, glm::vec2& min, glm::vec2& max, glm::vec4& color)
+	void Text::PrepareText(const AlignedText& alignedText, Font* font, Font::Character::Face* vertices, Text::HorizontalAlignment horizontalAlignment, Text::VerticalAlignment verticalAlignment, float lineSpacing, glm::vec2& offset, glm::vec2& min, glm::vec2& max, glm::vec4& color)
 	{
 		std::map<char, Font::Character>& characters = font->GetCharacters();
 		
@@ -181,19 +175,21 @@ namespace GUI {
 		float justifySpaceSizeIncrease = 0.0f;
 		float centerAlignIncrease = 0.0f;
 		float rightAlignIncrease = 0.0f;
+		float leftAlignIncrease = 0.0f;
 
 		unsigned int fontSize = font->GetSize();
 		float maxRowWidth = alignedText.max - alignedText.min;
 
 		for (std::size_t i = 0; i < alignedText.rows.size(); ++i) {
 			Text::AlignedText::Row row = alignedText.rows[i];
-			if (alignment == Text::Alignment::JUSTIFY && row.shouldJustify) {
+			offset.x -= row.min;
+			if (horizontalAlignment == Text::HorizontalAlignment::JUSTIFY && row.shouldJustify) {
 				justifySpaceSizeIncrease = ((maxRowWidth - (row.max - row.min)) / row.numSpaces);
 			}
-			else if (alignment == Text::Alignment::CENTER) {
+			else if (horizontalAlignment == Text::HorizontalAlignment::CENTER) {
 				offset.x += (maxRowWidth / 2.0f) - ((row.max - row.min) / 2.0f);
 			}
-			else if (alignment == Text::Alignment::RIGHT) {
+			else if (horizontalAlignment == Text::HorizontalAlignment::RIGHT) {
 				offset.x += alignedText.max - row.max;
 			}
 			for (std::size_t j = 0; j < row.text.size(); ++j) {
@@ -302,7 +298,7 @@ namespace GUI {
 		}
 	};
 
-	void Text::PrepareMarkdownText(AlignedText alignedText, Font* font, Font::Character::Face* vertices, Text::Alignment alignment, float lineSpacing, glm::vec2& offset, glm::vec2& min, glm::vec2& max, glm::vec4& color)
+	void Text::PrepareMarkdownText(const AlignedText& alignedText, Font* font, Font::Character::Face* vertices, Text::HorizontalAlignment horizontalAlignment, Text::VerticalAlignment verticalAlignment, float lineSpacing, glm::vec2& offset, glm::vec2& min, glm::vec2& max, glm::vec4& color)
 	{
 		//std::vector<MarkdownData> formatting = std::vector<MarkdownData>();
 		
@@ -391,7 +387,7 @@ namespace GUI {
 			
 			GUI::Font::Character::Face* characterFaces = new GUI::Font::Character::Face[alignedText.numCharacters];
 
-			PrepareText(alignedText, m_Fonts[SIZE_1_00X].get(), characterFaces, m_Alignment, m_LineSpacing, glm::vec2(0.0f, 0.0f), m_Min, m_Max, m_Color);
+			PrepareText(alignedText, m_Fonts[SIZE_1_00X].get(), characterFaces, m_HorizontalAlignment, m_VerticalAlignment, m_LineSpacing, glm::vec2(0.0f, 0.0f), m_Min, m_Max, m_Color);
 			m_TranslationOffset = glm::round(m_Max - ((glm::abs(m_Min) + glm::abs(m_Max)) * 0.5f));
 			//}
 			//m_TranslationOffset = glm::round(m_Max - ((glm::abs(m_Min) + glm::abs(m_Max)) * 0.5f));
@@ -483,10 +479,16 @@ namespace GUI {
 		m_SupportsMarkdown = supportsMarkdown;
 	}
 
-	void Text::SetAlignment(Alignment alignment)
+	void Text::SetHorizontalAlignment(HorizontalAlignment horizontalAlignment)
 	{
-		m_ShouldRecalculate = (m_Alignment != alignment) || m_ShouldRecalculate;
-		m_Alignment = alignment;
+		m_ShouldRecalculate = (m_HorizontalAlignment != horizontalAlignment) || m_ShouldRecalculate;
+		m_HorizontalAlignment = horizontalAlignment;
+	}
+
+	void Text::SetVerticalAlignment(VerticalAlignment verticalAlignment)
+	{
+		m_ShouldRecalculate = (m_VerticalAlignment != verticalAlignment) || m_ShouldRecalculate;
+		m_VerticalAlignment = verticalAlignment;
 	}
 
 	void Text::SetWrap(Wrap wrap)
@@ -555,9 +557,14 @@ namespace GUI {
 		return m_SupportsMarkdown;
 	}
 
-	Text::Alignment Text::GetAlignment()
+	Text::HorizontalAlignment Text::GetHorizontalAlignment()
 	{
-		return m_Alignment;
+		return m_HorizontalAlignment;
+	}
+
+	Text::VerticalAlignment Text::GetVerticalAlignment()
+	{
+		return m_VerticalAlignment;
 	}
 
 	Text::Wrap Text::GetWrap()

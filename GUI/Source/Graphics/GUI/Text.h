@@ -13,11 +13,17 @@
 namespace GUI {
 	class Text {
 	public:
-		enum class Alignment {
+		enum class HorizontalAlignment {
 			LEFT = 1,
 			CENTER = 2,
 			RIGHT = 4,
 			JUSTIFY = 8
+		};
+
+		enum class VerticalAlignment {
+			TOP = 1,
+			CENTER = 2,
+			BOTTOM = 4
 		};
 
 		enum class Wrap {
@@ -25,8 +31,6 @@ namespace GUI {
 			LETTER = 1,
 			// WORD wraps at the nearest word
 			WORD = 2,
-			// NONE does not wrap and instead deletes overflowing characters
-			NONE = 4
 		};
 	private:
 		bool m_SupportsMarkdown;
@@ -43,7 +47,8 @@ namespace GUI {
 
 		unsigned int m_MaxNumberOfRows;
 		unsigned int m_MaxWidth;
-		Alignment m_Alignment;
+		HorizontalAlignment m_HorizontalAlignment;
+		VerticalAlignment m_VerticalAlignment;
 		Wrap m_Wrap;
 
 		glm::vec4 m_Color;
@@ -92,8 +97,8 @@ namespace GUI {
 
 		static Text::AlignedText Text::AlignText(const std::string& text, Font* font, unsigned int maxWidth, unsigned int maxLines, Wrap wrap);
 		void Recalculate();
-		static void PrepareText(AlignedText alignedText, Font* font, Font::Character::Face* vertices, Text::Alignment alignment, float lineSpacing, glm::vec2& offset, glm::vec2& min, glm::vec2& max, glm::vec4& color);
-		static void PrepareMarkdownText(AlignedText alignedText, Font* font, Font::Character::Face* vertices, Text::Alignment alignment, float lineSpacing, glm::vec2& offset, glm::vec2& min, glm::vec2& max, glm::vec4& color);
+		static void PrepareText(const AlignedText& alignedText, Font* font, Font::Character::Face* vertices, Text::HorizontalAlignment horizontalAlignment, Text::VerticalAlignment verticalAlignment, float lineSpacing, glm::vec2& offset, glm::vec2& min, glm::vec2& max, glm::vec4& color);
+		static void PrepareMarkdownText(const AlignedText& alignedText, Font* font, Font::Character::Face* vertices, Text::HorizontalAlignment horizontalAlignment, Text::VerticalAlignment verticalAlignment, float lineSpacing, glm::vec2& offset, glm::vec2& min, glm::vec2& max, glm::vec4& color);
 	protected:
 		glm::vec2 m_Scale;
 		glm::vec2 m_Translation;
@@ -107,7 +112,8 @@ namespace GUI {
 		void SetFontSize(unsigned int size);
 		void SetDPI(unsigned int dpi);
 		void SetSupportsMarkdown(bool supportsMarkdown);
-		void SetAlignment(Alignment alignment);
+		void SetHorizontalAlignment(HorizontalAlignment horizontalAlignment);
+		void SetVerticalAlignment(VerticalAlignment verticalAlignment);
 		void SetWrap(Wrap wrap);
 		void SetMaxNumberOfRows(unsigned int maxNumRows);
 		void SetMaxWidth(unsigned int maxWidth);
@@ -121,7 +127,8 @@ namespace GUI {
 		unsigned int GetFontSize();
 		unsigned int GetDPI();
 		bool GetSupportsMarkdown();
-		Alignment GetAlignment();
+		HorizontalAlignment GetHorizontalAlignment();
+		VerticalAlignment GetVerticalAlignment();
 		Wrap GetWrap();
 		unsigned int GetMaxNumberOfRows();
 		unsigned int GetMaxWidth();

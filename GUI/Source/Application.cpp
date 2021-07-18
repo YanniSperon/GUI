@@ -179,12 +179,12 @@ int main() {
 	temptex->SetFont("C:/Windows/Fonts/Arial");
 	temptex->SetFontSize(24);
 	temptex->SetWrap(GUI::Text::Wrap::WORD);
-	temptex->SetAlignment(GUI::Text::Alignment::LEFT);
+	temptex->SetHorizontalAlignment(GUI::Text::HorizontalAlignment::JUSTIFY);
 	temptex->SetDPI(96);
-	temptex->SetMaxWidth(100);
+	temptex->SetMaxWidth(300);
 	temptex->SetSupportsMarkdown(false);
 	temptex->SetMaxNumberOfRows(0);
-	temptex->SetText("Hey are\nyou\nnestingi inside house");
+	temptex->SetText("Test testing 123");
 	temptex->SetTranslation(glm::vec2(640.0f, 360.0f));
 
 
@@ -258,18 +258,24 @@ int main() {
 			Console::Info("Mouse Position: (%.2f, %.2f)", input->GetMousePositionX(), input->GetMousePositionY());
 		}
 		if (input->GetKeyboardKeyPressed(AD_KEY_U)) {
-			temptex->SetAlignment(GUI::Text::Alignment::LEFT);
+			temptex->SetHorizontalAlignment(GUI::Text::HorizontalAlignment::LEFT);
 		}
 		if (input->GetKeyboardKeyPressed(AD_KEY_I)) {
-			temptex->SetAlignment(GUI::Text::Alignment::CENTER);
+			temptex->SetHorizontalAlignment(GUI::Text::HorizontalAlignment::CENTER);
 		}
 		if (input->GetKeyboardKeyPressed(AD_KEY_O)) {
-			temptex->SetAlignment(GUI::Text::Alignment::RIGHT);
+			temptex->SetHorizontalAlignment(GUI::Text::HorizontalAlignment::RIGHT);
 		}
 		if (input->GetKeyboardKeyPressed(AD_KEY_P)) {
-			temptex->SetAlignment(GUI::Text::Alignment::JUSTIFY);
+			temptex->SetHorizontalAlignment(GUI::Text::HorizontalAlignment::JUSTIFY);
 		}
 
+		if (input->GetKeyboardKeyHeld(AD_KEY_K)) {
+			temptex->SetDPI(temptex->GetDPI() - 2u);
+		}
+		if (input->GetKeyboardKeyHeld(AD_KEY_L)) {
+			temptex->SetDPI(temptex->GetDPI() + 2u);
+		}
 		mainView->Draw(proj);
 		temptex->Draw(proj);
 
