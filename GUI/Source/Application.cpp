@@ -96,8 +96,7 @@ int main() {
 	glfwSetErrorCallback([](int error, const char* description)
 		{
 			Console::Error("GLFW Error (%i): \"%s\"", error, description);
-		}
-	);
+		});
 	//////////////////////////////////////////////////////////////////////////////////////////////
 	glfwSetCursorPosCallback(window, [](GLFWwindow* glfwWindow, double xPos, double yPos)
 		{
@@ -109,8 +108,7 @@ int main() {
 			mouseYPos = yPos;
 
 			didMove = true;
-		}
-	);
+		});
 	glfwSetMouseButtonCallback(window, [](GLFWwindow* glfwWindow, int button, int action, int mods)
 		{
 			Input* input = (Input*)glfwGetWindowUserPointer(glfwWindow);
@@ -128,8 +126,7 @@ int main() {
 				break;
 			}
 			}
-		}
-	);
+		});
 	glfwSetKeyCallback(window, [](GLFWwindow* glfwWindow, int key, int scancode, int action, int mods)
 		{
 			Input* input = (Input*)glfwGetWindowUserPointer(glfwWindow);
@@ -147,8 +144,7 @@ int main() {
 				break;
 			}
 			}
-		}
-	);
+		});
 	glfwSetWindowSizeCallback(window, [](GLFWwindow* glfwWindow, int width, int height)
 		{
 			Input* input = (Input*)glfwGetWindowUserPointer(glfwWindow);
@@ -159,25 +155,21 @@ int main() {
 			glViewport(0, 0, windowWidth, windowHeight);
 
 			shouldRecalculate = true;
-		}
-	);
+		});
 	glfwSetCharCallback(window, [](GLFWwindow* glfwWindow, unsigned int keycode)
 		{
 			Input* input = (Input*)glfwGetWindowUserPointer(glfwWindow);
-		}
-	);
+		});
 	glfwSetScrollCallback(window, [](GLFWwindow* glfwWindow, double xOffset, double yOffset)
 		{
 			Input* input = (Input*)glfwGetWindowUserPointer(glfwWindow);
-		}
-	);
+		});
 	glfwSetCursorEnterCallback(window, [](GLFWwindow* glfwWindow, int entered)
 		{
 			Input* input = (Input*)glfwGetWindowUserPointer(glfwWindow);
 
 			input->SetMouseWasBlocked(true);
-		}
-	);
+		});
 
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
@@ -189,10 +181,11 @@ int main() {
 	temptex->SetWrap(GUI::Text::Wrap::WORD);
 	temptex->SetAlignment(GUI::Text::Alignment::LEFT);
 	temptex->SetDPI(96);
+	temptex->SetMaxWidth(100);
 	temptex->SetSupportsMarkdown(false);
 	temptex->SetMaxNumberOfRows(0);
-	temptex->SetText("Tes wwt\ntesting\nwwwwww wwwww");
-	temptex->SetTranslation(glm::vec2(100.0f, 100.0f));
+	temptex->SetText("Hey are\nyou\nnestingi inside house");
+	temptex->SetTranslation(glm::vec2(640.0f, 360.0f));
 
 
 

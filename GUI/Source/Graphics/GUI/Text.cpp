@@ -47,7 +47,6 @@ namespace GUI {
 		float baselineOffset;
 		float shiftX;
 		float baseline = 0.0f;
-		float maxRowWidth = -FLT_MAX;
 		float lastMax = 0.0f;
 		float maxAtLastSpace = 0.0f;
 
@@ -78,7 +77,9 @@ namespace GUI {
 				lastSpaceIndex = i;
 				maxAtLastSpace = lastMax;
 				lastMax = 0.0f;
-				if (lastCharacterWasNewline) {
+				if (rowSize == 1) {
+					rowSize--;
+					rowStartIndex++;
 					continue;
 				}
 			}
@@ -94,9 +95,7 @@ namespace GUI {
 				lastMax = 0.0f;
 				lastSpaceIndex = i;
 				rowStartIndex = i + 1ull;
-				maxRowWidth = glm::max(currentRow.max - currentRow.min, maxRowWidth);
 				currentRow = Text::AlignedText::Row();
-				lastCharacterWasNewline = true;
 				lockedUntilNewline = false;
 				baseline = 0.0f;
 				rowSize = 0;
@@ -120,34 +119,35 @@ namespace GUI {
 		
 			// advance affects baseline so add it to bearing
 			baselineOffset = kerningXPx + (ch.advance.x >> 6);
-			if (baseline + baselineOffset > maxWidth) {
+
+			// add together the final shift on the characters themselves
+			shiftX = kerningXPx + characterBearingX + baseline;
+
+			currentRow.min = glm::min(ch.face.bottomLeft.position.x + shiftX, currentRow.min);
+			currentRow.max = glm::max(ch.face.topRight.position.x + shiftX, currentRow.max);
+
+			if ((currentRow.max - currentRow.min) > maxWidth) {
 				// reset the cursor
 				if (wrap == Text::Wrap::NONE) {
 					lockedUntilNewline = true;
 				}
 				baseline = 0.0f;
 				if (lastSpaceIndex < rowStartIndex || wrap == Text::Wrap::LETTER) {
-					currentRow.text = text.substr(rowStartIndex, i - rowStartIndex);
+					currentRow.text = text.substr(rowStartIndex, i - rowStartIndex + 1ull);
 				}
 				else {
 					currentRow.text = text.substr(rowStartIndex, rowSize - 1ull - (i - lastSpaceIndex));
 					currentRow.max = maxAtLastSpace;
 					i = lastSpaceIndex;
 				}
+				currentRow.shouldJustify = true;
 				result.rows.push_back(currentRow);
 				lastSpaceIndex = i;
 				rowStartIndex = i + 1ull;
-				maxRowWidth = glm::max(currentRow.max - currentRow.min, maxRowWidth);
 				currentRow = Text::AlignedText::Row();
 				rowSize = 0;
 				continue;
 			}
-			
-			// add together the final shift on the characters themselves
-			shiftX = kerningXPx + characterBearingX + baseline;
-		
-			currentRow.min = glm::min(ch.face.bottomLeft.position.x + shiftX, currentRow.min);
-			currentRow.max = glm::max(ch.face.topRight.position.x + shiftX, currentRow.max);
 
 			lastMax = currentRow.max;
 			baseline += baselineOffset;
@@ -158,11 +158,11 @@ namespace GUI {
 		if (rowStartIndex != text.size() && result.rows.size() < maxNumberOfRows) {
 			currentRow.text = text.substr(rowStartIndex);
 			result.rows.push_back(currentRow);
-			maxRowWidth = glm::max(currentRow.max - currentRow.min, maxRowWidth);
 		}
-		result.maxWidth = maxRowWidth;
 		for (std::size_t i = 0; i < result.rows.size(); ++i) {
 			result.numCharacters += result.rows[i].text.size();
+			result.min = glm::min(result.rows[i].min, result.min);
+			result.max = glm::max(result.rows[i].max, result.max);
 		}
 		return result;
 	}
@@ -176,8 +176,6 @@ namespace GUI {
 		int characterBearingX;
 		float tempXOffset;
 		float shiftX;
-		glm::vec2 currMin;
-		glm::vec2 currMax;
 		std::size_t numCharactersAdded = 0ull;
 		float tempIncrease = 0.0f;
 		float justifySpaceSizeIncrease = 0.0f;
@@ -185,18 +183,18 @@ namespace GUI {
 		float rightAlignIncrease = 0.0f;
 
 		unsigned int fontSize = font->GetSize();
-
+		float maxRowWidth = alignedText.max - alignedText.min;
 
 		for (std::size_t i = 0; i < alignedText.rows.size(); ++i) {
 			Text::AlignedText::Row row = alignedText.rows[i];
-			if (alignment == Text::Alignment::JUSTIFY) {
-				justifySpaceSizeIncrease = ((alignedText.maxWidth - (row.max - row.min)) / row.numSpaces);
+			if (alignment == Text::Alignment::JUSTIFY && row.shouldJustify) {
+				justifySpaceSizeIncrease = ((maxRowWidth - (row.max - row.min)) / row.numSpaces);
 			}
 			else if (alignment == Text::Alignment::CENTER) {
-				offset.x += (alignedText.maxWidth / 2.0f) - ((row.max - row.min) / 2.0f);
+				offset.x += (maxRowWidth / 2.0f) - ((row.max - row.min) / 2.0f);
 			}
 			else if (alignment == Text::Alignment::RIGHT) {
-				offset.x += alignedText.maxWidth - row.max;
+				offset.x += alignedText.max - row.max;
 			}
 			for (std::size_t j = 0; j < row.text.size(); ++j) {
 				char c = row.text[j];
@@ -268,16 +266,11 @@ namespace GUI {
 				vertices[numCharactersAdded].bottomRight.color.b = color.b;
 				vertices[numCharactersAdded].bottomRight.color.a = color.a;
 
-				glm::vec2 temp = vertices[numCharactersAdded].topRight.position - vertices[numCharactersAdded].bottomLeft.position;
+				min.x = glm::min(vertices[numCharactersAdded].bottomLeft.position.x, min.x);
+				min.y = glm::min(vertices[numCharactersAdded].bottomLeft.position.y, min.y);
 
-				currMin.x = vertices[numCharactersAdded].bottomLeft.position.x;
-				currMin.y = vertices[numCharactersAdded].bottomLeft.position.y;
-				min.x = glm::min(currMin.x, min.x);
-				min.y = glm::min(currMin.y, min.y);
-				currMax.x = vertices[numCharactersAdded].topRight.position.x;
-				currMax.y = vertices[numCharactersAdded].topRight.position.y;
-				max.x = glm::max(currMax.x, max.x);
-				max.y = glm::max(currMax.y, max.y);
+				max.x = glm::max(vertices[numCharactersAdded].topRight.position.x, max.x);
+				max.y = glm::max(vertices[numCharactersAdded].topRight.position.y, max.y);
 				offset.x += tempXOffset;
 				tempIncrease = 0.0f;
 				numCharactersAdded++;
@@ -399,7 +392,7 @@ namespace GUI {
 			GUI::Font::Character::Face* characterFaces = new GUI::Font::Character::Face[alignedText.numCharacters];
 
 			PrepareText(alignedText, m_Fonts[SIZE_1_00X].get(), characterFaces, m_Alignment, m_LineSpacing, glm::vec2(0.0f, 0.0f), m_Min, m_Max, m_Color);
-			
+			m_TranslationOffset = glm::round(m_Max - ((glm::abs(m_Min) + glm::abs(m_Max)) * 0.5f));
 			//}
 			//m_TranslationOffset = glm::round(m_Max - ((glm::abs(m_Min) + glm::abs(m_Max)) * 0.5f));
 			//m_TranslationOffset = glm::vec2(0.0f, glm::round(m_Max.y - ((glm::abs(m_Min.y) + glm::abs(m_Max.y)) * 0.5f)));

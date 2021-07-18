@@ -66,22 +66,25 @@ namespace GUI {
 				float min;
 				float max;
 				int numSpaces;
+				// is true whenever the line ends in a space
+				bool shouldJustify;
 
 				Row()
-					: text(), min(FLT_MAX), max(-FLT_MAX), numSpaces(0)
+					: text(), min(FLT_MAX), max(-FLT_MAX), numSpaces(0), shouldJustify(false)
 				{
 
 				}
 			};
 
 			std::vector<Row> rows;
-			float maxWidth;
+			float min;
+			float max;
 			std::size_t numCharacters;
 
 
 
 			AlignedText()
-				: rows(), maxWidth(-FLT_MAX), numCharacters(0ull)
+				: rows(), min(FLT_MAX), max(-FLT_MAX), numCharacters(0ull)
 			{
 
 			}
