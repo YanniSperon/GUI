@@ -2,6 +2,7 @@
 C++ GUI Library implemented with OpenGL and FreeType
 
 [Button Clicking Demo](https://github.com/YanniSperon/GUI/raw/refs/heads/master/Demo/buttonclicking.mp4)
+
 [Text Wrapping Demo](https://github.com/YanniSperon/GUI/raw/refs/heads/master/Demo/textwrapping.mp4)
 
 
