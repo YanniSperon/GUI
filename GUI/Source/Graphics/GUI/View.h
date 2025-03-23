@@ -29,6 +29,10 @@ namespace GUI {
 			CENTER = 2,
 			RIGHT = 4
 		};
+		enum class HitBehavior {
+			ABSORB = 1,
+			PASSTHROUGH = 2
+		};
 	private:
 		float m_WidthConstraint;
 		ConstraintMeasurementType m_WidthConstraintMeasurementType;
@@ -70,6 +74,8 @@ namespace GUI {
 
 		bool m_ShouldClipToBounds;
 		SizeMode m_SizeMode;
+
+		HitBehavior m_HitBehavior;
 
 		virtual void SetBounds(const glm::vec2& min, const glm::vec2& max);
 
@@ -129,5 +135,10 @@ namespace GUI {
 		float GetMinimumWidth();
 		void SetMinimumHeight(float minimumHeight);
 		float GetMinimumHeight();
+
+
+
+		void SetHitBehavior(HitBehavior hb);
+		HitBehavior GetHitBehavior();
 	};
 }

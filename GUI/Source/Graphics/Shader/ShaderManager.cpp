@@ -15,7 +15,7 @@ ShaderManager::~ShaderManager()
 	m_Shaders.clear();
 }
 
-std::shared_ptr<Shader> ShaderManager::GetShader(const std::string& name, int shaderType)
+std::shared_ptr<Shader> ShaderManager::GetShader(const std::string& name, Shader::Type shaderType)
 {
 	if (m_Shaders.find(name) != m_Shaders.end()) {
 		return m_Shaders[name];

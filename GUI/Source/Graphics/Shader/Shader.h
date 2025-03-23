@@ -5,11 +5,32 @@
 
 #include "Vendor/glm/glm.hpp"
 
-#define SHADER_VERTEX_SHADER 1
-#define SHADER_FRAGMENT_SHADER 2
-#define SHADER_GEOMETRY_SHADER 4
+#define SHADER_TYPE_VERTEX                  1u << 0
+#define SHADER_TYPE_FRAGMENT                1u << 1
+#define SHADER_TYPE_GEOMETRY                1u << 2
+#define SHADER_TYPE_TESSELLATION_CONTROL    1u << 3
+#define SHADER_TYPE_TESSELLATION_EVALUATION 1u << 4
+#define SHADER_TYPE_COMPUTE                 1u << 5
+
+#define SHADER_TYPE_DEFAULT                 SHADER_TYPE_VERTEX | SHADER_TYPE_FRAGMENT
+#define SHADER_TYPE_ALL                     SHADER_TYPE_VERTEX | SHADER_TYPE_FRAGMENT | SHADER_TYPE_GEOMETRY | SHADER_TYPE_TESSELLATION_CONTROL | SHADER_TYPE_TESSELLATION_EVALUATION | SHADER_TYPE_COMPUTE
+#define SHADER_TYPE_TESSELLATION            SHADER_TYPE_TESSELLATION_CONTROL | SHADER_TYPE_TESSELLATION_EVALUATION
 
 class Shader {
+public:
+	enum class Type: unsigned int {
+		Vertex = SHADER_TYPE_VERTEX,
+		Fragment = SHADER_TYPE_FRAGMENT,
+		Geometry = SHADER_TYPE_GEOMETRY,
+		TessellationControl = SHADER_TYPE_TESSELLATION_CONTROL,
+		TessellationEvaluation = SHADER_TYPE_TESSELLATION_EVALUATION,
+		COMPUTE = SHADER_TYPE_COMPUTE,
+
+		Default = SHADER_TYPE_DEFAULT,
+		All = SHADER_TYPE_ALL,
+		Tessellation = SHADER_TYPE_TESSELLATION,
+	};
+
 private:
 	GLuint m_ID;
 	//GLuint m_UBO;
@@ -18,9 +39,9 @@ private:
 
 	std::string m_Path;
 
-	int m_ShaderType;
+	Type m_ShaderType;
 public:
-	Shader(const std::string& name, int shaderType);
+	Shader(const std::string& name, Type shaderType);
 	~Shader();
 
 	GLuint LoadShader(const char* path, GLenum type);
@@ -47,7 +68,7 @@ public:
 
 	void SetHasFakeUser(bool fakeUser);
 	bool GetHasFakeUser();
-	int GetShaderType();
+	Type GetShaderType();
 
 	const std::string& GetPath();
 

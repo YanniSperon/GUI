@@ -7,25 +7,38 @@
 #include <fstream>
 #include <sstream>
 
-Shader::Shader(const std::string& name, int shaderType)
+Shader::Shader(const std::string& name, Type shaderType)
 	: m_ID(0), m_FakeUser(false), m_Path(name), m_ShaderType(shaderType)
 {
 	m_ID = glCreateProgram();
 
-	int vertID, fragID, geomID, tescID;
-	if (shaderType & SHADER_VERTEX_SHADER) {
+	unsigned int st = static_cast<unsigned int>(shaderType);
+
+	int vertID, fragID, geomID, teccID, teceID, compID;
+	if (st & SHADER_TYPE_VERTEX) {
 		std::string vertexShaderString = name + ".vert";
 		vertID = LoadShader(vertexShaderString.c_str(), GL_VERTEX_SHADER);
 	}
-	if (shaderType & SHADER_FRAGMENT_SHADER) {
+	if (st & SHADER_TYPE_FRAGMENT) {
 		std::string fragmentShaderString = name + ".frag";
 		fragID = LoadShader(fragmentShaderString.c_str(), GL_FRAGMENT_SHADER);
 	}
-	if (shaderType & SHADER_GEOMETRY_SHADER) {
+	if (st & SHADER_TYPE_GEOMETRY) {
 		std::string geometryShaderString = name + ".geom";
 		geomID = LoadShader(geometryShaderString.c_str(), GL_GEOMETRY_SHADER);
 	}
-
+	if (st & SHADER_TYPE_TESSELLATION_CONTROL) {
+		std::string tesselationControlShaderString = name + ".tecc";
+		teccID = LoadShader(tesselationControlShaderString.c_str(), GL_TESS_CONTROL_SHADER);
+	}
+	if (st & SHADER_TYPE_TESSELLATION_EVALUATION) {
+		std::string tesselationEvaluationShaderString = name + ".tece";
+		teceID = LoadShader(tesselationEvaluationShaderString.c_str(), GL_TESS_EVALUATION_SHADER);
+	}
+	if (st & SHADER_TYPE_COMPUTE) {
+		std::string computeShaderString = name + ".comp";
+		compID = LoadShader(computeShaderString.c_str(), GL_COMPUTE_SHADER);
+	}
 
 	int success;
 	char infoLog[512];
@@ -37,14 +50,23 @@ Shader::Shader(const std::string& name, int shaderType)
 		Console::Error("Shader type: %i at path \"%s\" linking failed \"%s\"", shaderType, name.c_str(), infoLog);
 	}
 
-	if (shaderType & SHADER_VERTEX_SHADER) {
+	if (st & SHADER_TYPE_VERTEX) {
 		glDeleteShader(vertID);
 	}
-	if (shaderType & SHADER_FRAGMENT_SHADER) {
+	if (st & SHADER_TYPE_FRAGMENT) {
 		glDeleteShader(fragID);
 	}
-	if (shaderType & SHADER_GEOMETRY_SHADER) {
+	if (st & SHADER_TYPE_GEOMETRY) {
 		glDeleteShader(geomID);
+	}
+	if (st & SHADER_TYPE_TESSELLATION_CONTROL) {
+		glDeleteShader(teccID);
+	}
+	if (st & SHADER_TYPE_TESSELLATION_EVALUATION) {
+		glDeleteShader(teceID);
+	}
+	if (st & SHADER_TYPE_COMPUTE) {
+		glDeleteShader(compID);
 	}
 
 	//glUniformBlockBinding(m_ID, glGetUniformBlockIndex(m_ID, "ubo_Matrices"), 0);
@@ -184,7 +206,7 @@ bool Shader::GetHasFakeUser()
 	return m_FakeUser;
 }
 
-int Shader::GetShaderType()
+Shader::Type Shader::GetShaderType()
 {
 	return m_ShaderType;
 }

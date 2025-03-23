@@ -15,7 +15,7 @@ public:
 	ShaderManager();
 	~ShaderManager();
 
-	std::shared_ptr<Shader> GetShader(const std::string& name, int shaderType);
+	std::shared_ptr<Shader> GetShader(const std::string& name, Shader::Type shaderType);
 
 	std::unordered_map<std::string, std::shared_ptr<Shader>>& GetManagedShaders();
 

@@ -9,7 +9,7 @@
 
 namespace GUI {
 	Text::Text()
-		: m_Fonts(), m_MaxNumberOfRows(0), m_MaxWidth(INT_MAX), m_Scale(1.0f, 1.0f), m_Translation(0.0f, 0.0f), m_Min(FLT_MAX, FLT_MAX), m_Max(-FLT_MAX, -FLT_MAX), m_SupportsMarkdown(false), m_HorizontalAlignment(HorizontalAlignment::LEFT), m_VerticalAlignment(VerticalAlignment::TOP), m_Color(1.0f, 1.0f, 1.0f, 1.0f), m_TranslationOffset(0.0f, 0.0f), m_Shader(ShaderManager::GetInstance()->GetShader("Resources/Shaders/Text", SHADER_VERTEX_SHADER | SHADER_FRAGMENT_SHADER)), m_FontPath(""), m_FontSize(12), m_ShouldRecalculate(false), m_LineSpacing(1.0f), m_Wrap(Text::Wrap::WORD), m_DPI(96)
+		: m_Fonts(), m_MaxNumberOfRows(0), m_MaxWidth(INT_MAX), m_Scale(1.0f, 1.0f), m_Translation(0.0f, 0.0f), m_Min(FLT_MAX, FLT_MAX), m_Max(-FLT_MAX, -FLT_MAX), m_SupportsMarkdown(false), m_HorizontalAlignment(HorizontalAlignment::LEFT), m_VerticalAlignment(VerticalAlignment::TOP), m_Color(1.0f, 1.0f, 1.0f, 1.0f), m_TranslationOffset(0.0f, 0.0f), m_Shader(ShaderManager::GetInstance()->GetShader("Resources/Shaders/Text", Shader::Type::Default)), m_FontPath(""), m_FontSize(12), m_ShouldRecalculate(false), m_LineSpacing(1.0f), m_Wrap(Text::Wrap::WORD), m_DPI(96)
 	{
 		glGenVertexArrays(1, &m_VAO);
 		glBindVertexArray(m_VAO);

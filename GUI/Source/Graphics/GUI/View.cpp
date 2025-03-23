@@ -8,7 +8,7 @@
 
 namespace GUI {
 	View::View(float x, float y, float width, float height)
-		: m_WidthConstraint(50.0f), m_WidthConstraintMeasurementType(ConstraintMeasurementType::PERCENT), m_HeightConstraint(50.0f), m_HeightConstraintMeasurementType(ConstraintMeasurementType::PERCENT), m_XConstraintOffset(0.0f), m_XConstraintLocation(XConstraintLocation::CENTER), m_XConstraintOffsetMeasurementType(ConstraintMeasurementType::PERCENT), m_YConstraintOffset(0.0f), m_YConstraintLocation(YConstraintLocation::CENTER), m_YConstraintOffsetMeasurementType(ConstraintMeasurementType::PERCENT), m_VAO(0), m_VBO(0), m_Scale(1.0f), m_Translation(0.0f), m_MinimumWidth(1.0f), m_MinimumHeight(1.0f), m_Opacity(1.0f), m_Children(), m_Parent(nullptr), m_CornerRoundness(0.0625f), m_TintColor(1.0f, 1.0f, 1.0f, 1.0f), m_MinimumBounds(x, y), m_MaximumBounds(x + width, y + height), m_AspectRatio(1.0f), m_ShouldClipToBounds(false), m_SizeMode(SizeMode::FILL), m_BorderWeight(0.0f), m_BorderColor(0.0f, 0.0f, 0.0f, 1.0f), m_Shader(ShaderManager::GetInstance()->GetShader("Resources/Shaders/2D", SHADER_VERTEX_SHADER | SHADER_FRAGMENT_SHADER))
+		: m_WidthConstraint(50.0f), m_WidthConstraintMeasurementType(ConstraintMeasurementType::PERCENT), m_HeightConstraint(50.0f), m_HeightConstraintMeasurementType(ConstraintMeasurementType::PERCENT), m_XConstraintOffset(0.0f), m_XConstraintLocation(XConstraintLocation::CENTER), m_XConstraintOffsetMeasurementType(ConstraintMeasurementType::PERCENT), m_YConstraintOffset(0.0f), m_YConstraintLocation(YConstraintLocation::CENTER), m_YConstraintOffsetMeasurementType(ConstraintMeasurementType::PERCENT), m_VAO(0), m_VBO(0), m_Scale(1.0f), m_Translation(0.0f), m_MinimumWidth(1.0f), m_MinimumHeight(1.0f), m_Opacity(1.0f), m_Children(), m_Parent(nullptr), m_CornerRoundness(0.0625f), m_TintColor(1.0f, 1.0f, 1.0f, 1.0f), m_MinimumBounds(x, y), m_MaximumBounds(x + width, y + height), m_AspectRatio(1.0f), m_ShouldClipToBounds(false), m_SizeMode(SizeMode::FILL), m_BorderWeight(0.0f), m_BorderColor(0.0f, 0.0f, 0.0f, 1.0f), m_Shader(ShaderManager::GetInstance()->GetShader("Resources/Shaders/2D", Shader::Type::Default)), m_HitBehavior(View::HitBehavior::PASSTHROUGH)
 	{
 		GLfloat vertices[] = {
 			-0.5f, -0.5f, // Bottom Left
@@ -42,7 +42,7 @@ namespace GUI {
 	}
 
 	View::View(View* parent)
-		: m_WidthConstraint(50.0f), m_WidthConstraintMeasurementType(ConstraintMeasurementType::PERCENT),  m_HeightConstraint(50.0f), m_HeightConstraintMeasurementType(ConstraintMeasurementType::PERCENT), m_XConstraintOffset(0.0f), m_XConstraintLocation(XConstraintLocation::CENTER), m_XConstraintOffsetMeasurementType(ConstraintMeasurementType::PERCENT), m_YConstraintOffset(0.0f), m_YConstraintLocation(YConstraintLocation::CENTER), m_YConstraintOffsetMeasurementType(ConstraintMeasurementType::PERCENT), m_VAO(0), m_VBO(0), m_Scale(1.0f), m_Translation(0.0f), m_MinimumWidth(1.0f), m_MinimumHeight(1.0f), m_Opacity(1.0f), m_Children(), m_Parent(parent), m_CornerRoundness(0.0625f), m_TintColor(1.0f, 1.0f, 1.0f, 1.0f), m_MinimumBounds(parent->m_MinimumBounds), m_MaximumBounds(parent->m_MaximumBounds), m_SizeMode(SizeMode::FILL), m_AspectRatio(1.0f), m_ShouldClipToBounds(false), m_BorderWeight(0.0f), m_BorderColor(0.0f, 0.0f, 0.0f, 1.0f), m_Shader(ShaderManager::GetInstance()->GetShader("Resources/Shaders/2D", SHADER_VERTEX_SHADER | SHADER_FRAGMENT_SHADER))
+		: m_WidthConstraint(50.0f), m_WidthConstraintMeasurementType(ConstraintMeasurementType::PERCENT),  m_HeightConstraint(50.0f), m_HeightConstraintMeasurementType(ConstraintMeasurementType::PERCENT), m_XConstraintOffset(0.0f), m_XConstraintLocation(XConstraintLocation::CENTER), m_XConstraintOffsetMeasurementType(ConstraintMeasurementType::PERCENT), m_YConstraintOffset(0.0f), m_YConstraintLocation(YConstraintLocation::CENTER), m_YConstraintOffsetMeasurementType(ConstraintMeasurementType::PERCENT), m_VAO(0), m_VBO(0), m_Scale(1.0f), m_Translation(0.0f), m_MinimumWidth(1.0f), m_MinimumHeight(1.0f), m_Opacity(1.0f), m_Children(), m_Parent(parent), m_CornerRoundness(0.0625f), m_TintColor(1.0f, 1.0f, 1.0f, 1.0f), m_MinimumBounds(parent->m_MinimumBounds), m_MaximumBounds(parent->m_MaximumBounds), m_SizeMode(SizeMode::FILL), m_AspectRatio(1.0f), m_ShouldClipToBounds(false), m_BorderWeight(0.0f), m_BorderColor(0.0f, 0.0f, 0.0f, 1.0f), m_Shader(ShaderManager::GetInstance()->GetShader("Resources/Shaders/2D", Shader::Type::Default)), m_HitBehavior(View::HitBehavior::PASSTHROUGH)
 	{
 		m_Parent->AddChild(this);
 		GLfloat vertices[] = {
@@ -146,13 +146,13 @@ namespace GUI {
 		switch (m_XConstraintLocation)
 		{
 		case XConstraintLocation::LEFT:
-			xPixelDefaultSpot = glm::round(parentXMin + (finalWidthPixels / 2.0f));
+			xPixelDefaultSpot = glm::round(parentXMin + (finalWidthPixels * 0.5f));
 			break;
 		case XConstraintLocation::CENTER:
-			xPixelDefaultSpot = glm::round(parentXMin + ((parentXMax - parentXMin) / 2.0f));
+			xPixelDefaultSpot = glm::round(parentXMin + ((parentXMax - parentXMin) * 0.5f));
 			break;
 		case XConstraintLocation::RIGHT:
-			xPixelDefaultSpot = glm::round(parentXMax - (finalWidthPixels / 2.0f));
+			xPixelDefaultSpot = glm::round(parentXMax - (finalWidthPixels * 0.5f));
 			break;
 		default:
 			break;
@@ -178,13 +178,13 @@ namespace GUI {
 		switch (m_YConstraintLocation)
 		{
 		case YConstraintLocation::TOP:
-			yPixelDefaultSpot = glm::round(parentYMax - (finalHeightPixels / 2.0f));
+			yPixelDefaultSpot = glm::round(parentYMax - (finalHeightPixels * 0.5f));
 			break;
 		case YConstraintLocation::CENTER:
-			yPixelDefaultSpot = glm::round(parentYMin + ((parentYMax - parentYMin) / 2.0f));
+			yPixelDefaultSpot = glm::round(parentYMin + ((parentYMax - parentYMin) * 0.5f));
 			break;
 		case YConstraintLocation::BOTTOM:
-			yPixelDefaultSpot = glm::round(parentYMin + (finalHeightPixels / 2.0f));
+			yPixelDefaultSpot = glm::round(parentYMin + (finalHeightPixels * 0.5f));
 			break;
 		default:
 			break;
@@ -195,7 +195,7 @@ namespace GUI {
 
 		m_Translation = glm::vec2(finalXTranslation, finalYTranslation);
 		m_Scale = glm::vec2(finalWidthPixels, finalHeightPixels);
-		SetBounds(glm::vec2(m_Translation - (m_Scale / 2.0f)), glm::vec2(m_Translation + (m_Scale / 2.0f)));
+		SetBounds(glm::vec2(m_Translation - (m_Scale / 2.0f)), glm::vec2(m_Translation + (m_Scale * 0.5f)));
 
 		for (int i = 0; i < m_Children.size(); i++) {
 			m_Children[i]->Recalculate();
@@ -289,13 +289,13 @@ namespace GUI {
 		switch (m_XConstraintLocation)
 		{
 		case XConstraintLocation::LEFT:
-			xPixelDefaultSpot = glm::round(parentXMin + (finalWidthPixels / 2.0f));
+			xPixelDefaultSpot = glm::round(parentXMin + (finalWidthPixels * 0.5f));
 			break;
 		case XConstraintLocation::CENTER:
-			xPixelDefaultSpot = glm::round(parentXMin + ((parentXMax - parentXMin)/2.0f));
+			xPixelDefaultSpot = glm::round(parentXMin + ((parentXMax - parentXMin) * 0.5f));
 			break;
 		case XConstraintLocation::RIGHT:
-			xPixelDefaultSpot = glm::round(parentXMax - (finalWidthPixels / 2.0f));
+			xPixelDefaultSpot = glm::round(parentXMax - (finalWidthPixels * 0.5f));
 			break;
 		default:
 			break;
@@ -321,13 +321,13 @@ namespace GUI {
 		switch (m_YConstraintLocation)
 		{
 		case YConstraintLocation::TOP:
-			yPixelDefaultSpot = glm::round(parentYMax - (finalHeightPixels / 2.0f));
+			yPixelDefaultSpot = glm::round(parentYMax - (finalHeightPixels * 0.5f));
 			break;
 		case YConstraintLocation::CENTER:
-			yPixelDefaultSpot = glm::round(parentYMin + ((parentYMax - parentYMin) / 2.0f));
+			yPixelDefaultSpot = glm::round(parentYMin + ((parentYMax - parentYMin) * 0.5f));
 			break;
 		case YConstraintLocation::BOTTOM:
-			yPixelDefaultSpot = glm::round(parentYMin + (finalHeightPixels / 2.0f));
+			yPixelDefaultSpot = glm::round(parentYMin + (finalHeightPixels * 0.5f));
 			break;
 		default:
 			break;
@@ -336,7 +336,7 @@ namespace GUI {
 
 		m_Translation = glm::vec2(finalXTranslation, finalYTranslation);
 		m_Scale = glm::vec2(finalWidthPixels, finalHeightPixels);
-		SetBounds(glm::vec2(m_Translation - (m_Scale / 2.0f)), glm::vec2(m_Translation + (m_Scale / 2.0f)));
+		SetBounds(glm::vec2(m_Translation - (m_Scale * 0.5f)), glm::vec2(m_Translation + (m_Scale * 0.5f)));
 
 		for (int i = 0; i < m_Children.size(); i++) {
 			m_Children[i]->Recalculate();
@@ -394,7 +394,9 @@ namespace GUI {
 		}
 		if (!temp && x > m_MinimumBounds.x && x < m_MaximumBounds.x &&
 			y > m_MinimumBounds.y && y < m_MaximumBounds.y) {
-			return this;
+			if (m_HitBehavior == HitBehavior::ABSORB) {
+				return this;
+			}
 		}
 		return temp;
 	}
@@ -541,5 +543,14 @@ namespace GUI {
 	float View::GetMinimumHeight()
 	{
 		return m_MinimumHeight;
+	}
+	void View::SetHitBehavior(HitBehavior hb)
+	{
+		m_HitBehavior = hb;
+	}
+
+	View::HitBehavior View::GetHitBehavior()
+	{
+		return m_HitBehavior;
 	}
 }

@@ -1,4 +1,5 @@
 #include "TextView.h"
+#include "Console.h"
 
 namespace GUI {
 	TextView::TextView(View* parent)
@@ -20,7 +21,7 @@ namespace GUI {
 	void TextView::Recalculate()
 	{
 		View::Recalculate();
-		m_Text.SetTranslation(glm::vec2(m_MaximumBounds - m_MinimumBounds));
+		m_Text.SetTranslation(m_Translation);
 		m_Text.SetMaxWidth(m_MaximumBounds.x - m_MinimumBounds.x);
 	}
 

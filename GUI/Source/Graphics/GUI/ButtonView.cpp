@@ -5,7 +5,7 @@ namespace GUI {
 	ButtonView::ButtonView(View* parent)
 		: View(parent)
 	{
-
+		m_HitBehavior = View::HitBehavior::ABSORB;
 	}
 
 	ButtonView::~ButtonView()

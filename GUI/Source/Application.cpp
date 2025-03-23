@@ -128,64 +128,64 @@ int main() {
 			}
 		});
 	glfwSetKeyCallback(window, [](GLFWwindow* glfwWindow, int key, int scancode, int action, int mods)
-		{
-			Input* input = (Input*)glfwGetWindowUserPointer(glfwWindow);
+			{
+				Input* input = (Input*)glfwGetWindowUserPointer(glfwWindow);
 
-			switch (action)
-			{
-			case GLFW_PRESS:
-			{
-				input->UpdateKeyboardKey(key, 1);
-				break;
-			}
-			case GLFW_RELEASE:
-			{
-				input->UpdateKeyboardKey(key, 3);
-				break;
-			}
-			}
-		});
+				switch (action)
+				{
+				case GLFW_PRESS:
+				{
+					input->UpdateKeyboardKey(key, 1);
+					break;
+				}
+				case GLFW_RELEASE:
+				{
+					input->UpdateKeyboardKey(key, 3);
+					break;
+				}
+				}
+			});
 	glfwSetWindowSizeCallback(window, [](GLFWwindow* glfwWindow, int width, int height)
-		{
-			Input* input = (Input*)glfwGetWindowUserPointer(glfwWindow);
+			{
+				Input* input = (Input*)glfwGetWindowUserPointer(glfwWindow);
 
-			windowWidth = width;
-			windowHeight = height;
+				windowWidth = width;
+				windowHeight = height;
 
-			glViewport(0, 0, windowWidth, windowHeight);
+				glViewport(0, 0, windowWidth, windowHeight);
 
-			shouldRecalculate = true;
-		});
+				shouldRecalculate = true;
+			});
 	glfwSetCharCallback(window, [](GLFWwindow* glfwWindow, unsigned int keycode)
-		{
-			Input* input = (Input*)glfwGetWindowUserPointer(glfwWindow);
-		});
+			{
+				Input* input = (Input*)glfwGetWindowUserPointer(glfwWindow);
+			});
 	glfwSetScrollCallback(window, [](GLFWwindow* glfwWindow, double xOffset, double yOffset)
-		{
-			Input* input = (Input*)glfwGetWindowUserPointer(glfwWindow);
-		});
+			{
+				Input* input = (Input*)glfwGetWindowUserPointer(glfwWindow);
+			});
 	glfwSetCursorEnterCallback(window, [](GLFWwindow* glfwWindow, int entered)
-		{
-			Input* input = (Input*)glfwGetWindowUserPointer(glfwWindow);
+			{
+				Input* input = (Input*)glfwGetWindowUserPointer(glfwWindow);
 
-			input->SetMouseWasBlocked(true);
-		});
+				input->SetMouseWasBlocked(true);
+			});
 
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 
-	
-	GUI::Text* temptex = new GUI::Text();
+
+	/*GUI::Text* temptex = new GUI::Text();
 	temptex->SetFont("C:/Windows/Fonts/Arial");
 	temptex->SetFontSize(24);
 	temptex->SetWrap(GUI::Text::Wrap::WORD);
 	temptex->SetHorizontalAlignment(GUI::Text::HorizontalAlignment::JUSTIFY);
 	temptex->SetDPI(96);
 	temptex->SetMaxWidth(300);
-	temptex->SetSupportsMarkdown(false);
 	temptex->SetMaxNumberOfRows(0);
+	temptex->SetSupportsMarkdown(false);
 	temptex->SetText("Test testing 123");
-	temptex->SetTranslation(glm::vec2(640.0f, 360.0f));
+	temptex->SetTranslation(glm::vec2(640.0f, 360.0f));*/
 
 
 
@@ -196,27 +196,102 @@ int main() {
 	mainView->SetHeightConstraint(100.0f, GUI::View::ConstraintMeasurementType::PERCENT);
 	mainView->Recalculate(0.0f, 0.0f, (float)windowWidth, (float)windowHeight);
 
-	GUI::View* subView2 = new GUI::View(mainView);
-	subView2->SetTintColor(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
-	subView2->SetCornerRoundness(0.5f);
-	subView2->SetBorderWeight(5.0f);
-	subView2->SetWidthConstraint(50.0f, GUI::View::ConstraintMeasurementType::PERCENT);
-	subView2->SetHeightConstraint(50.0f, GUI::View::ConstraintMeasurementType::PERCENT);
-	subView2->SetXConstraint(0.0f, GUI::View::ConstraintMeasurementType::PERCENT, GUI::View::XConstraintLocation::CENTER);
-	subView2->SetYConstraint(0.0f, GUI::View::ConstraintMeasurementType::PERCENT, GUI::View::YConstraintLocation::CENTER);
-	subView2->Recalculate();
+	GUI::View* subView1 = new GUI::View(mainView);
+	subView1->SetTintColor(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+	subView1->SetCornerRoundness(0.5f);
+	subView1->SetBorderWeight(5.0f);
+	subView1->SetWidthConstraint(50.0f, GUI::View::ConstraintMeasurementType::PERCENT);
+	subView1->SetHeightConstraint(90.0f, GUI::View::ConstraintMeasurementType::PERCENT);
+	subView1->SetXConstraint(0.0f, GUI::View::ConstraintMeasurementType::PERCENT, GUI::View::XConstraintLocation::CENTER);
+	subView1->SetYConstraint(0.0f, GUI::View::ConstraintMeasurementType::PERCENT, GUI::View::YConstraintLocation::CENTER);
+	subView1->Recalculate();
+
+	GUI::TextView* temptex = new GUI::TextView(subView1);
+	temptex->GetText().SetFont("C:/Windows/Fonts/Arial");
+	temptex->GetText().SetFontSize(24);
+	temptex->GetText().SetWrap(GUI::Text::Wrap::WORD);
+	temptex->GetText().SetHorizontalAlignment(GUI::Text::HorizontalAlignment::JUSTIFY);
+	temptex->GetText().SetDPI(96);
+	temptex->GetText().SetMaxWidth(300);
+	temptex->GetText().SetMaxNumberOfRows(0);
+	//subView3->GetText().SetSupportsMarkdown(true);
+	temptex->GetText().SetSupportsMarkdown(false);
+	temptex->GetText().SetText("This is an auto word-wrapped sentence!");
+	temptex->SetCornerRoundness(0.5f);
+	temptex->SetTintColor(Math::Scale255To1(glm::vec4(122.0f, 122.0f, 122.0f, 255.0f)));
+	temptex->SetWidthConstraint(50.0f, GUI::View::ConstraintMeasurementType::PERCENT);
+	temptex->SetHeightConstraint(90.0f, GUI::View::ConstraintMeasurementType::PERCENT);
+	temptex->SetXConstraint(0.0f, GUI::View::ConstraintMeasurementType::PERCENT, GUI::View::XConstraintLocation::CENTER);
+	temptex->SetYConstraint(0.0f, GUI::View::ConstraintMeasurementType::PERCENT, GUI::View::YConstraintLocation::CENTER);
+	temptex->Recalculate();
+
+	//GUI::ButtonView* buttonView1 = new GUI::ButtonView(subView1);
+	//buttonView1->SetTintColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	//buttonView1->SetCornerRoundness(0.1f);
+	//buttonView1->SetBorderWeight(2.0f);
+	//buttonView1->SetBorderColor(glm::vec4(0.0f, 0.0f, 1.0f, 0.5f));
+	//bool isClicked = false;
+	//buttonView1->SetCallbackFunction([buttonView1, &isClicked]{
+	//	Console::Info("Button clicked");
+	//	if (isClicked) {
+	//		buttonView1->SetTintColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	//	}
+	//	else {
+	//		buttonView1->SetTintColor(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
+	//	}
+	//	isClicked = !isClicked;
+	//});
+	//buttonView1->SetWidthConstraint(50.0f, GUI::View::ConstraintMeasurementType::PERCENT);
+	//buttonView1->SetHeightConstraint(50.0f, GUI::View::ConstraintMeasurementType::PERCENT);
+	//buttonView1->SetXConstraint(0.0f, GUI::View::ConstraintMeasurementType::PERCENT, GUI::View::XConstraintLocation::CENTER);
+	//buttonView1->SetYConstraint(0.0f, GUI::View::ConstraintMeasurementType::PERCENT, GUI::View::YConstraintLocation::CENTER);
+	//buttonView1->Recalculate();
+
+	//GUI::TextView* buttonViewText = new GUI::TextView(buttonView1);
+	//buttonViewText->GetText().SetFont("C:/Windows/Fonts/Arial");
+	//buttonViewText->GetText().SetFontSize(24);
+	//buttonViewText->GetText().SetWrap(GUI::Text::Wrap::WORD);
+	//buttonViewText->GetText().SetHorizontalAlignment(GUI::Text::HorizontalAlignment::JUSTIFY);
+	//buttonViewText->GetText().SetDPI(96);
+	//buttonViewText->GetText().SetMaxWidth(300);
+	//buttonViewText->GetText().SetMaxNumberOfRows(0);
+	////subView3->GetText().SetSupportsMarkdown(true);
+	//buttonViewText->GetText().SetSupportsMarkdown(false);
+	//buttonViewText->GetText().SetText("Button");
+	//buttonViewText->SetCornerRoundness(0.5f);
+	//buttonViewText->SetTintColor(Math::Scale255To1(glm::vec4(122.0f, 122.0f, 122.0f, 125.0f)));
+	//buttonViewText->SetWidthConstraint(50.0f, GUI::View::ConstraintMeasurementType::PERCENT);
+	//buttonViewText->SetHeightConstraint(50.0f, GUI::View::ConstraintMeasurementType::PERCENT);
+	//buttonViewText->SetXConstraint(0.0f, GUI::View::ConstraintMeasurementType::PERCENT, GUI::View::XConstraintLocation::CENTER);
+	//buttonViewText->SetYConstraint(0.0f, GUI::View::ConstraintMeasurementType::PERCENT, GUI::View::YConstraintLocation::CENTER);
+	//buttonViewText->Recalculate();
+
+	//GUI::View* subView2 = new GUI::View(mainView);
+	//subView2->SetTintColor(glm::vec4(1.0f, 0.5f, 0.0f, 1.0f));
+	//subView2->SetCornerRoundness(0.5f);
+	//subView2->SetBorderWeight(5.0f);
+	//subView2->SetWidthConstraint(50.0f, GUI::View::ConstraintMeasurementType::PERCENT);
+	//subView2->SetHeightConstraint(45.0f, GUI::View::ConstraintMeasurementType::PERCENT);
+	//subView2->SetXConstraint(0.0f, GUI::View::ConstraintMeasurementType::PERCENT, GUI::View::XConstraintLocation::CENTER);
+	//subView2->SetYConstraint(2.5f, GUI::View::ConstraintMeasurementType::PERCENT, GUI::View::YConstraintLocation::BOTTOM);
+	//subView2->Recalculate();
 
 	//GUI::TextView* subView3 = new GUI::TextView(subView2);
 	//subView3->GetText().SetFont("C:/Windows/Fonts/Arial");
 	//subView3->GetText().SetFontSize(24);
-	//subView3->GetText().SetSupportsMarkdown(true);
-	//subView3->GetText().SetUsePtSize(true);
-	//subView3->GetText().SetText("Test\ntesting");
-	//subView3->SetCornerRoundness(0.0f);
-	//subView3->SetTintColor(Math::Scale255To1(glm::vec4(75.0f, 75.0f, 75.0f, 50.0f)));
-	//subView3->SetWidthConstraint(100.0f, GUI::View::ConstraintMeasurementType::PERCENT);
-	//subView3->SetHeightConstraint(100.0f, GUI::View::ConstraintMeasurementType::PERCENT);
-	//subView3->SetXConstraint(0.0f, GUI::View::ConstraintMeasurementType::PERCENT, GUI::View::XConstraintLocation::LEFT);
+	//subView3->GetText().SetWrap(GUI::Text::Wrap::WORD);
+	//subView3->GetText().SetHorizontalAlignment(GUI::Text::HorizontalAlignment::JUSTIFY);
+	//subView3->GetText().SetDPI(96);
+	//subView3->GetText().SetMaxWidth(300);
+	//subView3->GetText().SetMaxNumberOfRows(0);
+	////subView3->GetText().SetSupportsMarkdown(true);
+	//subView3->GetText().SetSupportsMarkdown(false);
+	//subView3->GetText().SetText("Hello\nWorld!");
+	//subView3->SetCornerRoundness(0.5f);
+	//subView3->SetTintColor(Math::Scale255To1(glm::vec4(122.0f, 122.0f, 122.0f, 255.0f)));
+	//subView3->SetWidthConstraint(50.0f, GUI::View::ConstraintMeasurementType::PERCENT);
+	//subView3->SetHeightConstraint(50.0f, GUI::View::ConstraintMeasurementType::PERCENT);
+	//subView3->SetXConstraint(0.0f, GUI::View::ConstraintMeasurementType::PERCENT, GUI::View::XConstraintLocation::CENTER);
 	//subView3->SetYConstraint(0.0f, GUI::View::ConstraintMeasurementType::PERCENT, GUI::View::YConstraintLocation::CENTER);
 	//subView3->Recalculate();
 
@@ -258,23 +333,24 @@ int main() {
 			Console::Info("Mouse Position: (%.2f, %.2f)", input->GetMousePositionX(), input->GetMousePositionY());
 		}
 		if (input->GetKeyboardKeyPressed(AD_KEY_U)) {
-			temptex->SetHorizontalAlignment(GUI::Text::HorizontalAlignment::LEFT);
+			temptex->GetText().SetHorizontalAlignment(GUI::Text::HorizontalAlignment::LEFT);
+			
 		}
 		if (input->GetKeyboardKeyPressed(AD_KEY_I)) {
-			temptex->SetHorizontalAlignment(GUI::Text::HorizontalAlignment::CENTER);
+			temptex->GetText().SetHorizontalAlignment(GUI::Text::HorizontalAlignment::CENTER);
 		}
 		if (input->GetKeyboardKeyPressed(AD_KEY_O)) {
-			temptex->SetHorizontalAlignment(GUI::Text::HorizontalAlignment::RIGHT);
+			temptex->GetText().SetHorizontalAlignment(GUI::Text::HorizontalAlignment::RIGHT);
 		}
 		if (input->GetKeyboardKeyPressed(AD_KEY_P)) {
-			temptex->SetHorizontalAlignment(GUI::Text::HorizontalAlignment::JUSTIFY);
+			temptex->GetText().SetHorizontalAlignment(GUI::Text::HorizontalAlignment::JUSTIFY);
 		}
 
 		if (input->GetKeyboardKeyHeld(AD_KEY_K)) {
-			temptex->SetDPI(temptex->GetDPI() - 2u);
+			temptex->GetText().SetDPI(temptex->GetText().GetDPI() - 2u);
 		}
 		if (input->GetKeyboardKeyHeld(AD_KEY_L)) {
-			temptex->SetDPI(temptex->GetDPI() + 2u);
+			temptex->GetText().SetDPI(temptex->GetText().GetDPI() + 2u);
 		}
 		mainView->Draw(proj);
 		temptex->Draw(proj);
